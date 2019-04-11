@@ -40,8 +40,8 @@ var oracledb = require("oracledb");
                 return;
               }
               console.log(result.rows);
-           });
-       });
+           })
+       })
     } catch(err){
         console.log("Error: ", err)
     }finally{
