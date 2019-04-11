@@ -8,7 +8,9 @@ var oracledb = require("oracledb");
             password:'leitura',
             connectString:'10.0.1.3:1521/MEGA'
         });
-        connection.execute(
+        console.log("conectou blz");
+
+        result = await connection.execute(
             `select vp.ANO, 
                     vp.MES,
                     to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')) as SEMANA, 
@@ -41,7 +43,8 @@ var oracledb = require("oracledb");
               }
               console.log(result.rows);
            })
-       })
+        });
+
     } catch(err){
         console.log("Error: ", err)
     }finally{
@@ -55,3 +58,4 @@ var oracledb = require("oracledb");
     }
 
 })()
+
