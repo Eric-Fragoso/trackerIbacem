@@ -6,7 +6,7 @@ var oracledb = require("oracledb");
         connection = await oracledb.getConnection({
             user:'ibacem',
             password:'ibc1763!',
-            connectString:'138.204.68.18:3322/MEGA'
+            connectString:'localhost/MEGA'
         });
         console.log("conexão realizada com sucesso");
     } catch(err){
