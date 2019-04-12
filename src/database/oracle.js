@@ -3,7 +3,7 @@ process.env.ORA_SDTZ = 'UTC';
 const oracledb = require('oracledb');
 const {user, password, connectString} = require('../config/oracle.json')
 
-const connection;
+let connection;
 var sql, binds, options, result;
 
 async function conectar() {
