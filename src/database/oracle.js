@@ -13,6 +13,8 @@ async function conectar() {
             password,    
             connectString,
         });
+
+        busca();
     } catch (err) {
         console.error(err);
     } finally {
