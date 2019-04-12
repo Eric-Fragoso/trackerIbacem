@@ -13,8 +13,8 @@ async function conectar() {
             password,    
             connectString,
         });
-
-        busca();
+        console.log("conectou com o banco sem problemas");
+        
     } catch (err) {
         console.error(err);
     } finally {
