@@ -45,6 +45,7 @@ async function run() {
             vp.VARIEDADE,
             vp.CONTROLE,
             vp.SAFRA
+        order by vp.DATA
         `;
 
     binds = {};
