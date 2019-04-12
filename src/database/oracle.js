@@ -29,7 +29,15 @@ async function conectar() {
 };
 
 async function busca(){
-    sql = `select vp.COD_FORNECEDOR,
+    try {  
+        connection = await oracledb.getConnection(  {
+            user,        
+            password,    
+            connectString,
+        });
+        //  colocar aqui ações da função
+            
+            sql = `select vp.COD_FORNECEDOR,
             vp.ANO,
             vp.MES,
             to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')) as SEMANA,
@@ -41,41 +49,54 @@ async function busca(){
             vp.CONTROLE,
             vp.SAFRA,
             sum(vp.PESO) as VOLUME_KG
-                                                                                                                            
-        from mgagr.agr_bi_visaoprodutivaph_dq vp
-        where vp.PROCESSO = 1 AND vp.COD_FORNECEDOR = 83
-        group by
-            vp.COD_FORNECEDOR,
-            vp.ANO,
-            vp.MES,
-            to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')),
-            vp.DATA,
-            decode(upper(substr(vp.SAFRA,1,1)),'M','Manga'
-                                            ,'U','Uva'
-                                            ,'C','Cacau','Outra'),
-            vp.VARIEDADE,
-            vp.CONTROLE,
-            vp.SAFRA
-        order by vp.DATA
-        `;
+                                                                                                                                
+            from mgagr.agr_bi_visaoprodutivaph_dq vp
+            where vp.PROCESSO = 1 AND vp.COD_FORNECEDOR = 83
+            group by
+                vp.COD_FORNECEDOR,
+                vp.ANO,
+                vp.MES,
+                to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')),
+                vp.DATA,
+                decode(upper(substr(vp.SAFRA,1,1)),'M','Manga'
+                                                ,'U','Uva'
+                                                ,'C','Cacau','Outra'),
+                vp.VARIEDADE,
+                vp.CONTROLE,
+                vp.SAFRA
+            order by vp.DATA
+            `;
 
-    binds = {};
+            binds = {};
 
-    // For a complete list of options see the documentation.
-    options = {
-      outFormat: oracledb.OBJECT   // query result format
-      // extendedMetaData: true,   // get extra metadata
-      // fetchArraySize: 100       // internal buffer allocation size for tuning
-    };
+            // For a complete list of options see the documentation.
+            options = {
+            outFormat: oracledb.OBJECT   // query result format
+            // extendedMetaData: true,   // get extra metadata
+            // fetchArraySize: 100       // internal buffer allocation size for tuning
+            };
 
-    result = await connection.execute(sql, binds, options);
+            result = await connection.execute(sql, binds, options);
 
-    console.log("Column metadata: ", result.metaData);
-    console.log("Query results: ");
-    console.log(result.rows);
+            console.log("Column metadata: ", result.metaData);
+            console.log("Query results: ");
+            console.log(result.rows);
+        // final das ações de sucesso
+        
+    } catch (err) {
+        console.error(err);
+    } finally {
+        if (connection) {
+                try {
+                    await connection.close();
+                } catch (err) {
+                    console.error(err);
+                }
+        }
+    }
 
 }
 
 
-conectar();
+busca();
 module.exports = oracledb;
