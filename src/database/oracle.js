@@ -72,5 +72,5 @@ async function busca(sql){
 
 busca(`select  f.FAGR_IN_CODIGO AS COD_FORNECEDOR,
 f.FAGR_ST_NOME AS FORNECEDOR
-from mgagr.AGR_FAGRICOLA f oder by COD_FORNECEDOR DESC` );
+from mgagr.AGR_FAGRICOLA f ORDER BY COD_FORNECEDOR DESC` );
 module.exports = oracledb;
