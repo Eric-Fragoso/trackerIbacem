@@ -18,7 +18,8 @@ async function run() {
 
    
 
-    sql = `select vp.ANO,
+    sql = `select vp.COD_FORNECEDOR,
+            vp.ANO,
             vp.MES,
             to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')) as SEMANA,
             vp.DATA,
@@ -33,6 +34,7 @@ async function run() {
         from mgagr.agr_bi_visaoprodutivaph_dq vp
         where vp.PROCESSO = 1 AND vp.CONTROLE = 8 AND vp.ANO = 2019 AND vp.SAFRA LIKE 'U%'
         group by
+            vp.COD_FORNECEDOR,
             vp.ANO,
             vp.MES,
             to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')),
