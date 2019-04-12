@@ -32,7 +32,7 @@ async function run() {
             sum(vp.PESO) as VOLUME_KG
                                                                                                                             
         from mgagr.agr_bi_visaoprodutivaph_dq vp
-        where vp.PROCESSO = 1 AND vp.CONTROLE = 8 AND vp.ANO = 2019 AND vp.SAFRA LIKE 'U%'
+        where vp.PROCESSO = 1 AND vp.SAFRA LIKE 'U%'
         group by
             vp.COD_FORNECEDOR,
             vp.ANO,
