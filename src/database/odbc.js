@@ -27,10 +27,11 @@ async function run() {
                                             ,'C','Cacau','Outra') as CULTURA,
             vp.VARIEDADE,
             vp.CONTROLE,
+            vp.SAFRA,
             sum(vp.PESO) as VOLUME_KG
                                                                                                                             
         from mgagr.agr_bi_visaoprodutivaph_dq vp
-        where vp.PROCESSO = 1 AND vp.CONTROLE = 8 AND vp.ANO = 2019 AND decode(upper(substr(vp.SAFRA,1,1)),'M','Manga','U','Uva','C','Cacau','Outra') = Uva
+        where vp.PROCESSO = 1 AND vp.CONTROLE = 8 AND vp.ANO = 2019
         group by
             vp.ANO,
             vp.MES,
@@ -40,7 +41,8 @@ async function run() {
                                             ,'U','Uva'
                                             ,'C','Cacau','Outra'),
             vp.VARIEDADE,
-            vp.CONTROLE
+            vp.CONTROLE,
+            vp.SAFRA
         `;
 
     binds = {};
