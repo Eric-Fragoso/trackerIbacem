@@ -28,7 +28,7 @@ async function conectar() {
     }
 };
 
-async function busca(){
+async function busca(sql){
     try {  
         connection = await oracledb.getConnection(  {
             user,        
@@ -37,36 +37,6 @@ async function busca(){
         });
         //  colocar aqui ações da função
             
-            sql = `select vp.COD_FORNECEDOR,
-            vp.ANO,
-            vp.MES,
-            to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')) as SEMANA,
-            vp.DATA,
-            decode(upper(substr(vp.SAFRA,1,1)),'M','Manga'
-                                            ,'U','Uva'
-                                            ,'C','Cacau','Outra') as CULTURA,
-            vp.VARIEDADE,
-            vp.CONTROLE,
-            vp.SAFRA,
-            sum(vp.PESO) as VOLUME_KG
-                                                                                                                                
-            from mgagr.agr_bi_visaoprodutivaph_dq vp
-            where vp.PROCESSO = 1 AND vp.COD_FORNECEDOR = 83
-            group by
-                vp.COD_FORNECEDOR,
-                vp.ANO,
-                vp.MES,
-                to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')),
-                vp.DATA,
-                decode(upper(substr(vp.SAFRA,1,1)),'M','Manga'
-                                                ,'U','Uva'
-                                                ,'C','Cacau','Outra'),
-                vp.VARIEDADE,
-                vp.CONTROLE,
-                vp.SAFRA
-            order by vp.DATA
-            `;
-
             binds = {};
 
             // For a complete list of options see the documentation.
@@ -98,5 +68,33 @@ async function busca(){
 }
 
 
-busca();
+busca(`select vp.COD_FORNECEDOR,
+vp.ANO,
+vp.MES,
+to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')) as SEMANA,
+vp.DATA,
+decode(upper(substr(vp.SAFRA,1,1)),'M','Manga'
+                                ,'U','Uva'
+                                ,'C','Cacau','Outra') as CULTURA,
+vp.VARIEDADE,
+vp.CONTROLE,
+vp.SAFRA,
+sum(vp.PESO) as VOLUME_KG
+                                                                                                                    
+from mgagr.agr_bi_visaoprodutivaph_dq vp
+where vp.PROCESSO = 1 AND vp.COD_FORNECEDOR = 83
+group by
+    vp.COD_FORNECEDOR,
+    vp.ANO,
+    vp.MES,
+    to_number(to_char(to_date(vp.DATA,'DD/MM/YYYY'),'WW')),
+    vp.DATA,
+    decode(upper(substr(vp.SAFRA,1,1)),'M','Manga'
+                                    ,'U','Uva'
+                                    ,'C','Cacau','Outra'),
+    vp.VARIEDADE,
+    vp.CONTROLE,
+    vp.SAFRA
+order by vp.DATA
+`);
 module.exports = oracledb;
