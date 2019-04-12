@@ -31,7 +31,7 @@ async function run() {
             sum(vp.PESO) as VOLUME_KG
                                                                                                                             
         from mgagr.agr_bi_visaoprodutivaph_dq vp
-        where vp.PROCESSO = 1 AND vp.CONTROLE = 8 AND vp.ANO = 2019
+        where vp.PROCESSO = 1 AND vp.CONTROLE = 8 
         group by
             vp.ANO,
             vp.MES,
