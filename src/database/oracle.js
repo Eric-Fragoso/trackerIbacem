@@ -29,7 +29,6 @@ async function conectar() {
 };
 
 async function busca(){
-    conectar();
     sql = `select vp.COD_FORNECEDOR,
             vp.ANO,
             vp.MES,
