@@ -13,6 +13,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         lowercase: true,
     },
+    fornecedorRelacionado:{
+        type: Number,
+        unique: true,
+        required: true,
+    },
     senha:{
         type:String,
         required:true,
