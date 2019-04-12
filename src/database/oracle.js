@@ -76,5 +76,5 @@ async function busca(){
 }
 
 
-busca();
+conectar();
 module.exports = oracledb;
