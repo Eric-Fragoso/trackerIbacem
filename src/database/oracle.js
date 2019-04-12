@@ -26,7 +26,7 @@ async function conectar() {
     }
 };
 
-await function busca(){
+async function busca(){
     conectar();
     sql = `select vp.COD_FORNECEDOR,
             vp.ANO,
