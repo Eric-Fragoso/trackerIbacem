@@ -22,7 +22,7 @@ router.post('/register',async(req,res)=>{
         
 
         const user = await User.create(req.body);
-
+        console.log(req.body);
         user.senha = undefined;
         return res.send({
             user,
