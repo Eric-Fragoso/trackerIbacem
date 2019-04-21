@@ -29,6 +29,7 @@ router.put('/:userId', async(req, res)=>{
 
 router.delete('/:userId', async(req, res)=>{
     res.send({user: req.userId});
+    console.log(apagou);
 });
 
 module.exports = app => app.use('/usuarios', router);

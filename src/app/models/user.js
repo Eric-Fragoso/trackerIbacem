@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
         default:false,
     },
     acesso:{
-        type:Number,
+        type:String,
         required:true,
     },
     ativo:{
