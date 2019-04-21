@@ -28,8 +28,12 @@ router.put('/:userId', async(req, res)=>{
 });
 
 router.delete('/:userId', async(req, res)=>{
-    res.send({user: req.userId});
-    console.log('apagou');
+    try{
+       await User.findByIdAndRemove(req.params.userId);
+       return res.send();
+    }catch(err){
+        return res.status(400).send({error: 'Erro deletando usuário'});
+    }
 });
 
 module.exports = app => app.use('/usuarios', router);
