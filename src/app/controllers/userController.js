@@ -5,7 +5,7 @@ const User = require('../models/User');
 
 router.use(authMiddleware);
 
-router.get('/',(req, res)=>{
+router.get('/', asysc (req, res)=>{
     try{
         const users = await User.find();
 
