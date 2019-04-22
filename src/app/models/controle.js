@@ -6,7 +6,7 @@ const ControleSchema = new mongoose.Schema({
     importadoPor:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
-        require:true;
+        require:true,
     },
     publicadoPor:{
         type:mongoose.Schema.Types.ObjectId,
