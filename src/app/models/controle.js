@@ -11,9 +11,8 @@ const ControleSchema = new mongoose.Schema({
     publicadoPor:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User',
-        require:true;
     },
-    numero:{
+    codigo:{
         type: String,
         require:true,
     },
@@ -24,6 +23,7 @@ const ControleSchema = new mongoose.Schema({
     passoAtual:{
         type:Number,
         required:true,
+        default:1,
     },
     importadoEm:{
         type:Date,
