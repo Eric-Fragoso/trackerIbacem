@@ -7,7 +7,7 @@ router.use(authMiddleware);
 
 router.get('/', async(req, res)=>{
     try{
-        const controles = await Controle.find().populate('importadoPor');
+        const controles = await Controle.find().populate('User');
 
         return res.send({controles});
     }catch(err){
