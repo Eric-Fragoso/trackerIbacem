@@ -5,12 +5,12 @@ const bcrypt = require('bcryptjs');
 const ControleSchema = new mongoose.Schema({
     importadoPor:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user',
+        ref:'User',
         require:true,
     },
     publicadoPor:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user',
+        ref:'User',
     },
     codigo:{
         type: String,
