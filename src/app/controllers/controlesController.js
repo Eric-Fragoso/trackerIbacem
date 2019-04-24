@@ -7,7 +7,7 @@ router.use(authMiddleware);
 
 router.get('/', async(req, res)=>{
     try{
-        const controles = await Controle.find().populate('User');
+        const controles = await Controle.find().populate('user');
 
         return res.send({controles});
     }catch(err){
@@ -20,8 +20,9 @@ router.get('/:controleId', async(req, res)=>{
 });
 
 router.post('/', async(req, res)=>{
+    const {codigo} = req.body;
     try{
-        if (await Controle.findOne(req.body.codigo))
+        if (await Controle.findOne({codigo}))
             return res.status(400).send({error: 'Controle já importado anteriormente'});
         const controle = await Controle.create(req.body);
         
