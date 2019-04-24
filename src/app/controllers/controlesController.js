@@ -24,7 +24,7 @@ router.post('/', async(req, res)=>{
 
     console.log(req.body);
     try{
-        if (await Controle.findOne({codigo}))
+        if (await Controle.findOne({codigo}).sort({ importadoEm: 1 }))
             return res.status(400).send({error: 'Controle já importado anteriormente'});
         const controle = await Controle.create(req.body);
         console.log(controle);
