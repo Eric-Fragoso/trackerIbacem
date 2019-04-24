@@ -20,11 +20,11 @@ router.get('/:controleId', async(req, res)=>{
 });
 
 router.post('/', async(req, res)=>{
-    const {codigo} = req.body;
+    const {objeto} = req.body;
     try{
-        if (await Controle.findOne({codigo}))
+        if (await Controle.findOne({objeto.codigo}))
             return res.status(400).send({error: 'Controle já importado anteriormente'});
-        const controle = await Controle.create({...req.body, importadoPor:req.userId});
+        const controle = await Controle.create({req.body});
         
         return res.send({
             controle

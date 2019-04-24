@@ -4,14 +4,12 @@ const bcrypt = require('bcryptjs');
 
 const ControleSchema = new mongoose.Schema({
     importadoPor:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User',
+        type: String,
         require:true,
     },
     publicadoPor:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'User',
-    },
+        type: String,
+     },
     codigo:{
         type: String,
         require:true,
