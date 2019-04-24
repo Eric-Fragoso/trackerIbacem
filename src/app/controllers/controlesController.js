@@ -21,7 +21,7 @@ router.get('/:controleId', async(req, res)=>{
 
 router.post('/', async(req, res)=>{
     const {objeto} = req.body;
-    console.log(objeto);
+    console.log(req.body);
     console.log({objeto});
     console.log({objeto}.codigo);
     try{
