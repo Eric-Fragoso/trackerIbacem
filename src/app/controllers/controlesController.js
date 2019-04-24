@@ -20,7 +20,7 @@ router.get('/:controleId', async(req, res)=>{
 });
 
 router.post('/', async(req, res)=>{
-    const {codigo} = req.body;
+    const {codigo} = req.body.params;
 
     console.log(req.body);
     try{
