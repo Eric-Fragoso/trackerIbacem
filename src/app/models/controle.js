@@ -21,9 +21,9 @@ const ControleSchema = new mongoose.Schema({
         default:false,
     },
     passoAtual:{
-        type:Number,
-        required:true,
-        default:1,
+        type:String,
+        require:true,
+        default:"",
     },
     importadoEm:{
         type:Date,
