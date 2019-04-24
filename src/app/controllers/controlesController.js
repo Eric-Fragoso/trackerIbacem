@@ -27,11 +27,12 @@ router.post('/', async(req, res)=>{
         if (await Controle.findOne({codigo}))
             return res.status(400).send({error: 'Controle já importado anteriormente'});
         const controle = await Controle.create(req.body);
-        
+        console.log(controle);
         return res.send({
             controle
         });
     }catch(err){
+        console.log("Não encontrou");
         return res.status(400).send({error:'Importação não concluida'});
     }
 });
