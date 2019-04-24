@@ -9,6 +9,8 @@ const ControleSchema = new mongoose.Schema({
     },
     publicadoPor:{
         type: String,
+        require:true,
+        default:"",
      },
     codigo:{
         type: String,
