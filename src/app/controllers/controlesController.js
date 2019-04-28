@@ -38,8 +38,7 @@ router.post('/', async(req, res)=>{
 });
 
 router.put('/:controleId', async(req, res)=>{
-    const {id, importadoPor, visivel} = req.body;
-    console.log(req.controleId, req.body, id, importadoPor, visivel);
+    const {id, publicadoPor, visivel} = req.body;
     try{
         const controle = await Controle.findByIdAndUpdate(id, req.body,{new:true});
         return res.send({
