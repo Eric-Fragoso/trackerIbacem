@@ -24,10 +24,11 @@ router.get('/fornecedor/:fornecedorID', async(req, res)=>{
 
     console.log(req.body, req.params);
     try{
-        if (await Controle.find({fornecedorID}))
+        if (await Controle.find({fornecedorCOD:fornecedorID}))
           //  return res.status(400).send({error: 'Controle já importado anteriormente'});
         //const controle = await Controle.create(req.body);
         //console.log(controle);
+        console.log("entrou");
         return res.send({
            // controle
         });
