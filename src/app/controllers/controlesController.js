@@ -23,7 +23,7 @@ router.get('/fornecedor/:fornecedorID', async(req, res)=>{
     const fornecedorID = req.params.fornecedorID;
 
     try{
-        const controles = await Controle.find({fornecedorCOD:fornecedorID, visivel:true})
+        const controles = await Controle.find({fornecedorCOD:29, visivel:true})
         console.log(controles, fornecedorID);
         return res.send({
             controles
