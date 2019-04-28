@@ -19,10 +19,28 @@ router.get('/:controleId', async(req, res)=>{
     res.send({ Controle: req.controleId});
 });
 
+router.get('/fornecedor/:fornecedorID', async(req, res)=>{
+    const {fornecedorID} = req.body;
+
+    console.log(req.body, req.params);
+    try{
+        if (await Controle.find({fornecedorID}))
+          //  return res.status(400).send({error: 'Controle já importado anteriormente'});
+        //const controle = await Controle.create(req.body);
+        //console.log(controle);
+        return res.send({
+           // controle
+        });
+    }catch(err){
+        console.log("Não encontrou");
+        return res.status(400).send({error:'Importação não concluida'});
+    }
+});
+
+
 router.post('/', async(req, res)=>{
     const {codigo} = req.body;
 
-    console.log(req.body);
     try{
         if (await Controle.findOne({codigo}))
             return res.status(400).send({error: 'Controle já importado anteriormente'});
