@@ -18,7 +18,7 @@ router.post('/register',async(req,res)=>{
     const {email} = req.body;
     try{
         if (await User.findOne({email}))
-            return res.status(400).send({error: 'Usário já cadastrado'});
+            return res.status(400).send({error: 'Usuário já cadastrado'});
         const user = await User.create(req.body);
         
         user.senha = undefined;

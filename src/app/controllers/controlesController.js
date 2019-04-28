@@ -38,7 +38,14 @@ router.post('/', async(req, res)=>{
 });
 
 router.put('/:controleId', async(req, res)=>{
-    res.send({Controle: req.controleId});
+    try{
+        const controle = await Controle.findByIdAndUpdate(req.params.id, req.body,{new:true});
+        return res.send({
+            controle
+        });
+    }catch(err){
+        return res.status(400).send({error:'Atualização não efetuada'});
+    }
 });
 
 router.delete('/:controleId', async(req, res)=>{
