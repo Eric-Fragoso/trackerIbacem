@@ -16,6 +16,10 @@ const ControleSchema = new mongoose.Schema({
         type: String,
         require:true,
     },
+    fornecedorCod:{
+        type: String,
+        require:true,
+    },
     visivel:{
         type:Boolean,
         default:false,
