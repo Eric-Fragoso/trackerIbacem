@@ -65,7 +65,12 @@ router.put('/:controleId', async(req, res)=>{
 });
 
 router.delete('/:controleId', async(req, res)=>{
-    res.send({Controle: req.controleId});
+    try{
+        await Controle.findByIdAndRemove(req.params.controleId);
+        return res.send();
+    }catch(err){
+        return res.status(400).send({error: 'Erro deletando o Controle'});
+    }
 });
 
 module.exports = app => app.use('/controles', router);
