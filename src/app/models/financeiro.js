@@ -1,12 +1,13 @@
 const mongoose = require('../../database');
 const bcrypt = require('bcryptjs');
-require('mongoose-double')(mongoose);
+const Schema = mongoose.Schema;
 
-const SchemaTypes =mongoose.Schema.Types;
+require('mongoose-currency').loadType(mongoose);
+const Currency = mongoose.Types.Currency;
 
 
 
-const FinanceiroSchema = new mongoose.Schema({
+const FinanceiroSchema = Schema({
     fornecedorCod:{
         type: String,
         require:true,
@@ -22,9 +23,8 @@ const FinanceiroSchema = new mongoose.Schema({
         default:"",
     },
     valor:{
-        type: SchemaTypes.Double,
+        type: Currency,
         require: true,
-        default:0,
     }
 
 
