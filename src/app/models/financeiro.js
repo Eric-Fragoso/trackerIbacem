@@ -1,5 +1,9 @@
 const mongoose = require('../../database');
 const bcrypt = require('bcryptjs');
+require('mongoose-double')(mongoose);
+
+const SchemaTypes =mongoose.Schema.Types;
+
 
 
 const FinanceiroSchema = new mongoose.Schema({
@@ -18,7 +22,7 @@ const FinanceiroSchema = new mongoose.Schema({
         default:"",
     },
     valor:{
-        type: Number ,
+        type: SchemaTypes.Double,
         require: true,
         default:0,
     }
