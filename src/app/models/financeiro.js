@@ -18,9 +18,9 @@ const FinanceiroSchema = new mongoose.Schema({
         default:"",
     },
     valor:{
-        type:Double,
+        type: Number ,
         require: true,
-        default:0.0
+        default:0,
     }
 
 
