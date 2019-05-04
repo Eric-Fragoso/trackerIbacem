@@ -19,7 +19,7 @@ router.get('/:fornecedorID', async(req, res)=>{
     const fornecedorID = req.params.fornecedorID;
 
     try{
-        const financeiros = await Financeiro.find({fornecedorCod:fornecedorID}).sort({data: -1})
+        const financeiros = await Financeiro.find({fornecedorCod:fornecedorID}).sort({data: 1})
         return res.send({
             financeiros
         });
