@@ -7,7 +7,7 @@ router.use(authMiddleware);
 
 router.get('/', async(req, res)=>{
     try{
-        const financeiros = await financeiro.find();
+        const financeiros = await Financeiro.find();
 
         return res.send({financeiros});
     }catch(err){
