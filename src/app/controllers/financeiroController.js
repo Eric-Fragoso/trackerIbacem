@@ -15,7 +15,7 @@ router.get('/', async(req, res)=>{
     }
 });
 
-router.get('/:financeiroId', async(req, res)=>{
+router.get('/:fornecedorID', async(req, res)=>{
     const fornecedorID = req.params.fornecedorID;
 
     try{
