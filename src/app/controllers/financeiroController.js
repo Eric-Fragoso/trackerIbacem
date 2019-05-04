@@ -30,15 +30,9 @@ router.get('/:financeiroId', async(req, res)=>{
 
 
 router.post('/', async(req, res)=>{
-    const {codigo} = req.body;
-
     try{
-        if (await Financeiro.findOne({codigo}))
-            return res.status(400).send({error: 'Financeiro já importado anteriormente'});
         const financeiro = await Financeiro.create(req.body);
-        return res.send({
-            financeiro
-        });
+        return res.send({financeiro});
     }catch(err){
         return res.status(400).send({error:'Entrada não realizada'});
     }
