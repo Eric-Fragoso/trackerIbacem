@@ -2,9 +2,10 @@ const express = require('express');
 const authMiddleware = require('../middlewares/auth')
 const router = express.Router();
 const Controle = require('../models/controle');
-const multer = require('multer')
+const multer = require('multer');
+const multerConfig = require('../../config/multer')
 
-const upload = multer({dest: 'uploads/'})
+const upload = multer(multerConfig);
 
 router.use(authMiddleware);
 
@@ -76,7 +77,8 @@ router.delete('/:controleId', async(req, res)=>{
     }
 });
 
-router.post('/controle/gallery', upload.array('gallery[]'), async(req, res)=>{
+router.post('/gallery', upload.array('file'), async(req, res)=>{
+    console.log(req.file);
     console.log("opa", upload);
     let gallery = [];
     req.files.map((image)=>gallery.push({'url':`https://138.204.68.18:3323/img/quality/${image.filename}`}));
