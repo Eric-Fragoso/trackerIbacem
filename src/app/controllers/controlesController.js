@@ -77,8 +77,9 @@ router.delete('/:controleId', async(req, res)=>{
 });
 
 router.post('/controle/gallery', upload.array('gallery[]'), async(req, res)=>{
+    console.log("opa", upload);
     let gallery = [];
-    req.files.map((image)=>gallery.push({'url':`https://138.204.68.18:3323/uploads/${image.filename}`}));
+    req.files.map((image)=>gallery.push({'url':`https://138.204.68.18:3323/img/quality/${image.filename}`}));
     res.status(200).json(gallery);
 });
 
