@@ -2,6 +2,9 @@ const express = require('express');
 const authMiddleware = require('../middlewares/auth')
 const router = express.Router();
 const Controle = require('../models/controle');
+const multer = require('multer')
+
+const upload = multer({dest: 'uploads/'})
 
 router.use(authMiddleware);
 
@@ -71,6 +74,12 @@ router.delete('/:controleId', async(req, res)=>{
     }catch(err){
         return res.status(400).send({error: 'Erro deletando o Controle'});
     }
+});
+
+router.post('/controle/gallery', upload.array('gallery[]'), async(req, res)=>{
+    let gallery = [];
+    req.files.map((image)=>gallery.push({'url':`https://138.204.68.18:3323/uploads/${image.filename}`}));
+    res.status(200).json(gallery);
 });
 
 module.exports = app => app.use('/controles', router);
