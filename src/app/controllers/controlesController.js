@@ -77,7 +77,7 @@ router.delete('/:controleId', async(req, res)=>{
     }
 });
 
-router.post('/gallery', upload.array('file]'), async(req, res)=>{
+router.post('/gallery', upload.array('file'), async(req, res)=>{
     console.log(req.file)
     console.log("opa", upload);
     let gallery = [];
