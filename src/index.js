@@ -5,7 +5,7 @@ const morgan = require('morgan');
 
 const app = express();
 
-console.log(express.static(__dirname);
+console.log(express.static(__dirname));
 
 app.use('/enviadas', express.static(__dirname  + '/uploads'));
 app.use(cors());
