@@ -81,7 +81,7 @@ router.post('/gallery', upload.array('file'), async(req, res)=>{
 
     let gallery = [];
     req.files.map((image)=>gallery.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
-    res.status(200).send(gallery);
+    res.status(200).json.parse(gallery);
 });
 
 module.exports = app => app.use('/controles', router);
