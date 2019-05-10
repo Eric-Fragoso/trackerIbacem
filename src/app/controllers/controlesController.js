@@ -79,10 +79,12 @@ router.delete('/:controleId', async(req, res)=>{
 
 router.post('/gallery', upload.array('file'), async(req, res)=>{
 
-    let gallery = [];
+    let gallery = '{itens:[';
     let itens = [];
-    req.files.map((image)=>itens.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
-    gallery = req.files;
+    req.files.map((image)=>itens.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`})
+        gallery = gallery + `http://138.204.68.18:3323/enviadas/${image.filename},`
+    );
+    gallery = allery+']}';
     res.status(200).json(gallery);
 });
 
