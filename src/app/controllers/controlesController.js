@@ -90,7 +90,7 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
         controleRelacionado: req.params.controleId,
         etapaRelacionada: req.params.etapa
     });
-   
+   console.log(image);
    // req.files.map((image)=>gallery.push(`http://138.204.68.18:3323/enviadas/${image.filename}`));
     res.status(200).json(image);
 });
