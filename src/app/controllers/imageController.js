@@ -9,7 +9,7 @@ router.get('/', async (req, res)=>{
     try{
         const images = await Image.find();
 
-        return res.send({Images});
+        return res.send({images});
     }catch(err){
         return res.status(400).send({error:'Erro carregando usuários'});
     }
