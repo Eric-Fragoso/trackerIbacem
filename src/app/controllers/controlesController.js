@@ -84,12 +84,12 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
    // req.files.map((image)=>gallery.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
 
   // let gallery = [];
-    const image = await Image.create{
+    const image = await Image.create({
         nome: req.file.filename,
         path: `http://138.204.68.18:3323/enviadas/${req.file.filename}`,
         controleRelacionado: req.params.controleId,
         etapaRelacionada: req.params.etapa
-    } 
+    });
    
    // req.files.map((image)=>gallery.push(`http://138.204.68.18:3323/enviadas/${image.filename}`));
     res.status(200).json(image);
