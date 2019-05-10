@@ -91,18 +91,20 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
         etapaRelacionada: req.params.etapa
     });
 
+    var controle;
+
     switch (req.params.etapa) {
         case "Recepcao":
-            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qRecepcao:true},{new:true})
+            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qRecepcao:true},{new:true})
         break;
         case "Selecao":
-            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qSelecao:true},{new:true})   
+            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qSelecao:true},{new:true})   
         break;
         case "Embalamento":
-            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qEmbalamento:true},{new:true})
+            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qEmbalamento:true},{new:true})
         break;
         case "Expedicao":
-            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qExpedicao:true},{new:true})
+            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qExpedicao:true},{new:true})
         break;
     
         default:
