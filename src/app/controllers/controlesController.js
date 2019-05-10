@@ -2,6 +2,7 @@ const express = require('express');
 const authMiddleware = require('../middlewares/auth')
 const router = express.Router();
 const Controle = require('../models/controle');
+const Image = require('../models/images')
 const multer = require('multer');
 const multerConfig = require('../../config/multer')
 
@@ -77,13 +78,21 @@ router.delete('/:controleId', async(req, res)=>{
     }
 });
 
-router.post('/gallery', upload.array('file'), async(req, res)=>{
+router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res)=>{
 
    // let gallery = [];
    // req.files.map((image)=>gallery.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
-   let gallery = [];
-    req.files.map((image)=>gallery.push(`http://138.204.68.18:3323/enviadas/${image.filename}`));
-    res.status(200).json(gallery);
+
+  // let gallery = [];
+    const image = await Image.create{
+        nome: req.file.filename,
+        path: `http://138.204.68.18:3323/enviadas/${req.file.filename}`,
+        controleRelacionado: req.params.controleId,
+        etapaRelacionada: req.params.etapa
+    } 
+   
+   // req.files.map((image)=>gallery.push(`http://138.204.68.18:3323/enviadas/${image.filename}`));
+    res.status(200).json(image);
 });
 
 module.exports = app => app.use('/controles', router);
