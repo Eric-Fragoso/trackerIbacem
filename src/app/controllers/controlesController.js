@@ -95,15 +95,19 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
 
     switch (req.params.etapa) {
         case "Recepcao":
+            console.log("entrou em" + req.params.etapa);
             controle = await Controle.findByIdAndUpdate(req.params.controleId, {qRecepcao:true},{new:true})
         break;
         case "Selecao":
+            console.log("entrou em" + req.params.etapa);
             controle = await Controle.findByIdAndUpdate(req.params.controleId, {qSelecao:true},{new:true})   
         break;
         case "Embalamento":
+            console.log("entrou em" + req.params.etapa);
             controle = await Controle.findByIdAndUpdate(req.params.controleId, {qEmbalamento:true},{new:true})
         break;
         case "Expedicao":
+            console.log("entrou em" + req.params.etapa);
             controle = await Controle.findByIdAndUpdate(req.params.controleId, {qExpedicao:true},{new:true})
         break;
     
