@@ -90,6 +90,26 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
         controleRelacionado: req.params.controleId,
         etapaRelacionada: req.params.etapa
     });
+
+    switch (req.params.etapa) {
+        case "Recepcao":
+            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qRecepcao:true},{new:true})
+        break;
+        case "Selecao":
+            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qSelecao:true},{new:true})   
+        break;
+        case "Embalamento":
+            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qEmbalamento:true},{new:true})
+        break;
+        case "Expedicao":
+            const controle = await Controle.findByIdAndUpdate(req.params.controleId, {qExpedicao:true},{new:true})
+        break;
+    
+        default:
+            break;
+    }
+
+
    console.log(image);
    // req.files.map((image)=>gallery.push(`http://138.204.68.18:3323/enviadas/${image.filename}`));
     res.status(200).json(image);

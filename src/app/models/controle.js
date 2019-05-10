@@ -24,6 +24,22 @@ const ControleSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    qRecepcao:{
+        type:Boolean,
+        default:false,
+    },
+    qSelecao:{
+        type:Boolean,
+        default:false,
+    },
+    qEmbalamento:{
+        type:Boolean,
+        default:false,
+    },
+    qExpedicao:{
+        type:Boolean,
+        default:false,
+    },
     passoAtual:{
         type:String,
         require:true,
