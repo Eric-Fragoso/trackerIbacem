@@ -84,7 +84,7 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
    // req.files.map((image)=>gallery.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
 
   // let gallery = [];
-    console.log(req.params.etapa, req.params.controleId)
+    console.log(req.params.etapa, req.params.controleId, req.body)
 
     const image = await Image.create({
         nome: req.file.filename,
@@ -118,7 +118,7 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
     }
 
 
-   console.log(image);
+   //console.log(image);
    // req.files.map((image)=>gallery.push(`http://138.204.68.18:3323/enviadas/${image.filename}`));
     res.status(200).json(controle);
 });
