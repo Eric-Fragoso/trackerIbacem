@@ -84,8 +84,6 @@ router.post('/gallery', upload.single('file'), async(req, res)=>{
    // req.files.map((image)=>gallery.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
 
   // let gallery = [];
-    console.log(req.params.etapa, req.params.controleId, req.body)
-
     const image = await Image.create({
         nome: req.file.filename,
         path: `http://138.204.68.18:3323/enviadas/${req.file.filename}`,
@@ -95,22 +93,22 @@ router.post('/gallery', upload.single('file'), async(req, res)=>{
 
     let controle;
 
-    switch (req.params.etapa) {
+    switch (req.body.qualidade) {
         case "Recepcao":
-            console.log("entrou em" + req.params.etapa);
-            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qRecepcao:true},{new:true})
+            console.log("entrou em" + req.body.qualidade);
+            controle = await Controle.findByIdAndUpdate(req.body.controle, {qRecepcao:true},{new:true})
         break;
         case "Selecao":
-            console.log("entrou em" + req.params.etapa);
-            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qSelecao:true},{new:true})   
+            console.log("entrou em" + req.body.qualidade);
+            controle = await Controle.findByIdAndUpdate(req.body.controle, {qSelecao:true},{new:true})   
         break;
         case "Embalamento":
-            console.log("entrou em" + req.params.etapa);
-            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qEmbalamento:true},{new:true})
+            console.log("entrou em" + req.body.qualidade);
+            controle = await Controle.findByIdAndUpdate(req.body.controle, {qEmbalamento:true},{new:true})
         break;
         case "Expedicao":
-            console.log("entrou em" + req.params.etapa);
-            controle = await Controle.findByIdAndUpdate(req.params.controleId, {qExpedicao:true},{new:true})
+            console.log("entrou em" + req.body.qualidade);
+            controle = await Controle.findByIdAndUpdate(req.body.controle, {qExpedicao:true},{new:true})
         break;
     
         default:
