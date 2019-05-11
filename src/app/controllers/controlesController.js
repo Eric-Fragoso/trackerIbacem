@@ -89,11 +89,11 @@ router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res
     const image = await Image.create({
         nome: req.file.filename,
         path: `http://138.204.68.18:3323/enviadas/${req.file.filename}`,
-        controleRelacionado: req.params.controleId,
-        etapaRelacionada: req.params.etapa
+        controleRelacionado: req.body.controle,
+        etapaRelacionada: req.body.qualidade
     });
 
-    var controle;
+    let controle;
 
     switch (req.params.etapa) {
         case "Recepcao":
