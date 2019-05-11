@@ -78,7 +78,7 @@ router.delete('/:controleId', async(req, res)=>{
     }
 });
 
-router.post('/gallery/:controleId/:etapa', upload.single('file'), async(req, res)=>{
+router.post('/gallery', upload.single('file'), async(req, res)=>{
 
    // let gallery = [];
    // req.files.map((image)=>gallery.push({'url':`http://138.204.68.18:3323/enviadas/${image.filename}`}));
