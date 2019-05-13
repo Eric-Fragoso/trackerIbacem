@@ -15,14 +15,14 @@ router.get('/', async (req, res)=>{
     }
 });
 
-router.get('/:controleID', async(req, res)=>{
+router.get('/:controleID/:etapa', async(req, res)=>{
     const controleID = req.params.controleID;
+    const etapa = req.params.etapa
 
     try{
-        const controles = await Image.find({controleRelacionado:controleID})
-        console.log(controles, controleID);
+        const images = await Image.find({controleRelacionado:controleID, etapaRelacionada:etapa})
         return res.send({
-            controles
+            images
         });
     }catch(err){
         console.log("Não encontrou");
