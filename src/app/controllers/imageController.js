@@ -19,7 +19,7 @@ router.get('/:controleID', async(req, res)=>{
     const controleID = req.params.controleID;
 
     try{
-        const controles = await Controle.find({controleRelacionado:controleID})
+        const controles = await Image.find({controleRelacionado:controleID})
         console.log(controles, controleID);
         return res.send({
             controles
