@@ -15,5 +15,20 @@ router.get('/', async (req, res)=>{
     }
 });
 
+router.get('/:controleID', async(req, res)=>{
+    const controleID = req.params.controleID;
+
+    try{
+        const controles = await Controle.find({controleRelacionado:controleID})
+        console.log(controles, controleID);
+        return res.send({
+            controles
+        });
+    }catch(err){
+        console.log("Não encontrou");
+        return res.status(400).send({error:'Importação não concluida'});
+    }
+});
+
 
 module.exports = app => app.use('/images', router);
