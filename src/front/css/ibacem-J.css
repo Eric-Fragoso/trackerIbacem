@@ -1,0 +1,274 @@
+*{margin:0; padding: 0;border: 0; outline: 0; list-style: none;}
+html{padding-bottom: 80px}
+body{background-color: #F2F3E3!important; height: 100%;}
+p, span, h1, h2, h3, h4, h5, h6, label, input, button, a, th, tr, td, select, span, small, select, option, div{font-family: 'Montserrat', sans-serif;}
+
+
+
+
+
+/* H E A D E R  */
+/* H E A D E R  */
+/* H E A D E R  */
+
+h1{font-size: 18px; text-indent:-4999px; display:block; background: url(../img/Logo-Ibacem_HOR.png) no-repeat top left;height: 64px; width: 180px; float: left}
+header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 70px}
+.wrapper{width: 1000px; margin:0 auto;}
+
+/* H E A D E R  */
+/* H E A D E R  */
+/* H E A D E R  */
+
+
+
+
+
+/* T E L A   D E   L O G I N */
+/* T E L A   D E   L O G I N */
+/* T E L A   D E   L O G I N */
+
+
+#formLogin{width: 390px; margin:60px auto 0;}
+	#formLogin h2{font-size: 30px; font-weight:900; color: black}
+	#formLogin div{margin-top: 50px}
+	#formLogin i{width: 30px; height: 30px; float: left; margin-right:4px; font-size: 25px; color: rgba(237, 203, 33, 1); margin-top:7px;}
+	#formLogin input{height: 35px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 85%; margin-bottom: 20px; font-size: 16px; color: black}
+	#formLogin button{border-radius: 6px;background-color: #029184; width: 150px; height: 35px; color: white; cursor: pointer; margin-top: 20px }
+	#formLogin a, #esqueciSenha {float:right; display: block ;color: black; margin-top: 29px; font-size: 14px; margin-right: 27px}
+.erroForm{text-align: center;font-weight: bold; margin-top: 20px; color:red; display: none}
+
+/* T E L A   D E   L O G I N */
+/* T E L A   D E   L O G I N */
+/* T E L A   D E   L O G I N */
+
+
+
+/*P A I N E L   D E   A D M I N I S T R A D O R */
+/*P A I N E L   D E   A D M I N I S T R A D O R */
+/*P A I N E L   D E   A D M I N I S T R A D O R */
+
+#userInfo{float:right;width: 300px; padding-top: 10px}
+	#userInfo p{float: right; margin-top: 15px; font-size: 15px; margin-right: 14px; text-align: right;}
+	#userInfo p span{font-weight: bolder}
+	#userInfo img{float: right; border-radius: 30px}
+
+#menuHolder{width: 100%; background-color: #dbdeaf;}
+#abas {width: 1000px;  overflow: hidden;  padding-top: 15px;  margin:0 auto;  height: 44px;}
+	#abas button {background-color: inherit;  float: left;  border: none;  outline: none;  cursor: pointer;  padding: 14px 20px;  transition: 0.3s;  background-color: #e5e8ba;  margin-right: 10px;  color: #008c7f; border-top-right-radius: 6px;border-top-left-radius: 6px}
+	#abas button:hover {background-color: #f2f3e3;}
+	#abas button.active {  background-color: #f2f3e3;}
+
+.conteudoAba {display: none;  padding: 40px 12px;border-top: none;  animation: fadeEffect 1s;}
+
+#importDataArea, #gerenciarUsers,#miniDashProdutor, #miniDashAnalista, #entradaFinanceira, #pesquisaFinanceira {display: block; float: left; width: 100%; padding: 0 0 30px 0; border-bottom: 1px solid #dbdeaf; margin-bottom: 20px}
+
+#importDataArea h2, #gerenciarUsers h2,#miniDashProdutor h2, #miniDashAnalista h2, #entradaFinanceira h2, #pesquisaFinanceira h2{float: left;width: 100%; margin-bottom: 40px}
+#importDataArea button, #gerenciarUsers button, #miniDashProdutor button, #miniDashAnalista button, #entradaFinanceira button{border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left; }
+#importDataArea input, #entradaFinanceira input{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 180px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
+#importDataArea button{float:right; width:162px}
+#importDataArea .edd-root{width:150px!important}
+#select-ano-safra{width: 150px}
+#erroImportData, #mensagemErro{animation: mensErro 4s;margin: 9px auto 0;  display: none;  width: 100%;  background: #d63031;  font-weight: bold;  color: white;  text-align: center;  padding: 0px 0;  border-radius: 6px; height: 0px}
+
+.tableHolder{width: 100%; float: left; color:#2d3436;}
+	.tableHolder h2{float: left;width: 100%; margin-bottom: 40px}
+	.table {width: 100%; margin: 20px 0}
+	.table th{background-color:#029184; padding: 10px 2px ;font-size: 13px;color: #fff; font-weight: lighter;}
+	.table thead tr th:first-child{border-top-left-radius: 6px}
+	.table thead tr th:last-child{border-top-right-radius: 6px}
+	.table tr{background: #fff; ;}
+	.table tr td{padding: 13px 3px; font-size: 13px;}
+	.table tr td .fa-check-circle{color:#00b894;}
+	.table tr td .fa-times-circle{color:#d63031;}
+	.table tr td a{color:#0984e3; text-decoration: none; font-size: 16px}
+#dynatable-query-search-my-table, #dynatable-query-search-my-table-user,#dynatable-query-search-my-table-comercial{height: 40px; padding: 8px 0 8px 12px; border-radius: 6px; width: 250px; font-size: 15px; color: black; border:1px solid #008c7f;}
+#dynatable-per-page-my-table, #dynatable-per-page-my-table-user,#dynatable-per-page-my-table-comercial{height: 40px; padding: 8px 0 8px 12px;font-size: 15px;color: black; border:1px solid #008c7f;border-radius: 6px;}
+.checkboxVisivel{display: none}
+.tdClicavel{cursor: pointer;}
+.tdClicavel a{z-index: 20}
+
+.editarUsuario{margin-right: 20px}
+#ModalNovoUser input{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 250px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
+#ModalNovoUser fieldset{margin:20px 0;}
+#ModalNovoUser .cancelarUser{background:#d63031;border-radius: 6px; width: 130px; height: 44px; color: white; cursor: pointer; float: left; margin-right: 30px;}
+#ModalNovoUser .confirmarUser, .confirmarDelete, .confirmarPesquisa{border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+
+#ModalDeleteUser p, #ModalDeleteRegistro p{margin:40px 0;}
+.cancelarDelete{background:#d63031;border-radius: 6px; width: 130px; height: 40px; color: white; cursor: pointer; float: left;}
+#confirmarDelete, #confirmarImport, #confirmarEntrada{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+
+
+#escondeCampo{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px;  display: block;}
+
+.hidden{display: none;}
+
+/*P A I N E L   D E   P R O D U T O R */
+/*P A I N E L   D E   P R O D U T O R */
+/*P A I N E L   D E   P R O D U T O R */
+
+
+.statusControleOK{color:#bdc3c7!important;font-size: 13px!important;}
+.statusControleOK i{color:#bdc3c7!important;}
+.statusControleAtual{color: #00b894!important; font-weight: bolder}
+.statusControleNext{color: #f39c12!important;}
+.fa-arrow-right{color:#b2bec3!important; margin:0 5px;}
+.fa-check-circle{color: #00b894}
+
+.imprimirExtrato{margin-right: 15px}
+#miniDashProdutor{display: block; float: left; width: 100%; padding: 0 0 30px 0; border-bottom: 1px solid #dbdeaf; margin-bottom: 20px}
+#saldoProdutor{float:right;}
+	#saldoProdutor small{float: right;font-size: 11px;}
+	#saldoProdutor span{float: right; clear: both; font-size: 28px; color: #00b894; font-weight: bolder }
+
+.historico{text-align: left!important; padding-left: 8px; float: left}
+
+.editarControleProdutor, .visualizarQualidade{font-size: 13px!important; color: #000!important;}
+.visualizarQualidade:hover, .editarControleProdutor:hover{text-decoration: underline;}
+.editarControleProdutor i, .visualizarQualidade i{font-size: 16px!important; color: #d63031}
+.visualizarQualidade i{color: #0984e3!important;}
+
+
+
+
+
+
+/*P A I N E L   D E   A N A L I S T A  */
+/*P A I N E L   D E   A N A L I S T A  */
+/*P A I N E L   D E   A N A L I S T A  */
+
+.controleInput{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 140px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
+.importarPDFAnalista{margin-right: 20px}
+.importarFOTOSAnalista{overflow: hidden;border-radius: 6px;background-color: #029184; width: 190px; height: 29px; color: white; float: left;text-align: center; font-size: 13px;cursor: pointer;}
+.importarFOTOSAnalista input{position: absolute;    top: 0;    right: 0;    margin: 0;    opacity: 0;    font-size: 200px !important;    direction: ltr;    cursor: pointer!important;}
+.confirmarUpload{float: right!important; background-color:#0984e3!important; width: 100px!important; }
+.btnAnexa{border-radius: 6px;background-color: #029184; width: 170px; height: 44px; color: white; cursor: pointer; float: left; text-align: center; font-size: 13px; overflow: hidden;position: relative}
+.btnAnexa span{cursor: pointer; display: block; margin-top: 14px}
+#minidashAnalista .btnAnexa input[type=file]{position: absolute;  top: 0;  right: 0;  margin: 0;  border: solid transparent;  width: 100%;  opacity: 0;  cursor: pointer; height: 100%}
+
+.cardUpload{width: 100%; margin-top: 20px; display: none; }
+.cardHeader{padding: 10px 0 10px 15px; background-color: #DBDEAF; font-size: 14px; color:#008c7f}
+.media{padding:10px 25px; color:#008c7f; font-size: 14px; border-bottom:1px solid #DBDEAF }
+.progress{display: flex;  height: 1.25rem;  overflow: hidden;  font-size: .75rem;  background-color: #DBDEAF;  border-radius: .25rem; margin-top: 8px; font-weight: bolder; text-align: center}
+
+.progress-bar{padding-top: 2px; color: white}
+.progress-bar-striped{background-color: cadetblue}
+.bg-successo{background-color: #029184}
+.bg-danger{width:100%!important;background-color: #d63031}
+
+#minidashAnalista .edd-root{float:left; width: 140px}
+#empresaSelect .edd-root{width: 350px!important}
+
+#input-data, #input-valor{width: 110px!important}
+#input-descricao{width:320px!important}
+#entradaFinanceira {display: none}
+#entradaFinanceira .edd-root{width: 180px!important;}
+.confirmarEntrada{width:140px!important; float:right!important}
+
+#resultadoPesquisaFinanceiro{ padding-top: 20px}
+#pesquisaFinanceira .edd-root{float: left; width: 350px}
+
+.someUpload{animation: someUpload 2s}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+@keyframes fadeModal {
+  from {opacity: 0;}
+  to {opacity: 0.99;}
+}
+@keyframes mensErro{
+  0%   {opacity: 0;height: 0; padding:0 0;}
+  10%  {opacity: 1;height: 20px; padding:8px 0;}
+  90%  {opacity: 1;height: 20px; padding:8px 0;}
+  100% {opacity: 0;height: 0; padding:0 0;}
+}
+@keyframes animaTable{
+  from {opacity:0; height: 0}
+  to{opacity:1; height: 100%}
+}
+
+@keyframes someUpload{
+  0%{ opacity:1; display: block}
+  100%{opacity:0; display: none!important}
+}
+
+.dynatable-per-page-label{float:left;padding-top: 11px}
+
+
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+  opacity: 0.99;
+  animation: fadeModal 0.5s;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: rgb(242, 243, 227);
+  margin: auto;
+  padding: 40px 80px;
+  width: 90%;
+  max-width: 545px;
+  min-width: 545px;
+  animation: fadeEffect 0.5s;
+  border-radius: 6px;
+}
+.modal-content2 {
+  position: relative;
+  background-color: rgb(242, 243, 227);
+  margin: auto;
+  padding: 40px 80px;
+  width: 90%;
+  max-width: 240px;
+  animation: fadeEffect 0.5s;
+  border-radius: 6px;
+  text-align: center;
+}
+.modal-content3 {
+  position: relative;
+  background-color: rgb(242, 243, 227);
+  margin: auto;
+  padding: 40px 80px;
+  width: 90%;
+  max-width: 350px;
+  animation: fadeEffect 0.5s;
+  border-radius: 6px;
+  text-align: center;
+}
+.modal-content3 ul{text-align:left; margin:20px 0; padding:0 0 20px 0 ; font-size: 14px; border-bottom: 2px solid #dbdeaf}
+.modal-content3 ul li{margin:10px 0}
+.destacaImport{font-weight: bolder;font-size: 16px}
+#containerControles{overflow: scroll; overflow-x: hidden;height: 352px; margin:20px 0 20px 0;}
+
+
+
+/* The Close Button */
+.close {
+  color: #fff;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 85px;
+  font-weight: lighter;
+}
+
+.close:hover,
+.close:focus {
+  color: #029184;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+

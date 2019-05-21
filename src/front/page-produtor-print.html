@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+       
+        <link rel="stylesheet" media="screen" type="text/css" href="css/ibacem-Print.css">
+        <link rel="stylesheet" media="print" type="text/css" href="css/ibacem-Print.css">
+
+  
+        
+        <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+        <header>
+            <div class="wrapper">
+                <h1><img src="img/Logo-Ibacem_HOR.png"  /></h1>
+                <h2 id="tituloExtrato">EXTRATO FINANCEIRO</h2>
+            </div>
+        </header>
+
+
+        <div class="wrapper">
+                <div id="pageFinanceiroProdutor" class="conteudoAba">
+                
+
+
+                <div class="tableHolder" id="imprimivel">
+                    <h2>REGISTROS</h2>
+                    <div id="saldoProdutor">
+                        <small>SALDO DISPONÍVEL</small>
+                        <span id="valorSaldoProdutor"></span>
+                    </div>
+                    <table id="my-table-financeiro" class="table tFinanceiro">
+                      <thead>
+                        <tr>
+                          <th width="13%">Data</th>
+                          <th style="border-top-right-radius: 6px">Histórico</th>
+                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">&nbsp;</th>
+                          <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
+                          <th width="11%" style="background-color: #d63031">Débito</th>
+                          <th width="11%" style="background-color:#636e72">Saldo</th>
+                        </tr>
+                      </thead>
+                      <tbody id="containerFinanceiro">
+                        
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+
+        <script>
+            jQuery(document).ready(function($) {
+                $('#my-table').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                $('#my-table-comercial').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                })
+                $('#my-table-financeiro').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                $('#my-table-qualidade').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false,            
+                  }
+                });
+                fnPrint();
+                
+            });
+            function fnPrint(){
+                    var printoso = localStorage.getItem("print");
+                    $('#imprimivel').html(printoso) ;
+                    console.log(printoso);
+                    window.print();
+                    window.close();
+                }
+            
+            
+
+        </script>
+        <script src="js/vendor/jspdf.min.js"></script>
+        <script src="js/vendor/jspdf.plugin.autotable.js"></script>
+        
+        
+    </body>

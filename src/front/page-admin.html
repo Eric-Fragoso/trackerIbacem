@@ -1,0 +1,319 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/ibacem-j.css">
+        <link rel="stylesheet" type="text/css" href="css/all.css" >
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <link rel="stylesheet" type="text/css" href="js/beanstalk.css">
+        
+        
+
+        <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <!-- MODAL NOVO USUARIO -->
+        <!-- MODAL NOVO USUARIO -->
+        <!-- MODAL NOVO USUARIO -->
+        <div id="ModalNovoUser" class="modal">
+            <span class="close cursor" onclick="closeModalNovoUser();">&times;</span>
+            <div class="modal-content">
+                <h2>ADICIONAR NOVO USUÁRIO</h2>
+                <form id="formCadastroUsuario" onsubmit="cadastrar(event);">
+                    <fieldset>
+                        <input type="text" placeholder="NOME COMPLETO" id="inputNome" autocomplete="name">
+                        <input type="text" placeholder="E-MAIL" id="inputEmail" autocomplete="email">
+                    </fieldset>
+                    <fieldset>
+                        <input type="password" placeholder="SENHA" id="inputSenha" autocomplete="new-password">
+                        <input type="password" placeholder="CONFIRME SUA SENHA" id="inputSenha2" autocomplete="new-password">
+                    </fieldset>
+                    <fieldset>
+                        <input type="text" placeholder="TELEFONE" id="inputTelefone" autocomplete="tel">
+                        <select name="acesso" id="select-fidelidade">
+                            <option value="" data-placeholder>FIDELIDADE</option>
+                            <option value="1">SIM</option>
+                            <option value="0">NÃO</option>
+                        </select>
+                    </fieldset>
+                    <fieldset>
+                        <select name="acesso" id="select-nivelAcesso" onchange="gambit();">
+                            <option value="" data-placeholder>NÍVEL DE ACESSO</option>
+                            <option value="Produtor">PRODUTOR</option>
+                            <option value="Analista">ANALISTA</option>
+                            <option value="Supervisor">SUPERVISOR</option>
+                            <option value="Administrador">ADMINISTRADOR</option>
+                        </select>
+                        <div id="escondeCampo"></div>
+                        <select name="acesso" id="select-empresa">
+                            <option value="" data-placeholder>EMPRESA</option>
+                        </select>
+                    </fieldset>
+                    <button class="cancelarUser" onclick="closeModalNovoUser();">CANCELAR</button> 
+                    <button class="confirmarUser" type="submit">CONFIRMAR CADASTRO</button>
+                    
+                    
+                </form>
+                <br clear="all">
+                <p id="mensagemErro"></p>
+            </div>
+        </div>
+        <script>
+          function gambit(){
+              var e = document.getElementById("select-nivelAcesso");
+              var strUser = e.options[e.selectedIndex].value;
+              console.log(strUser);
+              if(strUser == "Produtor"){
+                document.getElementById("escondeCampo").style.display="none";
+              }else{
+                document.getElementById("escondeCampo").style.display="block";
+              }
+          }
+        </script>
+
+
+
+
+
+
+
+        <!-- MODAL DELETAR USUARIO -->
+        <!-- MODAL DELETAR USUARIO -->
+        <!-- MODAL DELETAR USUARIO -->
+        <div id="ModalDeleteUser" class="modal">
+            <span class="close cursor" onclick="closeModalDeleteUser();">&times;</span>
+            <div class="modal-content2">
+                <h2>CONFIRMAR AÇÃO</h2>
+                <p>Deseja realmente deletar este usuário?<b> Essa ação não poderá ser desfeita</b></p>
+                 <button id="confirmarDelete">SIM</button> <button class="cancelarDelete" onclick="closeModalDeleteUser();">CANCELAR</button>
+                <br clear="all">
+            </div>
+        </div>
+
+
+        <!--MODAL CONFIRMAR IMPORT-->
+        <!--MODAL CONFIRMAR IMPORT-->
+        <!--MODAL CONFIRMAR IMPORT-->
+        <div id="ModalConfirmarImport" class="modal">
+            <span class="close cursor" onclick="closeModalExibeImportacao();">&times;</span>
+            <div class="modal-content3">
+                <h2>CONFIRMAR IMPORTAÇÃO</h2>
+                <div id="containerControles">
+                    <ul>
+                      <li>COD_FORNECEDOR: <span id="controleCOD" class="destacaImport">2</span></li>
+                      <li>ANO: <span id="controleANO" class="destacaImport">2018</span></li>
+                      <li>MÊS: <span id="controleMES" class="destacaImport">11</span></li>
+                      <li>SEMANA: <span id="controleSEMANA" class="destacaImport">44</span></li>
+                      <li>DATA: <span id="controleDATA" class="destacaImport">01/11/2018</span></li>
+                      <li>CULTURA: <span id="controleCULTURA" class="destacaImport">Manga</span></li>
+                      <li>VARIEDADE: <span id="controleVAR" class="destacaImport">TOMMY ATKINS</span></li>
+                      <li>CONTROLE: <span id="controleCON" class="destacaImport">946</span></li>
+                      <li>SAFRA: <span id="controleSAFRA" class="destacaImport">M18</span></li>
+                      <li>VOLUME EM KG: <span id="controleCOD" class="destacaImport">8990</span></li>
+                    </ul>
+                </div>
+                 <button id="confirmarImport" onclick="salvaControle();">SIM</button> <button class="cancelarDelete" onclick="closeModalExibeImportacao();">CANCELAR</button>
+                <br clear="all">
+            </div>
+        </div>
+
+
+        <header>
+            <div class="wrapper">
+                <h1>Ibacem</h1>
+                <div id="userInfo">
+                    <!-- img src="img/user.webp"-->
+                    <p>Olá, <span id="userName"></span></p>
+                </div>
+            </div>
+        </header>
+        <div id="menuHolder" >
+            <div id="abas">
+                <button class="tablinks" onclick="openCity(event, 'pageControles')">CONTROLES</button>
+                <button class="tablinks" onclick="openCity(event, 'pageUsuarios')" id="default">USUÁRIOS</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper">
+            <div id="pageControles" class="conteudoAba">
+                <div id="importDataArea">
+                    <h2>IMPORTAR CONTROLE</h2>
+                    <input id="input-controle" type="text" placeholder="CONTROLE" value="">
+                    
+                    <select name="ano-safra" id="select-ano-safra">
+                        <option value="" data-placeholder>ANO</option>
+                        <option value="17">2017</option>
+                        <option value="18">2018</option>
+                        <option value="19">2019</option>
+                    </select>
+                    <select name="cultura" id="select-cultura">
+                        <option value="" data-placeholder>CULTURA</option>
+                        <option value="M">Manga</option>
+                        <option value="U">Uva</option>
+                        <option value="C">Cacau</option>
+                    </select>
+                    <select name="status" id="select-status">
+                        <option value="" data-placeholder>STATUS</option>
+                        <option value="Recepção">Recepção</option>
+                        <option value="Seleção">Seleção</option>
+                        <option value="Embalagem">Embalagem</option>
+                        <option value="Expedição">Expedição</option>
+                        <option value="Comercial">Comercial</option>
+                    </select>
+                    <button class="importDataControles" onclick="erroImport();"><i class="fas fa-plus-circle"></i> IMPORTAR</button>
+                    <p id="erroImportData"></p>
+                </div>
+
+                <div class="tableHolder">
+                    <h2>ÚLTIMOS CONTROLES IMPORTADOS</h2>
+                    <table id="my-table" class="table tControles">
+                      <thead>
+                        <tr>
+                          <th width="15%">Controle</th>
+                          <th width="17%">Data de importação</th>
+                          <th>Status</th>
+                          <th>Importador</th>
+                          <th>Supervisor</th>
+                          <th width="7%">Público</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody-controles">
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pageUsuarios" class="conteudoAba">
+              <div id="gerenciarUsers">
+                <h2>CRIAR USUÁRIO</h2>
+                <button class="criarUser" onclick="openModalNovoUser();"><i class="fas fa-plus-circle"></i> NOVO USUÁRIO</button>
+              </div>
+
+              <div class="tableHolder">
+                <h2>USUÁRIOS CADASTRADOS</h2>
+                <table id="my-table-user" class="table tUsuarios">
+                  <thead>
+                    <tr>
+                      <th width="35%">Usuário</th>
+                      <th width="20%">Categoria</th>
+                      <th>E-mail</th>
+                      <th width="10%">Deletar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-user">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
+
+
+
+
+
+        <script type="text/javascript">
+            function openCity(evt, cityName) {
+              
+              var i, tabcontent, tablinks;
+
+              
+              tabcontent = document.getElementsByClassName("conteudoAba");
+              for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+              }
+
+              
+              tablinks = document.getElementsByClassName("tablinks");
+              for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+              }
+
+              
+              document.getElementById(cityName).style.display = "block";
+              evt.currentTarget.className += " active";
+            }
+            document.getElementById("default").click();
+            
+        </script>
+        
+        <script src="js/easydropdown.js"></script>
+        <script src="js/admin/admin.js"></script>
+        <script>
+            const edd = easydropdown('#select-ano-safra');
+            const edd2 = easydropdown('#select-cultura');
+            const edd3 = easydropdown('#select-status');
+            jQuery(document).ready(function($) {
+                $('#my-table').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                $('#my-table-user').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                fnPopulaControles(); 
+                fnPopulaUsuarios();   
+
+            });
+            function openModalDeleteUser(id) {
+              document.getElementById('confirmarDelete').setAttribute('onclick','deletarUsuario("'+id+'")');
+              document.getElementById('ModalDeleteUser').style.display = "block";
+            }
+            // Abre modal novo user
+            function openModalNovoUser() {
+              document.getElementById('ModalNovoUser').style.display = "block";
+              fnPopulaEmpresas();
+            }
+            // Fecha modal novo user
+            function closeModalNovoUser() {
+              document.getElementById('ModalNovoUser').style.display = "none";
+            }
+            // Fecha modal delete user
+            function closeModalDeleteUser() {
+              document.getElementById('ModalDeleteUser').style.display = "none";
+            }
+            // Abre modal exibe importação
+            function openModalExibeImportacao() {
+              document.getElementById('ModalConfirmarImport').style.display = "block";
+            }
+            // Fecha modal exibe importação
+            function closeModalExibeImportacao() {
+              document.getElementById('ModalConfirmarImport').style.display = "none";
+            }
+            function erroImport(){
+              var checaInput = document.getElementById('input-controle').value;
+              var checaControle = document.getElementById("input-controle").value;
+              var checaAno = document.getElementById("select-ano-safra").value;
+              var checaCultura = document.getElementById("select-cultura").value;
+              var checaStatus = document.getElementById("select-status").value;
+
+              if (checaInput == "" || checaControle == "" || checaAno == "" || checaCultura == "" || checaStatus == "" ){
+                  
+                  document.getElementById('erroImportData').innerHTML="Preencha todos os campos para iniciar a importação";
+                  document.getElementById('erroImportData').style.display = "block";
+                  setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                }else{
+                  importarControle();
+                };
+              }
+
+        </script>
+        
+
+    </body>

@@ -1,0 +1,16 @@
+{
+  "records": [
+    {
+      "entrada": "13/10/2019",
+      "controle": "021588749",
+      "recepção": "22%",
+      "seleção": "13%",
+      "embalagem": "11%",
+      "expedição": "9%",
+      "comercial":"-",
+      "ações": "<a href=\"javascript:;\" class=\"editarControleProdutor\"><i class=\"fas fa-file-pdf\"></i> Gerar PDF</a>"
+    }
+  ],
+  "queryRecordCount": 5,
+  "totalRecordCount": 5
+}

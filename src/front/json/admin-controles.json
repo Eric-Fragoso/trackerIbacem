@@ -1,0 +1,25 @@
+﻿{
+  "records": [
+    {
+      "controle": "021588749",
+      "data": "13/10/2019",
+      "status":"Recepção",
+      "importador": "Disco LTDA",
+      "supervisor": "Fred",
+      "público": "<i class=\"fas fa-check-circle\"></i>",
+      "editar": "<a href=\"javascript:;\" class=\"editarControle\"><i class=\"fas fa-pencil-alt\"></i></a>"
+
+    },
+    {
+      "controle": "021588749",
+      "data": "13/10/2019",
+      "status":"Recepção",
+      "importador": "Disco LTDA",
+      "supervisor": "Fred",
+      "público": "<i class=\"fas fa-check-circle\"></i>",
+      "editar": "<a href=\"javascript:;\" class=\"editarControle\"><i class=\"fas fa-pencil-alt\"></i></a>"
+    }
+  ],
+  "queryRecordCount": 2,
+  "totalRecordCount": 2
+}

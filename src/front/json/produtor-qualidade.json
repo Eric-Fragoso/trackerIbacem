@@ -1,0 +1,12 @@
+{
+  "records": [
+    {
+      "controle": "021588749",
+      "data": "13/10/2019",
+      "fotos": "<a href=\"javascript:;\" class=\"visualizarQualidade showGalleryFromArray\"><i class=\"fas fa-images\"></i> Visualizar Galeria</a>",
+      "relatório": "<a href=\"javascript:;\" class=\"editarControleProdutor\"><i class=\"fas fa-file-pdf\"></i> Gerar PDF</a>"
+    }
+  ],
+  "queryRecordCount": 1,
+  "totalRecordCount": 1
+}

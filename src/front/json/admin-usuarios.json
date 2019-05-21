@@ -1,0 +1,13 @@
+{
+  "records": [
+    {
+      "usuário": "Júlio Cesar da Silva",
+      "categoria": "Produtor",
+      "porra":"bicha",
+      "email":"juliofragoso@gmail.com",
+      "ações": "<a href=\"javascript:;\" class=\"editarUsuario\" title=\"Editar usuário\"><i class=\"fas fa-pencil-alt\"></i></a> <a href=\"javascript:;\" title=\"Deletar usuário\" class=\"deletarUsuario\" onclick=\"openModalDeleteUser();\"><i class=\"fas fa-times-circle\"></i></a>"
+    }
+  ],
+  "queryRecordCount": 1,
+  "totalRecordCount": 1
+}

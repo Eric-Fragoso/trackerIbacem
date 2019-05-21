@@ -1,0 +1,240 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" media="screen" type="text/css" href="css/ibacem-j.css">
+        <link rel="stylesheet" type="text/css" href="css/all.css" >
+        <link rel="stylesheet" type="text/css" href="css/simpleLightbox.css" >
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <script src="js/simpleLightbox.js"></script>
+  
+        
+        <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+        <header>
+            <div class="wrapper">
+                <h1>Ibacem</h1>
+                <div id="userInfo">
+                    <!-- img src="img/user.webp"-->
+                    <p>Olá, <span id="userName"></span></p>
+                </div>
+            </div>
+        </header>
+        <div id="menuHolder" >
+            <div id="abas">
+                <button class="tablinks" onclick="openCity(event, 'pageControlesProdutor')" id="default">CONTROLES</button>
+                <button class="tablinks" onclick="openCity(event, 'pageComercialProdutor')" >COMERCIAL</button>
+                <button class="tablinks" onclick="openCity(event, 'pageFinanceiroProdutor')" >FINANCEIRO</button>
+                <button class="tablinks" onclick="openCity(event, 'pageQualidadeProdutor')" >QUALIDADE</button>
+            </div>
+        </div>
+
+
+        <div class="wrapper">
+            <div id="pageControlesProdutor" class="conteudoAba">
+
+                <div class="tableHolder">
+                    <h2>CONTROLES</h2>
+                    <table id="my-table" class="table tControles">
+                      <thead>
+                        <tr>
+                          <th width="11%">Entrada</th>
+                          <th width="9%">Controle</th>
+                          <th>Recepção</th>
+                          <th>Seleção</th>
+                          <th>Embalagem</th>
+                          <th>Expedição</th>
+                          <th width="15%" style="background-color:#636e72">Perda Acumulada</th>
+                        </tr>
+                      </thead>
+                      <tbody id="containerControles">
+                        
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="pageComercialProdutor" class="conteudoAba">
+
+                <div class="tableHolder">
+                  <h2>RESUMOS</h2>
+                  <table id="my-table" class="table tControlesComercial">
+                    <thead>
+                      <tr>
+                        <th width="13%">Controle</th>
+                        <th width="10%">Destinos</th>
+                        <th>Cultura</th>
+                        <th>Variedade</th>
+                        <th>Peso Total</th>
+                        <th width="13%">Detalhes</th>
+                      </tr>
+                    </thead>
+                    <tbody id="containerControlesComercial">
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+                <div id="pageFinanceiroProdutor" class="conteudoAba">
+                <div id="miniDashProdutor">
+                    <h2>EXTRATO FINANCEIRO</h2>
+                    <button class="imprimirExtrato" onclick="imprimirExtrato();"><i class="fas fa-print"></i></i> IMPRIMIR EXTRATO</button> <button class="imprimirImposto hidden"><i class="fas fa-file-invoice-dollar"></i></i> IMPOSTO DE RENDA</button>
+                    <div id="saldoProdutor">
+                      <small>SALDO DISPONÍVEL</small>
+                      <span id="valorSaldoProdutor">R$ 17.855,00</span>
+                    </div>
+                </div>
+
+                <div class="tableHolder" id="imprimivel">
+                    <h2>REGISTROS</h2>
+                    <table id="my-table-financeiro" class="table tFinanceiro">
+                      <thead>
+                        <tr>
+                          <th width="13%">Data</th>
+                          <th style="border-top-right-radius: 6px">Histórico</th>
+                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">&nbsp;</th>
+                          <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
+                          <th width="11%" style="background-color: #d63031">Débito</th>
+                          <th width="11%" style="background-color:#636e72">Saldo</th>
+                        </tr>
+                      </thead>
+                      <tbody id="containerFinanceiro">
+                        
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+
+
+
+
+
+
+                <div id="pageQualidadeProdutor" class="conteudoAba">
+                  <div class="tableHolder">
+                    <h2>CONTROLES DISPONIBILIZADOS</h2>
+                    <table id="my-table-qualidade" class="table tControles">
+                      <thead>
+                        <tr>
+                          <th width="10%">Controle</th>
+                           <th width="20%">Recepção</th>
+                          <th width="20%">Seleção</th>
+                          <th width="20%">Embalamento</th>
+                          <th width="20%">Expedição</th>
+                        </tr>
+                      </thead>
+                      <tbody id="containerQualidade">
+                        <tr>
+                          <td>021588749</td>
+                          <td><a href="javascript:;" class="visualizarQualidade" onclick="galeria();"><i class="fas fa-images"></i> Galeria</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>
+                          <td><a href="javascript:;" class="visualizarQualidade" onclick="galeria();"><i class="fas fa-images"></i> Galeria</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <script type="text/javascript">
+            function openCity(evt, cityName) {
+              // Declare all variables
+              var i, tabcontent, tablinks;
+
+              // Get all elements with class="tabcontent" and hide them
+              tabcontent = document.getElementsByClassName("conteudoAba");
+              for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+              }
+
+              // Get all elements with class="tablinks" and remove the class "active"
+              tablinks = document.getElementsByClassName("tablinks");
+              for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+              }
+
+              // Show the current tab, and add an "active" class to the button that opened the tab
+              document.getElementById(cityName).style.display = "block";
+              evt.currentTarget.className += " active";
+            }
+            document.getElementById("default").click();
+            
+        </script>
+        <script>
+            jQuery(document).ready(function($) {
+                $('#my-table').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                $('#my-table-comercial').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                })
+                $('#my-table-financeiro').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                $('#my-table-qualidade').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false,            
+                  }
+                });
+            });
+            function openModal() {
+              document.getElementById('ModalNovoUser').style.display = "block";
+            }
+            function closeModal() {
+              document.getElementById('ModalNovoUser').style.display = "none";
+            }
+            
+
+        </script>
+        <script src="js/vendor/jspdf.min.js"></script>
+        <script src="js/vendor/jspdf.plugin.autotable.js"></script>
+        <script src="js/produtor/produtor.js"></script>
+        
+    </body>

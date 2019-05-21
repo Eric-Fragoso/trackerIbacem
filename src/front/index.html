@@ -1,0 +1,28 @@
+<html>
+        <meta charset="utf-8"/>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/ibacem-j.css">
+        <link rel="stylesheet" type="text/css" href="css/all.css" >
+        <script src="js/login/login.js"></script>
+    </head>
+    <body>
+        <header>
+            <div class="wrapper">
+                <h1>Ibacem</h1>
+            </div>
+        </header>
+        <form id="formlogin" onsubmit="logar(event);">
+            <h2>Acesso restrito</h2>
+            <p>Para continuar, informe seus dados</p>
+            <div>
+                <i class="far fa-user"></i><input id="inputEmail" type="text" placeholder="E-MAIL"><br>
+                <i class="fas fa-lock"></i><input id="inputSenha" type="password" name="" placeholder="SENHA" autocomplete=""><br>
+                <button type="submit">ENTRAR</button>
+                <a href="esquecisenha.html" id="esqueciSenha" >Esqueci minha senha</a>
+                <p id="erroImportData"></p>
+            </div>
+        </form>
+
+    </body>
+</html>

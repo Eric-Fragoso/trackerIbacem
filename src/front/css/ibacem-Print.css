@@ -1,0 +1,87 @@
+*{margin:0; padding: 0;border: 0; outline: 0; list-style: none;}
+html{padding-bottom: 80px}
+body{background-color: #fff!important; height: 100%;}
+p, span, h1, h2, h3, h4, h5, h6, label, input, button, a, th, tr, td, select, span, small, select, option, div{font-family: 'Montserrat', sans-serif;}
+
+
+
+
+
+/* H E A D E R  */
+/* H E A D E R  */
+/* H E A D E R  */
+
+h1{font-size: 18px; display:block; height: 64px; width: 180px; float: left}
+header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 70px}
+.wrapper{width: 1000px; margin:0 auto;}
+#tituloExtrato{float:right; font-size: 20px; margin:35px 0 0 0 ;}
+
+.conteudoAba {  padding: 40px 0 0 0 ;border-top: none;  animation: fadeEffect 1s;}
+
+#importDataArea, #gerenciarUsers,#miniDashProdutor, #miniDashAnalista, #entradaFinanceira, #pesquisaFinanceira {display: block; float: left; width: 100%;}
+
+#importDataArea h2, #gerenciarUsers h2,#miniDashProdutor h2, #miniDashAnalista h2, #entradaFinanceira h2, #pesquisaFinanceira h2{float: left;width: 100%; margin-bottom: 40px}
+#importDataArea button, #gerenciarUsers button, #miniDashProdutor button, #miniDashAnalista button, #entradaFinanceira button{display:none;border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left; }
+#importDataArea input, #entradaFinanceira input{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 180px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
+#importDataArea button{float:right; width:162px}
+#importDataArea .edd-root{width:150px!important}
+#select-ano-safra{width: 150px}
+#erroImportData, #mensagemErro{animation: mensErro 4s;margin: 9px auto 0;  display: none;  width: 100%;  background: #d63031;  font-weight: bold;  color: white;  text-align: center;  padding: 0px 0;  border-radius: 6px; height: 0px}
+
+.tableHolder{width: 100%; float: left; color:#2d3436;}
+	.tableHolder h2{float: left; margin-bottom: 40px}
+	.table {width: 100%; margin: 20px 0; }
+	.table th{background-color:#029184; padding: 10px 2px ;font-size: 13px;color: #000; font-weight: lighter;text-align: left}
+	.table thead tr th:first-child{border-top-left-radius: 6px}
+	.table thead tr th:last-child{border-top-right-radius: 6px}
+	.table tr{background: #fff;text-align: left ;}
+	.table tr td{padding: 13px 3px; font-size: 13px;text-align: left!important}
+	.table tr td .fa-check-circle{color:#00b894;}
+	.table tr td .fa-times-circle{color:#d63031;}
+	.table tr td a{color:#0984e3; text-decoration: none; font-size: 16px}
+#dynatable-query-search-my-table, #dynatable-query-search-my-table-user,#dynatable-query-search-my-table-comercial{height: 40px; padding: 8px 0 8px 12px; border-radius: 6px; width: 250px; font-size: 15px; color: black; border:1px solid #008c7f;}
+#dynatable-per-page-my-table, #dynatable-per-page-my-table-user,#dynatable-per-page-my-table-comercial{height: 40px; padding: 8px 0 8px 12px;font-size: 15px;color: black; border:1px solid #008c7f;border-radius: 6px;}
+.checkboxVisivel{display: none}
+.tdClicavel{cursor: pointer;}
+.tdClicavel a{z-index: 20}
+
+.editarUsuario{margin-right: 20px}
+#ModalNovoUser input{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 250px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
+#ModalNovoUser fieldset{margin:20px 0;}
+#ModalNovoUser .cancelarUser{background:#d63031;border-radius: 6px; width: 130px; height: 44px; color: white; cursor: pointer; float: left; margin-right: 30px;}
+#ModalNovoUser .confirmarUser, .confirmarDelete, .confirmarPesquisa{border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+
+#ModalDeleteUser p, #ModalDeleteRegistro p{margin:40px 0;}
+.cancelarDelete{background:#d63031;border-radius: 6px; width: 130px; height: 40px; color: white; cursor: pointer; float: left;}
+#confirmarDelete, #confirmarImport, #confirmarEntrada{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+
+
+#escondeCampo{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px;  display: block;}
+
+.hidden{display: none;}
+
+/*P A I N E L   D E   P R O D U T O R */
+/*P A I N E L   D E   P R O D U T O R */
+/*P A I N E L   D E   P R O D U T O R */
+
+
+.statusControleOK{color:#bdc3c7!important;font-size: 13px!important;}
+.statusControleOK i{color:#bdc3c7!important;}
+.statusControleAtual{color: #00b894!important; font-weight: bolder}
+.statusControleNext{color: #f39c12!important;}
+.fa-arrow-right{color:#b2bec3!important; margin:0 5px;}
+.fa-check-circle{color: #00b894}
+
+.imprimirExtrato{margin-right: 15px}
+#miniDashProdutor{display: block; float: left; width: 100%; padding: 0 0 30px 0; border-bottom: 1px solid #dbdeaf; margin-bottom: 20px}
+#saldoProdutor{float:right;}
+	#saldoProdutor small{float: right;font-size: 11px;}
+	#saldoProdutor span{float: right; clear: both; font-size: 28px; color: #00b894; font-weight: bolder }
+
+.historico{text-align: left!important; padding-left: 8px; float: left}
+
+.editarControleProdutor, .visualizarQualidade{font-size: 13px!important; color: #000!important;}
+.visualizarQualidade:hover, .editarControleProdutor:hover{text-decoration: underline;}
+.editarControleProdutor i, .visualizarQualidade i{font-size: 16px!important; color: #d63031}
+.visualizarQualidade i{color: #0984e3!important;}
+
