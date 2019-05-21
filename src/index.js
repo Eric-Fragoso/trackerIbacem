@@ -9,7 +9,7 @@ const app = express();
 console.log(express.static(__dirname));
 
 app.use('/enviadas', express.static(__dirname  + '/uploads'));
-app.use('/portal', express.static(__dirname  + '/front'));
+app.use('/portal', express.static(__dirname  + '/portal'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
