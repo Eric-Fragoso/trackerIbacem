@@ -158,7 +158,7 @@ function geraPDF(fornecedorCod, controleCod){
               cultura = control.CULTURA;
               variedade = control.VARIEDADE;
               //var kgtotal = control.TIPO_CX * control.QTD_CAIXA;
-              var kgtotal = Math.round(control.PESO_CX,2);
+              var kgtotal = Math.round10(control.PESO_CX,-2);
               var nettotal = control.NET_CX * control.QTD_CAIXA;
               arraySingle.push(control.MERCADO, control.NAVIO, control.CONTAINER, control.DATA_CHEGADA, control.COD_CLIENTE, control.CAIXA, control.QTD_CAIXA, control.CALIBRE, control.MOEDA, control.VALOR_BRUTO_CX, control.VALOR_COMISSAOIMP_CX, control.VALOR_CUSTOIMP_CX, control.RESU_FOB, control.VALOR_CX_MI, control.RESU_MI, control.DESP_FRETE, control.COMISSAO_IBACEM, control.CUSTO_PH, control.COMISSAO_MI, control.NET_CX, control.NET_KG, kgtotal, nettotal )
               arrayMaster.push(arraySingle);
