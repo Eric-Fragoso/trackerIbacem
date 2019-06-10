@@ -40,6 +40,7 @@ router.post('/', async(req, res)=>{
 
 router.put('/:financeiroId', async(req, res)=>{
     const {id, aprovado} = req.body;
+    console.log(aprovado);
     try{
         const financeiro = await Financeiro.findByIdAndUpdate(id, req.body,{new:true});
         return res.send({
