@@ -23,6 +23,11 @@ const FinanceiroSchema = Schema({
     valor:{
         type: Currency,
         require: true,
+    },
+    aprovado:{
+        type: Boolean,
+        require: true,
+        default: false,
     }
 
 
