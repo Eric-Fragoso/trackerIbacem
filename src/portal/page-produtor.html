@@ -5,9 +5,15 @@
         <link rel="stylesheet" media="screen" type="text/css" href="css/ibacemj.css">
         <link rel="stylesheet" type="text/css" href="css/all.css" >
         <link rel="stylesheet" type="text/css" href="css/simpleLightbox.css" >
+        <link href="js/datepicker.css" rel="stylesheet" type="text/css">
         <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/datepicker.js"></script>
+        <script src="js/datepicker.pt-BR.js"></script>
+        
         <script src="js/jquery.dynatable.js"></script>
         <script src="js/simpleLightbox.js"></script>
+        <script src="js/all.js"></script>
+        
   
         
         <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
@@ -22,7 +28,8 @@
                 <h1>Ibacem</h1>
                 <div id="userInfo">
                     <!-- img src="img/user.webp"-->
-                    <p>Olá, <span id="userName"></span></p>
+                    <p>Olá, <span id="userName"></span></p><br>
+                    <a id="logoff" href="javascript:;" onclick="sair();">SAIR</a>
                 </div>
             </div>
         </header>
@@ -40,7 +47,11 @@
             <div id="pageControlesProdutor" class="conteudoAba">
 
                 <div class="tableHolder">
-                    <h2>CONTROLES</h2>
+                    <h2 style="width: 80%;float: left">CONTROLES</h2><button class="imprimirResumo" onclick="imprimirResumo();"><i class="fas fa-print"></i></i> IMPRIMIR RESUMO</button>
+                    <p id="erroRangeData1" class="erroRangeData"></p><br>
+                    <input id="input-filtroData" type="text" placeholder="FILTRAR POR DATA" value="" data-range="true" data-multiple-dates-separator=" - "><button id="filtrarRange" onclick="erroImport();"><i class="fas fa-search"></i> FILTRAR</button><button id="apagarRange" onclick="limpaFiltro();"><i class="fas fa-times-circle"></i> APAGAR FILTRO</button>
+                    
+                    
                     <table id="my-table" class="table tControles">
                       <thead>
                         <tr>
@@ -64,9 +75,13 @@
 
                 <div class="tableHolder">
                   <h2>RESUMOS</h2>
-                  <table id="my-table" class="table tControlesComercial">
+                  <p id="erroRangeData2" class="erroRangeData"></p><br>
+                  <input id="input-filtroData2" type="text" placeholder="FILTRAR POR DATA" value="" data-range="true" data-multiple-dates-separator=" - "><button id="filtrarRange2" onclick="erroImport2();"><i class="fas fa-search"></i> FILTRAR</button><button id="apagarRange2" onclick="limpaFiltroComercial();"><i class="fas fa-times-circle"></i> APAGAR FILTRO</button>
+
+                  <table id="my-table-comercial" class="table tControlesComercial">
                     <thead>
                       <tr>
+                        <th width="13%">Data</th>
                         <th width="13%">Controle</th>
                         <th width="10%">Destinos</th>
                         <th>Cultura</th>
@@ -101,6 +116,9 @@
 
                 <div class="tableHolder" id="imprimivel">
                     <h2>REGISTROS</h2>
+                    <p id="erroRangeData3" class="erroRangeData"></p><br>
+                    <input id="input-filtroData3" type="text" placeholder="FILTRAR POR DATA" value="" data-range="true" data-multiple-dates-separator=" - "><button id="filtrarRange3" onclick="erroImport3();"><i class="fas fa-search"></i> FILTRAR</button><button id="apagarRange3" onclick="limpaFiltroFinanceiro();"><i class="fas fa-times-circle"></i> APAGAR FILTRO</button>
+  
                     <table id="my-table-financeiro" class="table tFinanceiro">
                       <thead>
                         <tr>
@@ -156,7 +174,7 @@
 
 
 
-
+        <script src="js/produtor/produtor.js"></script>
         <script type="text/javascript">
             function openCity(evt, cityName) {
               // Declare all variables
@@ -180,61 +198,68 @@
             }
             document.getElementById("default").click();
             
-        </script>
-        <script>
-            jQuery(document).ready(function($) {
-                $('#my-table').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false
-                  }
-                });
-                $('#my-table-comercial').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false
-                  }
-                })
-                $('#my-table-financeiro').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false
-                  }
-                });
-                $('#my-table-qualidade').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false,            
-                  }
-                });
-            });
+
+            
             function openModal() {
               document.getElementById('ModalNovoUser').style.display = "block";
             }
             function closeModal() {
               document.getElementById('ModalNovoUser').style.display = "none";
             }
+            $('#input-filtroData').datepicker({
+                    language: 'pt-BR',
+                    maxDate: new Date()
+            })
+            $('#input-filtroData2').datepicker({
+                    language: 'pt-BR',
+                    maxDate: new Date()
+            })
+            $('#input-filtroData3').datepicker({
+                    language: 'pt-BR',
+                    maxDate: new Date()
+            })
+            
+            function erroImport(){
+              var checaInput = document.getElementById('input-filtroData').value;
+              
+
+              if (checaInput == ""){
+                  document.getElementById('erroRangeData1').innerHTML="Selecione um período para filtrar";
+                  document.getElementById('erroRangeData1').style.display = "block";
+                  setTimeout(function(){ document.getElementById('erroRangeData1').style.display = "none"; }, 4000);
+                }else{
+                  filtrarData();
+              };
+            }
+            function erroImport2(){
+              var checaInput = document.getElementById('input-filtroData2').value;
+              
+
+              if (checaInput == ""){
+                  document.getElementById('erroRangeData2').innerHTML="Selecione um período para filtrar";
+                  document.getElementById('erroRangeData2').style.display = "block";
+                  setTimeout(function(){ document.getElementById('erroRangeData2').style.display = "none"; }, 4000);
+                }else{
+                  filtrarDataComercial();
+              };
+            }
+            function erroImport3(){
+              var checaInput = document.getElementById('input-filtroData3').value;
+              
+
+              if (checaInput == ""){
+                  document.getElementById('erroRangeData3').innerHTML="Selecione um período para filtrar";
+                  document.getElementById('erroRangeData3').style.display = "block";
+                  setTimeout(function(){ document.getElementById('erroRangeData3').style.display = "none"; }, 4000);
+                }else{
+                  filtrarDataFinanceiro();
+              };
+            }
             
 
         </script>
         <script src="js/vendor/jspdf.min.js"></script>
         <script src="js/vendor/jspdf.plugin.autotable.js"></script>
-        <script src="js/produtor/produtor.js"></script>
+        
         
     </body>

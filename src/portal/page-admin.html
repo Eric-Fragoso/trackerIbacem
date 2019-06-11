@@ -1,13 +1,18 @@
 <html>
     <head>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/ibacemj.css">
         <link rel="stylesheet" type="text/css" href="css/all.css" >
-        <script src="js/vendor/jquery-1.7.2.min.js"></script>
-        <script src="js/jquery.dynatable.js"></script>
         <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
         <link rel="stylesheet" type="text/css" href="js/beanstalk.css">
+        <link rel="stylesheet" type="text/css" href="js/jquery.dm-uploader.min.css">
+        <link href="js/datepicker.css" rel="stylesheet" type="text/css">
+        <script src="js/datepicker.js"></script>
+        <script src="js/datepicker.pt-BR.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <script src="js/all.js"></script>
         
         
 
@@ -127,13 +132,16 @@
                 <div id="userInfo">
                     <!-- img src="img/user.webp"-->
                     <p>Olá, <span id="userName"></span></p>
+                    <a id="logoff" href="javascript:;" onclick="sair();">SAIR</a>
                 </div>
             </div>
         </header>
         <div id="menuHolder" >
             <div id="abas">
-                <button class="tablinks" onclick="openCity(event, 'pageControles')">CONTROLES</button>
-                <button class="tablinks" onclick="openCity(event, 'pageUsuarios')" id="default">USUÁRIOS</button>
+                <button class="tablinks" onclick="openCity(event, 'pageControles')" id="default">CONTROLES</button>
+                <button class="tablinks" onclick="openCity(event, 'pageUsuarios')">USUÁRIOS</button>
+                <button class="tablinks" onclick="openCity(event, 'pageFinanceiroAdmin')">FINANCEIRO</button>
+                <button class="tablinks" onclick="openCity(event, 'pageQualidadeAdmin')">QUALIDADE</button>
             </div>
         </div>
 
@@ -178,6 +186,7 @@
                           <th>Status</th>
                           <th>Importador</th>
                           <th>Supervisor</th>
+                          <th width="9%">Analisado</th>
                           <th width="7%">Público</th>
                         </tr>
                       </thead>
@@ -198,10 +207,11 @@
                 <table id="my-table-user" class="table tUsuarios">
                   <thead>
                     <tr>
-                      <th width="35%">Usuário</th>
-                      <th width="20%">Categoria</th>
+                      <th width="45%">Produtor</th>
+                      <th width="15%">Usuário</th>
+                      <th width="13%">Categoria</th>
                       <th>E-mail</th>
-                      <th width="10%">Deletar</th>
+                      <th width="7%">Deletar</th>
                     </tr>
                   </thead>
                   <tbody id="tbody-user">
@@ -209,6 +219,125 @@
                 </table>
               </div>
             </div>
+
+
+
+
+
+
+
+            <div id="pageFinanceiroAdmin" class="conteudoAba">
+              
+              <div id="pesquisaFinanceira">
+                <h2>FILTRAR POR EMPRESA</h2>
+                <select name="acesso" id="select-empresa-financeiro" onchange="filtraEmpresa();">
+                    <option value="" data-placeholder>EMPRESA</option>
+                </select>
+                <button class="confirmarPesquisa" onclick="filtraEmpresa();">FILTRAR</button>
+              </div>
+              <div id="entradaFinanceira" class="hidden">
+                  <h2>INSERIR</h2>
+                  <form id="formEntFinanceira" onsubmit="cadastrarFinanceiro(event);">
+                    <input id="input-data" type="text" placeholder="DATA" value="" class="datepicker-here" data-language='pt-BR'>
+                    <input id="input-descricao" type="text" placeholder="DESCRIÇÃO" value="">
+                    <input id="input-valor" type="text" placeholder="VALOR" value="">
+                    <select name="tipo-entrada" id="select-tipo-entrada">
+                        <option value="x" data-placeholder >MOVIMENTAÇÃO</option>
+                        <option value=" ">CRÉDITO</option>
+                        <option value="-">DÉBITO</option>
+                    </select>
+                    <button class="confirmarEntrada" type="submit" ><i class="fas fa-plus-circle"></i></i> INSERIR</button>
+                  </form>
+                </div>
+                <div id="resultadoPesquisaFinanceiro">
+                  <h2>REGISTROS FINANCEIROS NÃO APROVADOS</h2>
+                  <table id="my-table-financeiro" class="table tFinanceiro">
+                    <thead>
+                      <tr>
+                        <th width="11%">Data</th>
+                        <th >Empresa</th>
+                        <th style="border-top-right-radius: 6px">Histórico</th>
+                        <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
+                        <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
+                        <th width="11%" style="background-color: #d63031">Débito</th>
+                        <th width="11%" style="background-color: #636e72">Aprovado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="containerFinanceiro1">
+                      
+                    </tbody>
+                  </table>
+                </div>
+
+                <div id="resultadoFiltraPesquisaFinanceiro" class="hidden">
+                    <h2>REGISTROS - <span id="nomeFiltraEmpresa">XXX</span></h2>
+                    <table id="my-table-financeiro" class="table tFinanceiro">
+                      <thead>
+                        <tr>
+                          <th width="11%">Data</th>
+                          <th style="border-top-right-radius: 6px">Histórico</th>
+                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
+                          <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
+                          <th width="11%" style="background-color: #d63031">Débito</th>
+                          <th width="8%" style="background-color:#636e72">Deletar</th>
+                        </tr>
+                      </thead>
+                      <tbody id="containerFinanceiro2">
+                        
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+
+
+
+
+
+
+
+
+
+            <div id="pageQualidadeAdmin" class="conteudoAba">
+              <form id="" action="https://138.204.68.18:3323/controles/gallery" method="POST" enctype="multipart/form-data">
+                <div id="miniDashAnalista">
+                    <h2>DOCUMENTOS DA QUALIDADE</h2>
+                    <p id="erroAdminQualidade" class="erroRangeData"></p><br>
+                    <div id="empresaSelect">
+                      <select name="acesso" id="select-empresa-controle" onchange="fnPopulaControlesFornecedor();">
+                          <option value="" data-placeholder>EMPRESA</option>
+                      </select>
+                    </div>
+                    <select name="etapa" class="hidden" id="select-controle" >
+                      <option value="" data-placeholder >CONTROLES</option>
+                    </select>
+                    <select name="tipo-entrada" id="select-estagio-qualidade" onchange="guardaDados();">
+                        <option value="" data-placeholder >ESTÁGIO</option>
+                        <option value="Recepcao">RECEPÇÃO</option>
+                        <option value="Selecao">SELEÇÃO</option>
+                        <option value="Embalamento">EMBALAMENTO</option>
+                        <option value="Expedicao">EXPEDIÇÃO</option>
+                    </select>
+                    <div class="btnAnexa">
+                        <span>ANEXAR ARQUIVOS</span>
+                        <input type="file" title="Anexar arquivos" multiple="">
+                    </div>
+
+                    <button class="confirmarUpload" id="btnApiStartAdmin" onclick="erroQualidade();"><i class="fas fa-cloud-upload-alt"></i> ENVIAR</button><br clear="all">
+                    <div class="cardUpload">
+                        <div class="cardHeader">
+                          Lista de arquivos anexados
+                        </div>
+                      
+                        <ul class="" id="files">
+                          <li class="empty">Nenhum arquivo anexado</li>
+                        </ul>
+                    </div>
+
+                </div>
+                
+              </form>
+            </div>
+
       </div>
 
 
@@ -216,6 +345,20 @@
 
 
         <script type="text/javascript">
+            function filtraEmpresa(){
+              var empresaFiltra = document.getElementById("select-empresa-financeiro").options[document.getElementById('select-empresa-financeiro').selectedIndex].innerText;
+
+
+              document.getElementById("entradaFinanceira").style.display = "block";
+              document.getElementById("resultadoFiltraPesquisaFinanceiro").style.display = "block";
+              document.getElementById("resultadoPesquisaFinanceiro").style.display = "none";
+              document.getElementById("nomeFiltraEmpresa").innerHTML = empresaFiltra;
+
+              fnPopulaFinanceirosFornecedor();
+            }
+
+
+
             function openCity(evt, cityName) {
               
               var i, tabcontent, tablinks;
@@ -246,6 +389,8 @@
             const edd = easydropdown('#select-ano-safra');
             const edd2 = easydropdown('#select-cultura');
             const edd3 = easydropdown('#select-status');
+            const edd4 = easydropdown('#select-tipo-entrada');
+
             jQuery(document).ready(function($) {
                 $('#my-table').dynatable({
                   features: {
@@ -268,7 +413,12 @@
                   }
                 });
                 fnPopulaControles(); 
-                fnPopulaUsuarios();   
+                fnPopulaUsuarios();
+                fnPopulaEmpresas();
+                $('#input-data').datepicker({
+                    language: 'pt-BR',
+                    maxDate: new Date()
+                })
 
             });
             function openModalDeleteUser(id) {
@@ -311,8 +461,110 @@
                 }else{
                   importarControle();
                 };
-              }
+            }
+            function erroQualidade(){
+              var qualidadeEmpresaControle = document.getElementById('select-empresa-controle').value;
+              var qualidadeControle = document.getElementById("select-controle").value;
+              var qualidadeEstagio = document.getElementById("select-estagio-qualidade").value;
 
+
+              if (qualidadeEmpresaControle == "" || qualidadeControle == "" || qualidadeEstagio == ""){
+                  
+                  document.getElementById('erroAdminQualidade').innerHTML="Preencha todos os campos para anexar os arquivos";
+                  document.getElementById('erroAdminQualidade').style.display = "block";
+                  setTimeout(function(){ document.getElementById('erroAdminQualidade').style.display = "none"; }, 4000);
+                  
+                }else{
+                  evt.preventDefault();
+                  $('.btnAnexa').dmUploader('start');
+                  console.log("entrou");
+                };
+            }
+            
+    
+
+
+              (function($, undefined) {
+
+                "use strict";
+
+                // When ready.
+                $(function() {
+                    
+                    var $form = $( "#formEntFinanceira" );
+                    var $input = $form.find( "#input-valor" );
+
+                    $input.on( "keyup", function( event ) {
+                        
+                        
+                        // When user select text in the document, also abort.
+                        var selection = window.getSelection().toString();
+                        if ( selection !== '' ) {
+                            return;
+                        }
+                        
+                        // When the arrow keys are pressed, abort.
+                        if ( $.inArray( event.keyCode, [38,40,37,39] ) !== -1 ) {
+                            return;
+                        }
+                        
+                        
+                        var $this = $( this );
+                        
+                        // Get the value.
+                        var input = $this.val();
+                        var input = input.replace(/[\D\s\._\-]+/g, "");
+                                input = input ? parseInt( input, 10 ) : 0;
+
+                                $this.val( function() {
+                                    return ( input === 0 ) ? "" : input.toLocaleString( "pt-BR" );
+                                } );
+                    } );
+                    
+                    /**
+                     * ==================================
+                     * When Form Submitted
+                     * ==================================
+                     */
+                    $form.on( "submit", function( event ) {
+                        
+                        var $this = $( this );
+                        var arr = $this.serializeArray();
+                    
+                        for (var i = 0; i < arr.length; i++) {
+                                arr[i].value = arr[i].value.replace(/[($)\s\._\-]+/g, ''); // Sanitize the values.
+                        };
+                        
+                        console.log( arr );
+                        
+                        event.preventDefault();
+                    });
+                    
+                });
+                })(jQuery);
+
+
+
+        </script>
+        <script src="js/jquery.dm-uploader.min.js"></script>
+        <script src="js/control-uploader.js"></script>
+        <script src="js/ui-multiple.js"></script>
+        <script type="text/html" id="files-template">
+          <li class="media">
+            <div class="media-body">
+              <p class="mb-2">
+                <strong>%%filename%%</strong> - Status: <span class="text-muted">Aguardando</span>
+              </p>
+              <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                  role="progressbar"
+                  style="width: 0%" 
+                  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+              <hr class="mt-1 mb-1" />
+            </div>
+          </li>
         </script>
         
 

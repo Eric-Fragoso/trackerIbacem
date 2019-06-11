@@ -11,6 +11,7 @@
         <script src="js/jquery.dynatable.js"></script>
         <link rel="stylesheet" type="text/css" href="js/beanstalk.css">
         <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <script src="js/all.js"></script>
 
         
         <link rel="stylesheet" type="text/css" href="js/jquery.dm-uploader.min.css">
@@ -49,6 +50,8 @@
                 <div id="userInfo">
                     
                     <p>Olá, <span id="userName"></span></p>
+                    <a id="logoff" href="index.html">SAIR</a>
+
                     <h2 class="hidden">EXTRATO FINANCEIRO</h2>
                 </div>
             </div>
@@ -57,68 +60,57 @@
             <div id="abas">
                 <button class="tablinks" onclick="openCity(event, 'pageControlesAnalista')" id="default">CONTROLES</button>
                 <button class="tablinks" onclick="openCity(event, 'pageFinanceiroAnalista')">FINANCEIRO</button>
+                <button class="tablinks" onclick="openCity(event, 'pageQualidadeAnalista')">QUALIDADE</button>
             </div>
         </div>
 
 
         <div class="wrapper">
             <div id="pageControlesAnalista" class="conteudoAba">
-              <form id="" action="https://138.204.68.18:3323/controles/gallery" method="POST" enctype="multipart/form-data">
-                <div id="miniDashAnalista">
-                    <h2>ANEXAR DOCUMENTOS</h2>
-                    <div id="empresaSelect">
-                    <select name="acesso" id="select-empresa-controle" onchange="fnPopulaControlesFornecedor();">
-                        <option value="" data-placeholder>EMPRESA</option>
-                    </select>
-                    </div>
-                    <select name="etapa" class="hidden" id="select-controle" >
-                      <option value="" data-placeholder >CONTROLES</option>
-                    </select>
-                    <select name="tipo-entrada" id="select-estagio-qualidade" onchange="guardaDados();">
-                        <option value="" data-placeholder >ESTÁGIO</option>
-                        <option value="Recepcao">RECEPÇÃO</option>
-                        <option value="Selecao">SELEÇÃO</option>
-                        <option value="Embalamento">EMBALAMENTO</option>
-                        <option value="Expedicao">EXPEDIÇÃO</option>
-                    </select>
-                    <div class="btnAnexa">
-                        <span>ANEXAR ARQUIVOS</span>
-                        <input type="file" title="Anexar arquivos" multiple="">
-                    </div>
+                <div id="importDataArea">
+                  <h2>IMPORTAR CONTROLE</h2>
+                  <input id="input-controle" type="text" placeholder="CONTROLE" value="">
+                  
+                  <select name="ano-safra" id="select-ano-safra">
+                      <option value="" data-placeholder>ANO</option>
+                      <option value="17">2017</option>
+                      <option value="18">2018</option>
+                      <option value="19">2019</option>
+                  </select>
+                  <select name="cultura" id="select-cultura">
+                      <option value="" data-placeholder>CULTURA</option>
+                      <option value="M">Manga</option>
+                      <option value="U">Uva</option>
+                      <option value="C">Cacau</option>
+                  </select>
+                  <select name="status" id="select-status">
+                      <option value="" data-placeholder>STATUS</option>
+                      <option value="Recepção">Recepção</option>
+                      <option value="Seleção">Seleção</option>
+                      <option value="Embalagem">Embalagem</option>
+                      <option value="Expedição">Expedição</option>
+                      <option value="Comercial">Comercial</option>
+                  </select>
+                  <button class="importDataControles" onclick="erroImport();"><i class="fas fa-plus-circle"></i> IMPORTAR</button>
+                  <p id="erroImportData"></p>
+              </div>
 
-                    <button class="confirmarUpload" id="btnApiStart"><i class="fas fa-cloud-upload-alt"></i> ENVIAR</button><br clear="all">
-                    <div class="cardUpload">
-                        <div class="cardHeader">
-                          Lista de arquivos anexados
-                        </div>
-                      
-                        <ul class="" id="files">
-                          <li class="empty">Nenhum arquivo anexado</li>
-                        </ul>
-                    </div>
-
-                </div>
-                
-              </form>
-            
               <div class="tableHolder">
-                <h2>ÚLTIMAS ALTERAÇÕES</h2>
-                <table id="my-table-analista" class="table tControles">
-                  <thead>
-                    <tr>
-                      <th width="13%">Entrada</th>
-                      <th width="10%">Controle</th>
-                      <th>Recepção</th>
-                      <th>Seleção</th>
-                      <th>Embalagem</th>
-                      <th>Expedição</th>
-                      <th>Comercial</th>
-                      <th width="13%">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
+                  <h2>ÚLTIMOS CONTROLES IMPORTADOS</h2>
+                  <table id="my-table" class="table tControles">
+                    <thead>
+                      <tr>
+                        <th width="15%">Controle</th>
+                        <th width="17%">Data de importação</th>
+                        <th>Status</th>
+                        <th>Importador</th>
+                        <th>Supervisor</th>
+                        <th width="8%">Analisado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody-controles">
+                    </tbody>
+                  </table>
               </div>
             </div>
 
@@ -153,7 +145,7 @@
                     <thead>
                       <tr>
                         <th width="11%">Data</th>
-                        <th style="">Empresa</th>
+                        <th >Empresa</th>
                         <th style="border-top-right-radius: 6px">Histórico</th>
                         <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
                         <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
@@ -186,10 +178,45 @@
                   </div>
               </div>
 
+              <div id="pageQualidadeAnalista" class="conteudoAba">
+                <form id="" action="https://138.204.68.18:3323/controles/gallery" method="POST" enctype="multipart/form-data">
+                  <div id="miniDashAnalista">
+                      <h2>DOCUMENTOS DA QUALIDADE</h2>
+                      <div id="empresaSelect">
+                      <select name="acesso" id="select-empresa-controle" onchange="fnPopulaControlesFornecedor();">
+                          <option value="" data-placeholder>EMPRESA</option>
+                      </select>
+                      </div>
+                      <select name="etapa" class="hidden" id="select-controle" >
+                        <option value="" data-placeholder >CONTROLES</option>
+                      </select>
+                      <select name="tipo-entrada" id="select-estagio-qualidade" onchange="guardaDados();">
+                          <option value="" data-placeholder >ESTÁGIO</option>
+                          <option value="Recepcao">RECEPÇÃO</option>
+                          <option value="Selecao">SELEÇÃO</option>
+                          <option value="Embalamento">EMBALAMENTO</option>
+                          <option value="Expedicao">EXPEDIÇÃO</option>
+                      </select>
+                      <div class="btnAnexa">
+                          <span>ANEXAR ARQUIVOS</span>
+                          <input type="file" title="Anexar arquivos" multiple="">
+                      </div>
 
+                      <button class="confirmarUpload" id="btnApiStart"><i class="fas fa-cloud-upload-alt"></i> ENVIAR</button><br clear="all">
+                      <div class="cardUpload">
+                          <div class="cardHeader">
+                            Lista de arquivos anexados
+                          </div>
+                        
+                          <ul class="" id="files">
+                            <li class="empty">Nenhum arquivo anexado</li>
+                          </ul>
+                      </div>
 
-
-
+                  </div>
+                  
+                </form>
+              </div>
             </div>
         </div>
       
@@ -272,7 +299,22 @@
                 })
             });
 
+            function erroImport(){
+              var checaInput = document.getElementById('input-controle').value;
+              var checaControle = document.getElementById("input-controle").value;
+              var checaAno = document.getElementById("select-ano-safra").value;
+              var checaCultura = document.getElementById("select-cultura").value;
+              var checaStatus = document.getElementById("select-status").value;
 
+              if (checaInput == "" || checaControle == "" || checaAno == "" || checaCultura == "" || checaStatus == "" ){
+                  
+                  document.getElementById('erroImportData').innerHTML="Preencha todos os campos para iniciar a importação";
+                  document.getElementById('erroImportData').style.display = "block";
+                  setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                }else{
+                  importarControle();
+              };
+            }
             
             (function($, undefined) {
 

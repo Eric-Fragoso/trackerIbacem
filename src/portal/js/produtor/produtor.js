@@ -21,7 +21,7 @@ const fnPopulaControles = async()=> {
     var controles = (response.data).controles;
     
       
-      controles.map(function (controle) {
+      controles.map(async function (controle) {
         
         switch (controle.codigo.length){
           case 9 :
@@ -48,36 +48,55 @@ const fnPopulaControles = async()=> {
         }
 
 
-        axios.get(`http://138.204.68.18:3324/api/controles/acompanhamento/${cod}/${ano}/${cultura}`)
+        await axios.get(`http://138.204.68.18:3324/api/controles/acompanhamento/${cod}/${ano}/${cultura}`)
         .then(function(resposta){
           var controls = (resposta.data);
            controls.map(function (control) {
-            objetoInsert = objetoInsert +
-            `<tr align="center">
-                  <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                  <td>${control.CONTROLE}</td>
-                  <td>${Math.round(control.RECEPCAO)} Kg</td>
-                  <td>${Math.round(control.SELECAO)} Kg</td>
-                  <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                  <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                  <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
-            </tr>`
+             if (localStorage.getItem("dataInicial")){
+               if(taNoRange(fnConvertData(control.DATA_CONTROLE), localStorage.getItem("dataInicial"), localStorage.getItem("dataFinal"))){
+                  objetoInsert = objetoInsert +
+                  `<tr align="center">
+                        <td>${fnConvertData(control.DATA_CONTROLE)}</td>
+                        <td>${control.CONTROLE}</td>
+                        <td>${Math.round(control.RECEPCAO)} Kg</td>
+                        <td>${Math.round(control.SELECAO)} Kg</td>
+                        <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                        <td>${Math.round(control.EXPEDICAO)} Kg</td>
+                        <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
+                  </tr>`
+                  
+               }
+             }else{
+              objetoInsert = objetoInsert +
+              `<tr align="center">
+                    <td>${fnConvertData(control.DATA_CONTROLE)}</td>
+                    <td>${control.CONTROLE}</td>
+                    <td>${Math.round(control.RECEPCAO)} Kg</td>
+                    <td>${Math.round(control.SELECAO)} Kg</td>
+                    <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                    <td>${Math.round(control.EXPEDICAO)} Kg</td>
+                    <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
+              </tr>`
+             }
                 
             }).join('');  
-            
+          
             return (document.getElementById('containerControles').innerHTML = objetoInsert);
+            
         })
         .catch(function(error){
           console.warn(error);
       });
    
       }).join('');   
+      
+      fnPopulaControlesComercial();
      
   })
   .catch(function(error){
       console.warn(error);
   });
-  fnPopulaControlesComercial();
+  
 }  
 
 const fnPopulaControlesComercial = async()=> {
@@ -116,11 +135,27 @@ const fnPopulaControlesComercial = async()=> {
             controls.map(function (control) {
               entradas++;
               cultura = control.CULTURA;
+              data = fnConvertData(control.DATA_EMBARQUE);
               variedade = control.VARIEDADE;
               pesoTotal = pesoTotal + (control.QTD_CAIXA * control.TIPO_CX);
-            }).join('');  
-            objetoInsert = objetoInsert +
+            }).join(''); 
+            if (localStorage.getItem("dataInicialComercial")){ 
+              if(taNoRange(data, localStorage.getItem("dataInicialComercial"), localStorage.getItem("dataFinalComercial"))){
+                objetoInsert = objetoInsert +
+                  `<tr align="center">
+                        <td>${data}</td>
+                        <td>${controle.codigo}</td>
+                        <td>${entradas}</td>
+                        <td>${cultura} </td>
+                        <td>${variedade}</td>
+                        <td>${pesoTotal} Kg</td>
+                        <td><a href="javascript:;" onclick="geraPDF(${valueFornecedor},${cod})" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Gerar PDF</a></td>
+                  </tr>`
+              }
+            }else{
+              objetoInsert = objetoInsert +
               `<tr align="center">
+                    <td>${data}</td>
                     <td>${controle.codigo}</td>
                     <td>${entradas}</td>
                     <td>${cultura} </td>
@@ -128,6 +163,7 @@ const fnPopulaControlesComercial = async()=> {
                     <td>${pesoTotal} Kg</td>
                     <td><a href="javascript:;" onclick="geraPDF(${valueFornecedor},${cod})" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Gerar PDF</a></td>
               </tr>`
+            }
             return (document.getElementById('containerControlesComercial').innerHTML = objetoInsert);
           })
           .catch(function(error){
@@ -226,28 +262,57 @@ const fnPopulaFinanceiros = async()=> {
     var saldo = 0;
     var contador = 0;
       financeiros.map(function (financeiro) {
-        saldo = saldo + financeiro.valor ;  
-        if(contador >=(financeiros.length-(qtdEntradas))){
-            if(financeiro.valor > 0){
-              objetoInsert = objetoInsert +
-                  `<tr align="center">
-                        <td>${fnConvertData(financeiro.data)}</td>
-                        <td>${financeiro.historico}</td>
-                        <td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td>
-                        <td>R$ ${fnConvertValor(financeiro.valor)}</td>
-                        <td></td>
-                        <td>R$ ${fnConvertValor(saldo)}</td>
-                  </tr>`
-            }else{
-              objetoInsert = objetoInsert +
-                  `<tr align="center">
-                        <td>${fnConvertData(financeiro.data)}</td>
-                        <td>${financeiro.historico}</td>
-                        <td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td>
-                        <td></td>
-                        <td>R$ ${fnConvertValor(financeiro.valor)}</td>
-                        <td>R$ ${fnConvertValor(saldo)}</td>
-                  </tr>`
+        if (localStorage.getItem("dataInicialFinanceiro")){ 
+          if(taNoRange(fnConvertData(financeiro.data), localStorage.getItem("dataInicialFinanceiro"), localStorage.getItem("dataFinalFinanceiro"))){
+            saldo = saldo + financeiro.valor ;  
+            if(contador >=(financeiros.length-(qtdEntradas))){
+                if(financeiro.valor > 0){
+                  objetoInsert = objetoInsert +
+                      `<tr align="center">
+                            <td>${fnConvertData(financeiro.data)}</td>
+                            <td>${financeiro.historico}</td>
+                            <td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td>
+                            <td>R$ ${fnConvertValor(financeiro.valor)}</td>
+                            <td></td>
+                            <td>R$ ${fnConvertValor(saldo)}</td>
+                      </tr>`
+                }else{
+                  objetoInsert = objetoInsert +
+                      `<tr align="center">
+                            <td>${fnConvertData(financeiro.data)}</td>
+                            <td>${financeiro.historico}</td>
+                            <td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td>
+                            <td></td>
+                            <td>R$ ${fnConvertValor(financeiro.valor)}</td>
+                            <td>R$ ${fnConvertValor(saldo)}</td>
+                      </tr>`
+                }
+            }
+          }
+        }else{
+          saldo = saldo + financeiro.valor ;  
+            if(contador >=(financeiros.length-(qtdEntradas))){
+                if(financeiro.valor > 0){
+                  objetoInsert = objetoInsert +
+                      `<tr align="center">
+                            <td>${fnConvertData(financeiro.data)}</td>
+                            <td>${financeiro.historico}</td>
+                            <td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td>
+                            <td>R$ ${fnConvertValor(financeiro.valor)}</td>
+                            <td></td>
+                            <td>R$ ${fnConvertValor(saldo)}</td>
+                      </tr>`
+                }else{
+                  objetoInsert = objetoInsert +
+                      `<tr align="center">
+                            <td>${fnConvertData(financeiro.data)}</td>
+                            <td>${financeiro.historico}</td>
+                            <td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td>
+                            <td></td>
+                            <td>R$ ${fnConvertValor(financeiro.valor)}</td>
+                            <td>R$ ${fnConvertValor(saldo)}</td>
+                      </tr>`
+                }
             }
         }
         contador++;
@@ -269,6 +334,7 @@ const fnPopulaControlesQualidade = async()=> {
   let tokenStr = localStorage.getItem("token");
   let valueFornecedor = localStorage.getItem("fornecedor");
   let objetoInsert="";
+  
   await axios.get(`http://138.204.68.18:3323/controles/fornecedor/${valueFornecedor}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     var controles = (response.data).controles;
@@ -305,7 +371,54 @@ const fnPopulaControlesQualidade = async()=> {
       console.warn(error);
 
     });
+    
+    setTimeout(rodaTabelas, 500); ;  
+  
+    
 }  
+
+function rodaTabelas(){
+  $('#my-table').dynatable({
+    features: {
+      paginate: false,
+      sort:true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false,
+    }
+  });
+  $('#my-table-comercial').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false
+    }
+  })
+  $('#my-table-financeiro').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: false,
+      recordCount: false,
+      perPageSelect: false
+    }
+  });
+  $('#my-table-qualidade').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false,            
+    }
+  });
+}
 
 function galeria(controleId, etapa) {
   let tokenStr = localStorage.getItem("token");
@@ -388,17 +501,22 @@ if(localStorage.getItem("acesso")!=="Produtor"){
 
 function imprimirExtrato(){
   
-  var conteudo = document.getElementById('imprimivel').innerHTML;
+  var conteudo = document.getElementById('my-table-financeiro').innerHTML;
+  var saldoG = document.getElementById('valorSaldoProdutor').innerHTML;
     localStorage.removeItem("print");
     localStorage.setItem("print", conteudo);
+    localStorage.removeItem("saldoG");
+    localStorage.setItem("saldoG", saldoG);
     var myWindow=window.open('page-produtor-print.html');
-    
-   // fnPrint();
-    /*myWindow.window.close();
-    tela_impressao = window.open('print.html');
-    tela_impressao.document.write(conteudo);
-    tela_impressao.window.print();
-    tela_impressao.window.close();*/
+
+}
+function imprimirResumo(){
+  
+  var conteudoResumo = document.getElementById('my-table').innerHTML;
+    localStorage.removeItem("conteudoResumo");
+    localStorage.setItem("conteudoResumo", conteudoResumo);
+    var myWindow2=window.open('page-produtor-resumo-print.html');
+
 }
 
 function calculaPerda(f1=0,f2=0,f3=0,f4=0,f5=0){
@@ -421,6 +539,134 @@ function calculaPerda(f1=0,f2=0,f3=0,f4=0,f5=0){
   }
 }
 
+function filtrarData(){
+  localStorage.removeItem("dataInicial");
+  localStorage.removeItem("dataFinal");
+
+  if(document.getElementById('input-filtroData').value !=""){
+    var dataIncial = (document.getElementById('input-filtroData').value).substring(6,10) + 
+                    (document.getElementById('input-filtroData').value).substring(3,5) +
+                    (document.getElementById('input-filtroData').value).substring(0,2);
+
+    var dataFinal = (document.getElementById('input-filtroData').value).substring(19,23) + 
+                    (document.getElementById('input-filtroData').value).substring(16,18) +
+                    (document.getElementById('input-filtroData').value).substring(13,15);    
+
+    localStorage.removeItem("dataInicial");
+    localStorage.setItem("dataInicial", dataIncial);
+
+    localStorage.removeItem("dataFinal");
+    localStorage.setItem("dataFinal", dataFinal);
+    document.getElementById('filtrarRange').style.display = "none";
+    document.getElementById('apagarRange').style.display = "block";
+    document.getElementById('input-filtroData').disabled = true;
+    
+  }
+fnPopulaControles();
+
+}
+
+
+function filtrarDataComercial(){
+  localStorage.removeItem("dataInicialComercial");
+  localStorage.removeItem("dataFinalComercial");
+
+  if(document.getElementById('input-filtroData2').value !=""){
+    var dataInicialComercial = (document.getElementById('input-filtroData2').value).substring(6,10) + 
+                    (document.getElementById('input-filtroData2').value).substring(3,5) +
+                    (document.getElementById('input-filtroData2').value).substring(0,2);
+
+    var dataFinalComercial = (document.getElementById('input-filtroData2').value).substring(19,23) + 
+                    (document.getElementById('input-filtroData2').value).substring(16,18) +
+                    (document.getElementById('input-filtroData2').value).substring(13,15);    
+
+    localStorage.removeItem("dataInicialComercial");
+    localStorage.setItem("dataInicialComercial", dataInicialComercial);
+
+    localStorage.removeItem("dataFinalComercial");
+    localStorage.setItem("dataFinalComercial", dataFinalComercial);
+    document.getElementById('filtrarRange2').style.display = "none";
+    document.getElementById('apagarRange2').style.display = "block";
+    document.getElementById('input-filtroData2').disabled = true;
+    
+  }
+  fnPopulaControlesComercial();
+
+}
+
+
+function filtrarDataFinanceiro(){
+  localStorage.removeItem("dataInicialFinanceiro");
+  localStorage.removeItem("dataFinalFinanceiro");
+
+  if(document.getElementById('input-filtroData3').value !=""){
+    var dataInicialFinanceiro = (document.getElementById('input-filtroData3').value).substring(6,10) + 
+                    (document.getElementById('input-filtroData3').value).substring(3,5) +
+                    (document.getElementById('input-filtroData3').value).substring(0,2);
+
+    var dataFinalFinanceiro = (document.getElementById('input-filtroData3').value).substring(19,23) + 
+                    (document.getElementById('input-filtroData3').value).substring(16,18) +
+                    (document.getElementById('input-filtroData3').value).substring(13,15);    
+
+    localStorage.removeItem("dataInicialFinanceiro");
+    localStorage.setItem("dataInicialFinanceiro", dataInicialFinanceiro);
+
+    localStorage.removeItem("dataFinalFinanceiro");
+    localStorage.setItem("dataFinalFinanceiro", dataFinalFinanceiro);
+    document.getElementById('filtrarRange3').style.display = "none";
+    document.getElementById('apagarRange3').style.display = "block";
+    document.getElementById('input-filtroData3').disabled = true;
+    
+  }
+  fnPopulaFinanceiros();  
+
+}
+
+function limpaFiltro(){
+  localStorage.removeItem("dataInicial");
+  localStorage.removeItem("dataFinal");
+  document.getElementById('input-filtroData').value = "";
+  document.getElementById('filtrarRange').style.display = "block";
+  document.getElementById('apagarRange').style.display = "none";
+  document.getElementById('input-filtroData').disabled = false;
+  fnPopulaControles();
+}
+
+function limpaFiltroComercial(){
+  localStorage.removeItem("dataInicialComercial");
+  localStorage.removeItem("dataFinalComercial");
+  document.getElementById('input-filtroData2').value = "";
+  document.getElementById('filtrarRange2').style.display = "block";
+  document.getElementById('apagarRange2').style.display = "none";
+  document.getElementById('input-filtroData2').disabled = false;
+  fnPopulaControlesComercial();
+}
+
+function limpaFiltroFinanceiro(){
+  localStorage.removeItem("dataInicialFinanceiro");
+  localStorage.removeItem("dataFinalFinanceiro");
+  document.getElementById('input-filtroData3').value = "";
+  document.getElementById('filtrarRange3').style.display = "block";
+  document.getElementById('apagarRange3').style.display = "none";
+  document.getElementById('input-filtroData3').disabled = false;
+  fnPopulaFinanceiros();  
+}
+
+
+function taNoRange(dataAlvo, inicial, final){
+  dataCalculo = dataAlvo.substring(6,10)+dataAlvo.substring(3,5)+dataAlvo.substring(0,2);
+  
+  if (dataCalculo >= inicial && dataCalculo <= final){
+    return true;
+  }
+  return false;  
+  
+}
+
+localStorage.removeItem("dataInicial");
+localStorage.removeItem("dataFinal");
+localStorage.removeItem("dataInicialComercial");
+localStorage.removeItem("dataFinalComercial");
 fnPopulaControles();
 
 (function(){

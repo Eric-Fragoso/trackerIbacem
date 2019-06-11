@@ -98,6 +98,24 @@ function uploadGeral(){
     evt.preventDefault();
     $('.btnAnexa').dmUploader('start');
   });
+  $('#btnApiStartAdmin').on('click', function(evt){
+    var qualidadeEmpresaControle = document.getElementById('select-empresa-controle').value;
+    var qualidadeControle = document.getElementById("select-controle").value;
+    var qualidadeEstagio = document.getElementById("select-estagio-qualidade").value;
+
+
+    if (qualidadeEmpresaControle == "" || qualidadeControle == "" || qualidadeEstagio == ""){
+        
+        document.getElementById('erroAdminQualidade').innerHTML="Preencha todos os campos para anexar os arquivos";
+        document.getElementById('erroAdminQualidade').style.display = "block";
+        setTimeout(function(){ document.getElementById('erroAdminQualidade').style.display = "none"; }, 4000);
+        console.log("entrou erro");
+      }else{
+        evt.preventDefault();
+        $('.btnAnexa').dmUploader('start');
+        console.log("entrou");
+      };
+  });
 
   $('#btnApiCancel').on('click', function(evt){
     evt.preventDefault();

@@ -20,44 +20,37 @@
         <header>
             <div class="wrapper">
                 <h1><img src="img/Logo-Ibacem_HOR.png"  /></h1>
-                <h2 id="tituloExtrato">EXTRATO FINANCEIRO</h2>
+                <h2 id="tituloExtrato">RESUMO DOS CONTROLES</h2>
             </div>
         </header>
 
 
         <div class="wrapper">
-                <div id="pageFinanceiroProdutor" class="conteudoAba">
-                
-
-
-                <div class="tableHolder" id="imprimivel">
-                    <h2>REGISTROS</h2>
-                    <div id="saldoProdutor">
-                        <small>SALDO DISPONÍVEL</small>
-                        <span id="valorSaldoProdutor">13</span>
-                    </div>
-                    <table id="my-table-financeiro" class="table tFinanceiro">
-                      <thead>
-                        <tr>
-                          <th width="13%">Data</th>
-                          <th style="border-top-right-radius: 6px">Histórico</th>
-                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">&nbsp;</th>
-                          <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
-                          <th width="11%" style="background-color: #d63031">Débito</th>
-                          <th width="11%" style="background-color:#636e72">Saldo</th>
-                        </tr>
-                      </thead>
-                      <tbody id="containerFinanceiro">
-                        
-                      </tbody>
-                    </table>
-                </div>
-              </div>
-              </div>
+          <div id="pageFinanceiroProdutor" class="conteudoAba">
+            <div class="tableHolder" id="imprimivel">
+                <table id="my-table" class="table tControles">
+                  <thead>
+                    <tr>
+                      <th width="11%">Entrada</th>
+                      <th width="9%">Controle</th>
+                      <th>Recepção</th>
+                      <th>Seleção</th>
+                      <th>Embalagem</th>
+                      <th>Expedição</th>
+                      <th width="15%" style="background-color:#636e72">Perda Acumulada</th>
+                    </tr>
+                  </thead>
+                  <tbody id="containerControles">
+                    
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
         <script>
             jQuery(document).ready(function($) {
                 
-                $('#my-table-financeiro').dynatable({
+                $('#my-table').dynatable({
                   features: {
                     paginate: false,
                     sort: false,
@@ -72,8 +65,7 @@
                 
             });
             function fnPrint(){
-              $('#my-table-financeiro').html(localStorage.getItem("print")) ;
-              $('#valorSaldoProdutor').html(localStorage.getItem("saldoG")) ;
+              $('#my-table').html(localStorage.getItem("conteudoResumo")) ;
               window.print();
               window.close();
             }

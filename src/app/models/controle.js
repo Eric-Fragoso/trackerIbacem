@@ -12,6 +12,11 @@ const ControleSchema = new mongoose.Schema({
         require:true,
         default:"",
      },
+     analisadoPor:{
+        type: String,
+        require:true,
+        default:"",
+     },
     codigo:{
         type: String,
         require:true,
@@ -21,6 +26,10 @@ const ControleSchema = new mongoose.Schema({
         require:true,
     },
     visivel:{
+        type:Boolean,
+        default:false,
+    },
+    analisado:{
         type:Boolean,
         default:false,
     },
@@ -49,7 +58,9 @@ const ControleSchema = new mongoose.Schema({
         type:Date,
         default: Date.now,
     },
-
+    comentario:{
+        type:String,
+    }
 });
 
 ControleSchema.pre('save', async function(next){

@@ -6,7 +6,7 @@ p, span, h1, h2, h3, h4, h5, h6, label, input, button, a, th, tr, td, select, sp
 
 
 
- 
+
 /* H E A D E R  */
 /* H E A D E R  */
 /* H E A D E R  */
@@ -31,11 +31,11 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 .tableHolder{width: 100%; float: left; color:#2d3436;}
 	.tableHolder h2{float: left; margin-bottom: 40px}
 	.table {width: 100%; margin: 20px 0; }
-	.table th{background-color:#029184; padding: 10px 2px ;font-size: 13px;color: #000; font-weight: lighter;text-align: left}
+	.table th{background-color:#029184; padding: 10px 2px ;font-size: 13px;color: #000; font-weight: lighter;}
 	.table thead tr th:first-child{border-top-left-radius: 6px}
 	.table thead tr th:last-child{border-top-right-radius: 6px}
-	.table tr{background: #fff;text-align: left ;}
-	.table tr td{padding: 13px 3px; font-size: 13px;text-align: left!important}
+	.table tr{background: #fff;}
+	.table tr td{padding: 13px 3px; font-size: 13px;}
 	.table tr td .fa-check-circle{color:#00b894;}
 	.table tr td .fa-times-circle{color:#d63031;}
 	.table tr td a{color:#0984e3; text-decoration: none; font-size: 16px}
@@ -59,6 +59,7 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 #escondeCampo{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px;  display: block;}
 
 .hidden{display: none;}
+
 
 /*P A I N E L   D E   P R O D U T O R */
 /*P A I N E L   D E   P R O D U T O R */

@@ -7,15 +7,14 @@ const fnPopulaEmpresas = async()=> {
         document.getElementById('select-empresa-financeiro').innerHTML = response.data.map(function (empresa) {
         return (
           "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
-          );
-          
+        );
         }).join('');
+
         document.getElementById('select-empresa-controle').innerHTML = response.data.map(function (empresa) {
-          return (
-            "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
-            );
-            
-          }).join('');
+        return (
+          "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
+        );
+        }).join('');
     })
     .catch(function(error){
         console.warn(error);
@@ -188,3 +187,159 @@ if(localStorage.getItem("acesso")!=="Analista"){
 }
 
 fnPopulaFinanceiros();
+
+
+
+/* FROM ADMIN */
+/* FROM ADMIN */
+/* FROM ADMIN */
+/* FROM ADMIN */
+/* FROM ADMIN */
+
+const importarControle = async()=> {
+  var valueControle = document.getElementById("input-controle").value;
+  var valueAno = document.getElementById("select-ano-safra").value;
+  var valueCultura = document.getElementById("select-cultura").value;
+
+
+
+  await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
+  .then(function(response){
+    var controles = (response.data);
+      document.getElementById('containerControles').innerHTML = controles.map(function (controle) {
+        openModalExibeImportacao();
+        fornecedorAtual = controle.COD_FORNECEDOR;
+        return (
+          `<ul>
+            <li>COD_FORNECEDOR: <span id="controleCOD" class="destacaImport" value="${controle.COD_FORNECEDOR}">${controle.COD_FORNECEDOR}</span></li>
+            <li>ANO: <span id="controleANO" class="destacaImport">${controle.ANO}</span></li>
+            <li>MÊS: <span id="controleMES" class="destacaImport">${controle.MES}</span></li>
+            <li>SEMANA: <span id="controleSEMANA" class="destacaImport">${controle.SEMANA}</span></li>
+            <li>DATA: <span id="controleDATA" class="destacaImport">${controle.DATA}</span></li>
+            <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
+            <li>VARIEDADE: <span id="controleVAR" class="destacaImport">${controle.VARIEDADE}</span></li>
+            <li>CONTROLE: <span id="controleCON" class="destacaImport">${controle.CONTROLE}</span></li>
+            <li>SAFRA: <span id="controleSAFRA" class="destacaImport">${controle.SAFRA}</span></li>
+            <li>VOLUME EM KG: <span id="controleCOD" class="destacaImport">${controle.VOLUME_KG}</span></li>
+          </ul>`
+          );
+        
+        }).join(''); 
+      
+  })
+  .catch(function(error){
+      console.warn(error);
+      document.getElementById('erroImportData').innerHTML="Controle não encontrado";
+      document.getElementById('erroImportData').style.display = "block";
+      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+  });
+
+}      
+
+
+const salvaControle = async()=> {
+  let tokenStr = localStorage.getItem("token");
+
+  var valueControle = document.getElementById("input-controle").value;
+  var valueAno = document.getElementById("select-ano-safra").value;
+  var valueCultura = document.getElementById("select-cultura").value;
+  let codigo = valueControle +"-"+valueCultura+"-"+valueAno;
+  let importadoPor = localStorage.getItem("nome");
+  let statusAtual = document.getElementById("select-status").value;
+
+  await axios.post('http://138.204.68.18:3323/controles', 
+              {codigo: codigo, 
+               fornecedorCod:fornecedorAtual,
+               importadoPor: importadoPor,
+               passoAtual: statusAtual
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    fnPopulaControles(); 
+    closeModalExibeImportacao();   
+    
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+const fnPopulaControles = async()=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/controles',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var controles = (response.data).controles;
+    
+      document.getElementById('tbody-controles').innerHTML = controles.map(function (controle) {
+        
+        if (controle.analisado == false){
+          var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"hidden\" class=\"checkboxVisivel\"></i></a>";
+        }else{
+          var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+        }
+        return (
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</td></tr>"
+          );
+        
+        }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+
+
+const atualizaControle = async(id,analisado)=> {
+  let tokenStr = localStorage.getItem("token");
+  let analisadoPor = localStorage.getItem("nome");
+
+ 
+  await axios.put(`http://138.204.68.18:3323/controles/${id}`, 
+              {id:id,
+                analisadoPor: analisadoPor,
+                analisado: analisado
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    fnPopulaControles(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+
+
+function changeCheckboxState(id){
+  var checkbox = document.getElementById(id);
+  checkbox.checked = !checkbox.checked;
+  if (checkbox.checked == true){
+    atualizaControle(id,checkbox.checked);
+    document.getElementById(id).parentElement.classList.remove("fa-times-circle");
+    document.getElementById(id).parentElement.classList.add("fa-check-circle");
+  }else{
+    document.getElementById(id).parentElement.classList.add("fa-times-circle");
+    document.getElementById(id).parentElement.classList.remove("fa-check-circle");
+  } 
+  
+}
+
+
+
+
+
+function fnConvertData(data){
+  let dia = data.substring(8,10);
+  let mes = data.substring(5,7);
+  let ano = data.substring(0,4);
+
+  return dia+"/"+mes+"/"+ano;
+}
+
+fnPopulaControles();
