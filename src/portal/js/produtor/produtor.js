@@ -372,7 +372,7 @@ const fnPopulaControlesQualidade = async()=> {
 
     });
     
-    setTimeout(rodaTabelas, 500); ;  
+    setTimeout(rodaTabelas, 500);  
   
     
 }  

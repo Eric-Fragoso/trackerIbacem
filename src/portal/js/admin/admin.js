@@ -185,13 +185,14 @@ const salvaControle = async()=> {
               {codigo: codigo, 
                fornecedorCod:fornecedorAtual,
                importadoPor: importadoPor,
-               passoAtual: statusAtual
+               passoAtual: statusAtual,
+               comentario:valueComentario
               },
           {headers: {"Authorization" : `Bearer ${tokenStr}`} }
   )
   .then(function(response){
     fnPopulaControles(); 
-    closeModalExibeImportacao();   
+    closeModalExibeImportacao();
     
   })
   .catch(function(error){
@@ -205,7 +206,6 @@ const fnPopulaControles = async()=> {
   await axios.get('http://138.204.68.18:3323/controles',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     var controles = (response.data).controles;
-    
       document.getElementById('tbody-controles').innerHTML = controles.map(function (controle) {
         
         if (controle.visivel == false){
@@ -213,8 +213,18 @@ const fnPopulaControles = async()=> {
         }else{
           var visivelAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
         }
+        if (controle.analisado == false){
+          var analisadoAtual = "<i class=\"fas fa-times-circle\"><input type=\"checkbox\" value=\"hidden\" class=\"checkboxVisivel\"></i>";
+        }else{
+          var analisadoAtual = "<i class=\"fas fa-check-circle\"><input type=\"checkbox\" value=\"show\" class=\"checkboxVisivel\" checked></i>";
+        }
+        if (controle.comentario != " "){
+          var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-comment-dots\"></i></a>";
+        }else{
+          var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-edit\"></i></a>";
+        }
         return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>teste</td><td class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</td></tr>"
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"');\">"+comentarioAtual+"</div></td></tr>"
           );
         
         }).join('');      
@@ -238,13 +248,33 @@ const atualizaControle = async(id,visivel)=> {
           {headers: {"Authorization" : `Bearer ${tokenStr}`} }
   )
   .then(function(response){
-    fnPopulaControles(); 
+    fnPopulaControles();
   })
   .catch(function(error){
       console.warn(error);
   });
 
 }
+const salvaComentario = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  let valueComentario = document.getElementById("comentario-Controle").value;
+
+  await axios.put(`http://138.204.68.18:3323/controles/${id}`, 
+              {id:id,
+               comentario:valueComentario
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    fnPopulaControles();
+    closeModalComentario();
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
 
 
 
@@ -335,11 +365,11 @@ const fnPopulaFinanceiros = async()=> {
           var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${financeiro._id} value="hidden" class="checkboxVisivel"></i></a>`;
           if(financeiro.valor >= 0){
             return (
-              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</td></tr>`
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><div class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</div></td></tr>`
               );
           }else{
             return (
-              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</td></tr>`
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><div class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</div></td></tr>`
               );
           }
         }
@@ -352,7 +382,7 @@ const fnPopulaFinanceiros = async()=> {
       console.warn(error);
 
     });
-
+   setTimeout(rodaTabelas, 1000);    
 }
 
 const atualizaFinan = async(id,aprovado)=> {
@@ -378,11 +408,9 @@ function changeCheckboxStateFinan(id){
   checkbox2.checked = !checkbox2.checked;
   if (checkbox2.checked == true){
     atualizaFinan(id,true);
-    console.log("entrou");
     document.getElementById(id).parentElement.classList.remove("fa-times-circle");
     document.getElementById(id).parentElement.classList.add("fa-check-circle");
   }else{
-    console.log("errou");
     atualizaFinan(id,false);
     document.getElementById(id).parentElement.classList.add("fa-times-circle");
     document.getElementById(id).parentElement.classList.remove("fa-check-circle");
@@ -490,5 +518,44 @@ function fnConvertValor(valorInt){
   
 }
 
+function rodaTabelas(){  
+  $('#my-table-user').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false
+    }
+  })
+  $('#my-table-financeiro').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: false,
+      recordCount: false,
+      perPageSelect: false
+    }
+  });
+  $('#my-table').dynatable({
+    features: {
+      paginate: false,
+      sort:true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false,
+    }    
+  });
+  $('#input-data').datepicker({
+    language: 'pt-BR',
+    maxDate: new Date()
+  })
+}
 
+fnPopulaControles(); 
+fnPopulaUsuarios();
+fnPopulaEmpresas();
 fnPopulaFinanceiros();

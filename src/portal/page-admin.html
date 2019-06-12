@@ -126,6 +126,28 @@
         </div>
 
 
+
+
+
+        <!--MODAL COMENTÁRIO-->
+        <!--MODAL COMENTÁRIO-->
+        <!--MODAL COMENTÁRIO-->
+        <div id="ModalComentario" class="modal">
+          <span class="close cursor" onclick="closeModalComentario();">&times;</span>
+          <div class="modal-content4">
+              <h2>ADICIONAR COMENTÁRIO</h2>
+              <div id="containerControles2">
+                  <p></p>
+                  <textarea placeholder="DIGITE SEU COMENTÁRIO" id="comentario-Controle"></textarea>
+              </div>
+               <button id="confirmarComment">SALVAR</button> <button class="cancelarDelete" onclick="closeModalComentario();">CANCELAR</button>
+              <br clear="all">
+          </div>
+      </div>
+
+
+
+
         <header>
             <div class="wrapper">
                 <h1>Ibacem</h1>
@@ -182,12 +204,13 @@
                       <thead>
                         <tr>
                           <th width="15%">Controle</th>
-                          <th width="17%">Data de importação</th>
+                          <th width="13%">Importação</th>
                           <th>Status</th>
                           <th>Importador</th>
                           <th>Supervisor</th>
                           <th width="9%">Analisado</th>
                           <th width="7%">Público</th>
+                          <th width="8%">Comentar</th>
                         </tr>
                       </thead>
                       <tbody id="tbody-controles">
@@ -391,36 +414,7 @@
             const edd3 = easydropdown('#select-status');
             const edd4 = easydropdown('#select-tipo-entrada');
 
-            jQuery(document).ready(function($) {
-                $('#my-table').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false
-                  }
-                });
-                $('#my-table-user').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false
-                  }
-                });
-                fnPopulaControles(); 
-                fnPopulaUsuarios();
-                fnPopulaEmpresas();
-                $('#input-data').datepicker({
-                    language: 'pt-BR',
-                    maxDate: new Date()
-                })
-
-            });
+            
             function openModalDeleteUser(id) {
               document.getElementById('confirmarDelete').setAttribute('onclick','deletarUsuario("'+id+'")');
               document.getElementById('ModalDeleteUser').style.display = "block";
@@ -445,6 +439,16 @@
             // Fecha modal exibe importação
             function closeModalExibeImportacao() {
               document.getElementById('ModalConfirmarImport').style.display = "none";
+            }
+            // Abre modal Comentário
+            function openModalComentario(id,texto) {
+              document.getElementById('ModalComentario').style.display = "block";
+              document.getElementById('confirmarComment').setAttribute('onclick','salvaComentario("'+id+'")');
+              document.getElementById('comentario-Controle').value = texto;
+            }
+            // Fecha modal Comentário
+            function closeModalComentario() {
+              document.getElementById('ModalComentario').style.display = "none";
             }
             function erroImport(){
               var checaInput = document.getElementById('input-controle').value;

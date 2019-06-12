@@ -1,7 +1,7 @@
 *{margin:0; padding: 0;border: 0; outline: 0; list-style: none;}
 html{padding-bottom: 80px}
 body{background-color: #F2F3E3!important; height: 100%;}
-p, span, h1, h2, h3, h4, h5, h6, label, input, button, a, th, tr, td, select, span, small, select, option, div{font-family: 'Montserrat', sans-serif;}
+p, span, h1, h2, h3, h4, h5, h6, label, input, button, a, th, tr, td, select, span, small, select, option, div, textarea{font-family: 'Montserrat', sans-serif;}
 
 
 
@@ -83,11 +83,12 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 	.table tr td{padding: 13px 3px; font-size: 13px;}
 	.table tr td .fa-check-circle{color:#00b894;}
 	.table tr td .fa-times-circle{color:#d63031;}
-	.table tr td a{color:#0984e3; text-decoration: none; font-size: 16px}
+  .table tr td a{color:#0984e3; text-decoration: none; font-size: 16px}
+  .table tr td i{font-size: 16px;}
 #dynatable-query-search-my-table, #dynatable-query-search-my-table-user,#dynatable-query-search-my-table-comercial, #dynatable-query-search-my-table-qualidade{height: 40px; padding: 8px 0 8px 12px; border-radius: 6px; width: 250px; font-size: 15px; color: black; border:1px solid #008c7f;}
 #dynatable-per-page-my-table, #dynatable-per-page-my-table-user,#dynatable-per-page-my-table-comercial{height: 40px; padding: 8px 0 8px 12px;font-size: 15px;color: black; border:1px solid #008c7f;border-radius: 6px;}
 .checkboxVisivel{display: none}
-.tdClicavel{cursor: pointer;}
+.tdClicavel{cursor: pointer; height: 100%; width: 100%;}
 .tdClicavel a{z-index: 20}
 
 .editarUsuario{margin-right: 20px}
@@ -98,7 +99,7 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 
 #ModalDeleteUser p, #ModalDeleteRegistro p{margin:40px 0;}
 .cancelarDelete{background:#d63031;border-radius: 6px; width: 130px; height: 40px; color: white; cursor: pointer; float: left;}
-#confirmarDelete, #confirmarImport, #confirmarEntrada{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+#confirmarDelete, #confirmarImport, #confirmarEntrada, #confirmarComment{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
 
 
 #escondeCampo{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px;  display: block;}
@@ -253,11 +254,23 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
   border-radius: 6px;
   text-align: center;
 }
+.modal-content4 {
+  position: relative;
+  background-color: rgb(242, 243, 227);
+  margin: auto;
+  padding: 40px 20px;
+  width: 25%;
+  
+  animation: fadeEffect 0.5s;
+  border-radius: 6px;
+  text-align: center;
+}
 .modal-content3 ul{text-align:left; margin:20px 0; padding:0 0 20px 0 ; font-size: 14px; border-bottom: 2px solid #dbdeaf}
 .modal-content3 ul li{margin:10px 0}
 .destacaImport{font-weight: bolder;font-size: 16px}
 #containerControles{overflow: scroll; overflow-x: hidden;height: 352px; margin:20px 0 20px 0;}
-
+#containerControles2{height: 352px; margin:20px 0 20px 0;}
+  #containerControles2 textarea {resize: none; width: 95%; height: 170px; padding:10px}
 
 
 /* The Close Button */
