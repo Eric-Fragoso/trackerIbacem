@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
         select:false,
     },
     telefone:{
-        tyep:String,
+        type:String,
         required:false,
     },
     fidelidade:{
