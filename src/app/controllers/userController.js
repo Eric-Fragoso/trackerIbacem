@@ -24,7 +24,15 @@ router.post('/', async(req, res)=>{
 });
 
 router.put('/:userId', async(req, res)=>{
-    res.send({user: req.userId});
+    try{
+        const user = await User.findByIdAndUpdate(req.userId, req.body,{new:true});
+        console.log(user);
+        return res.send({
+            user
+        });
+    }catch(err){
+        return res.status(400).send({error:'Atualização não efetuada'});
+    }
 });
 
 router.delete('/:userId', async(req, res)=>{

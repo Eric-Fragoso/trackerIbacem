@@ -15,8 +15,6 @@ const UserSchema = new mongoose.Schema({
     },
     fornecedorRelacionado:{
         type: Number,
-        unique: true,
-        required: true,
     },
     senha:{
         type:String,
