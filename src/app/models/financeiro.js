@@ -28,12 +28,12 @@ const FinanceiroSchema = Schema({
         type: Boolean,
         require: true,
         default: false,
-    }
+    },
     nf:{
         type: String,
         require:false,
         default:"",
-    },
+    }
 
 
 });
