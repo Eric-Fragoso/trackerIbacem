@@ -53,7 +53,12 @@ router.put('/:financeiroId', async(req, res)=>{
 });
 
 router.delete('/:financeiroId', async(req, res)=>{
-    res.send({financeiro: req.financeiroId});
+    try{
+        await Financeiro.findByIdAndRemove(req.params.financeiroId);
+        return res.send();
+     }catch(err){
+         return res.status(400).send({error: 'Erro deletando registro'});
+     }
 });
 
 module.exports = app => app.use('/financeiros', router);
