@@ -61,9 +61,9 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 
 .conteudoAba {display: none;  padding: 40px 12px;border-top: none;  animation: fadeEffect 1s;}
 
-#importDataArea, #gerenciarUsers,#miniDashProdutor, #miniDashAnalista, #entradaFinanceira, #pesquisaFinanceira {display: block; float: left; width: 100%; padding: 0 0 30px 0; border-bottom: 1px solid #dbdeaf; margin-bottom: 20px}
+#importDataArea, #gerenciarUsers,#miniDashProdutor, #miniDashAnalista, #entradaFinanceira, #pesquisaFinanceira, #pesquisaControle {display: block; float: left; width: 100%; padding: 0 0 30px 0; border-bottom: 1px solid #dbdeaf; margin-bottom: 20px}
 
-#importDataArea h2, #gerenciarUsers h2,#miniDashProdutor h2, #miniDashAnalista h2, #entradaFinanceira h2, #pesquisaFinanceira h2{float: left;width: 100%; margin-bottom: 40px}
+#importDataArea h2, #gerenciarUsers h2,#miniDashProdutor h2, #miniDashAnalista h2, #entradaFinanceira h2, #pesquisaFinanceira h2, #pesquisaControle h2{float: left;width: 100%; margin-bottom: 40px}
 #importDataArea button, #gerenciarUsers button, #miniDashProdutor button, #miniDashAnalista button, #entradaFinanceira button{border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left; }
 #importDataArea input, #entradaFinanceira input{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 180px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
 #importDataArea button{float:right; width:162px}
@@ -97,12 +97,27 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 #ModalNovoUser .cancelarUser{background:#d63031;border-radius: 6px; width: 130px; height: 44px; color: white; cursor: pointer; float: left; margin-right: 30px;}
 #ModalNovoUser .confirmarUser, .confirmarDelete, .confirmarPesquisa{border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left;margin-right: 30px;}
 
+
+#cancelaEdicao{float: left;  margin-left: 14px;  background: #d63031;  color: white;  padding: 5px 10px;  font-size: 12px;  border-radius: 6px;  text-decoration: none;  font-weight: bold;}
+#formEntFinanceira{clear: both}
+
+
+#ModalEditarUser input{height: 44px; float: left; padding: 8px 0 8px 12px; border-radius: 6px; width: 250px; font-size: 15px; color: black; border:1px solid #008c7f;margin-right: 20px}
+#ModalEditarUser fieldset{margin:20px 0;}
+#ModalEditarUser .cancelarUserEditar{background:#d63031;border-radius: 6px; width: 130px; height: 30px; color: white; cursor: pointer; float: left; margin-right: 30px; text-align: center; font-size: 13px; padding-top: 13px; text-decoration: none}
+#ModalEditarUser .confirmarUserEditar, .confirmarDeleteEditar, .confirmarPesquisaEditar{border-radius: 6px;background-color: #029184; width: 190px; height: 44px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+#escondeCampoEditar{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px; }
+
+
 #ModalDeleteUser p, #ModalDeleteRegistro p{margin:40px 0;}
 .cancelarDelete{background:#d63031;border-radius: 6px; width: 130px; height: 40px; color: white; cursor: pointer; float: left;}
 #confirmarDelete, #confirmarImport, #confirmarEntrada, #confirmarComment{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
 
+#inserirEntrada{background-color: #029184!important; width: 140px!important; float: right!important;border-radius: 6px; height: 30px; color: white; cursor: pointer;padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
+#editarEntradaFinanceiro{background-color: #0984e3!important; width: 140px!important; float: right!important;border-radius: 6px; height: 30px; color: white; cursor: pointer;padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
 
 #escondeCampo{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px;  display: block;}
+#confirmarUserEditar{height:30px!important; padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
 
 .hidden{display: none;}
 
@@ -165,16 +180,20 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 #minidashAnalista .edd-root{float:left; width: 140px}
 #empresaSelect .edd-root{width: 350px!important}
 
-#input-data, #input-valor{width: 110px!important}
-#input-descricao{width:320px!important}
+#input-data{width: 110px!important}
+#input-valor{width: 80px!important}
+#input-descricao{width:280px!important}
+#input-nf{width:80px!important}
 #entradaFinanceira {display: none}
 #entradaFinanceira .edd-root{width: 180px!important;}
 .confirmarEntrada{width:140px!important; float:right!important}
 
 #resultadoPesquisaFinanceiro{ padding-top: 20px}
-#pesquisaFinanceira .edd-root{float: left; width: 350px}
+#pesquisaFinanceira .edd-root, #pesquisaControle .edd-root{float: left; width: 350px}
 
 .someUpload{animation: someUpload 2s}
+
+.invis{background-color: #F2F3E3!important; color:#F2F3E3}
 
 @keyframes fadeEffect {
   from {opacity: 0;}
@@ -258,8 +277,8 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
   position: relative;
   background-color: rgb(242, 243, 227);
   margin: auto;
-  padding: 40px 20px;
-  width: 25%;
+  padding: 20px 20px;
+  width: 40%;
   
   animation: fadeEffect 0.5s;
   border-radius: 6px;
@@ -267,10 +286,14 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 }
 .modal-content3 ul{text-align:left; margin:20px 0; padding:0 0 20px 0 ; font-size: 14px; border-bottom: 2px solid #dbdeaf}
 .modal-content3 ul li{margin:10px 0}
-.destacaImport{font-weight: bolder;font-size: 16px}
+
+.modal-content4 ul{text-align:left; margin:20px 0; padding:0 0 20px 0 ; font-size: 13px;}
+.modal-content4 ul li{margin:5px 0}
+
+.destacaImport{font-weight: bolder;font-size: 13px}
 #containerControles{overflow: scroll; overflow-x: hidden;height: 352px; margin:20px 0 20px 0;}
 #containerControles2{height: 352px; margin:20px 0 20px 0;}
-  #containerControles2 textarea {resize: none; width: 95%; height: 170px; padding:10px}
+  #containerControles2 textarea {resize: none; width: 100%; height: 170px; padding:10px}
 
 
 /* The Close Button */

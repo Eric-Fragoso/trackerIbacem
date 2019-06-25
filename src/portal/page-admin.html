@@ -12,6 +12,7 @@
         <script src="js/datepicker.js"></script>
         <script src="js/datepicker.pt-BR.js"></script>
         <script src="js/jquery.dynatable.js"></script>
+        <script src="js/jquery.mask.min.js"></script>
         <script src="js/all.js"></script>
         
         
@@ -20,6 +21,18 @@
         <meta charset="UTF-8">
     </head>
     <body>
+      <!-- MODAL DELETAR REGISTRO -->
+        <!-- MODAL DELETAR REGISTRO -->
+        <!-- MODAL DELETAR REGISTRO -->
+        <div id="ModalDeleteRegistro" class="modal">
+            <span class="close cursor" onclick="closeModalDeleteRegistro();">&times;</span>
+            <div class="modal-content2">
+                <h2>CONFIRMAR AÇÃO</h2>
+                <p>Deseja realmente deletar esta entrada financeira?<b> Essa ação não poderá ser desfeita</b></p>
+                 <button id="confirmarDelete">SIM</button> <button class="cancelarDelete" onclick="closeModalDeleteRegistro();">CANCELAR</button>
+                <br clear="all">
+            </div>
+        </div>
         <!-- MODAL NOVO USUARIO -->
         <!-- MODAL NOVO USUARIO -->
         <!-- MODAL NOVO USUARIO -->
@@ -58,23 +71,80 @@
                         </select>
                     </fieldset>
                     <button class="cancelarUser" onclick="closeModalNovoUser();">CANCELAR</button> 
-                    <button class="confirmarUser" type="submit">CONFIRMAR CADASTRO</button>
-                    
-                    
+                    <button id="confirmarUser" class="confirmarUser" type="submit">CONFIRMAR CADASTRO</button>
                 </form>
                 <br clear="all">
                 <p id="mensagemErro"></p>
             </div>
         </div>
+
+        <!-- MODAL EDITAR USUARIO -->
+        <!-- MODAL EDITAR USUARIO -->
+        <!-- MODAL EDITAR USUARIO -->
+        <div id="ModalEditarUser" class="modal" style="display: none">
+          <span class="close cursor" onclick="closeModalEditarUser();">&times;</span>
+          <div class="modal-content">
+              <h2>EDITAR USUÁRIO</h2>
+              <form id="formEditarUsuario" >
+                  <fieldset>
+                      <input type="text" placeholder="NOME COMPLETO" id="inputNomeEditar" autocomplete="name">
+                      <input type="text" placeholder="E-MAIL" id="inputEmailEditar" autocomplete="email">
+                  </fieldset>
+                  <fieldset>
+                      <input type="text" placeholder="TELEFONE" id="inputTelefoneEditar" autocomplete="tel">
+                      <select name="acesso" id="select-fidelidade-editar">
+                          <option value="" data-placeholder>FIDELIDADE</option>
+                          <option value="1">SIM</option>
+                          <option value="0">NÃO</option>
+                      </select>
+                  </fieldset>
+                  <fieldset>
+                      <select name="acesso" id="select-nivelAcessoEditar" onchange="gambitEditar();">
+                          <option value="" data-placeholder>NÍVEL DE ACESSO</option>
+                          <option value="Produtor">PRODUTOR</option>
+                          <option value="Analista">ANALISTA</option>
+                          <option value="Supervisor">SUPERVISOR</option>
+                          <option value="Administrador">ADMINISTRADOR</option>
+                      </select>
+                      <div id="escondeCampoEditar"></div>
+                      <select name="acesso" id="select-empresa-editar">
+                          <option value="" data-placeholder>EMPRESA</option>
+                      </select>
+                  </fieldset>
+                  <a href="javascript:;" class="cancelarUserEditar" onclick="closeModalEditarUser();">CANCELAR</a> 
+                  <a href="javascript:;" id="confirmarUserEditar" class="confirmarUserEditar">SALVAR ALTERAÇÕES</a>
+              </form>
+              <br clear="all">
+              <p id="mensagemErro"></p>
+          </div>
+      </div>
+
+
+
+        
         <script>
+          function gambitEditar(){
+              var e = document.getElementById("select-nivelAcessoEditar");
+              var strUser = e.options[e.selectedIndex].value;
+              if(strUser == "Produtor"){
+                document.getElementById("escondeCampoEditar").style.display="none";
+                window.localStorage.setItem("produtorRel","outro");
+              }else{
+                document.getElementById("escondeCampoEditar").style.display="block";
+                window.localStorage.setItem("produtorRel","IBACEM");
+              }
+
+          }
+
           function gambit(){
               var e = document.getElementById("select-nivelAcesso");
               var strUser = e.options[e.selectedIndex].value;
-              console.log(strUser);
               if(strUser == "Produtor"){
                 document.getElementById("escondeCampo").style.display="none";
+                window.localStorage.setItem("produtorRel","outro");
               }else{
                 document.getElementById("escondeCampo").style.display="block";
+                window.localStorage.setItem("produtorRel","IBACEM");
               }
           }
         </script>
@@ -136,10 +206,17 @@
           <span class="close cursor" onclick="closeModalComentario();">&times;</span>
           <div class="modal-content4">
               <h2>ADICIONAR COMENTÁRIO</h2>
-              <div id="containerControles2">
+              <div id="containerControles2" style="height: 290px;">
                   <p></p>
                   <textarea placeholder="DIGITE SEU COMENTÁRIO" id="comentario-Controle"></textarea>
+                  <ul id="dadosComentario">
+                    <li>FORNECEDOR: <span id="controleCODcmt" class="destacaImport">2</span></li>
+                    <li>CONTROLE: <span id="controleCONcmt" class="destacaImport">946</span></li>
+                    <li>CULTURA: <span id="controleCULTURAcmt" class="destacaImport">Manga</span></li>
+                    <li>SAFRA: <span id="controleSAFRAcmt" class="destacaImport">M18</span></li>
+                  </ul>
               </div>
+              
                <button id="confirmarComment">SALVAR</button> <button class="cancelarDelete" onclick="closeModalComentario();">CANCELAR</button>
               <br clear="all">
           </div>
@@ -234,7 +311,8 @@
                       <th width="15%">Usuário</th>
                       <th width="13%">Categoria</th>
                       <th>E-mail</th>
-                      <th width="7%">Deletar</th>
+                      <th width="7%">Apagar</th>
+                      <th width="7%">Editar</th>
                     </tr>
                   </thead>
                   <tbody id="tbody-user">
@@ -259,17 +337,19 @@
                 <button class="confirmarPesquisa" onclick="filtraEmpresa();">FILTRAR</button>
               </div>
               <div id="entradaFinanceira" class="hidden">
-                  <h2>INSERIR</h2>
-                  <form id="formEntFinanceira" onsubmit="cadastrarFinanceiro(event);">
+                  <h2 id="titleFinanceiro">INSERIR</h2><a class="hidden" id="cancelaEdicao" href="javascript:;" onclick="limpaEditaFinanceiro();">CANCELAR EDIÇÃO</a>
+                  <form id="formEntFinanceira">
                     <input id="input-data" type="text" placeholder="DATA" value="" class="datepicker-here" data-language='pt-BR'>
                     <input id="input-descricao" type="text" placeholder="DESCRIÇÃO" value="">
                     <input id="input-valor" type="text" placeholder="VALOR" value="">
+                    <input id="input-nf" type="text" placeholder="Nº N.F." value="">
                     <select name="tipo-entrada" id="select-tipo-entrada">
-                        <option value="x" data-placeholder >MOVIMENTAÇÃO</option>
+                        <option value="x" data-placeholder >MOVIMENTO</option>
                         <option value=" ">CRÉDITO</option>
                         <option value="-">DÉBITO</option>
                     </select>
-                    <button class="confirmarEntrada" type="submit" ><i class="fas fa-plus-circle"></i></i> INSERIR</button>
+                    <a href="javascript:;" id="inserirEntrada" class="confirmarEntrada" onclick="cadastrarFinanceiro(event);" ><i class="fas fa-plus-circle"></i></i> INSERIR</a>
+                    <a href="javascript:;" id="editarEntradaFinanceiro" class="editarEntrada hidden" ><i class="fas fa-edit"></i></i> SALVAR</a>
                   </form>
                 </div>
                 <div id="resultadoPesquisaFinanceiro">
@@ -279,8 +359,9 @@
                       <tr>
                         <th width="11%">Data</th>
                         <th >Empresa</th>
-                        <th style="border-top-right-radius: 6px">Histórico</th>
-                        <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
+                        <th >Histórico</th>
+                        <th width="11%"style="border-top-right-radius: 6px">N.F.</th>
+                        <th width="1%" style="background-color: #F2F3E3!important; color:#F2F3E3"></th>
                         <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
                         <th width="11%" style="background-color: #d63031">Débito</th>
                         <th width="11%" style="background-color: #636e72">Aprovado</th>
@@ -298,11 +379,13 @@
                       <thead>
                         <tr>
                           <th width="11%">Data</th>
-                          <th style="border-top-right-radius: 6px">Histórico</th>
-                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
+                          <th>Histórico</th>
+                          <th width="11%" style="border-top-right-radius: 6px">N.F.</th>
+                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></th>
                           <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
                           <th width="11%" style="background-color: #d63031">Débito</th>
-                          <th width="8%" style="background-color:#636e72">Deletar</th>
+                          <th width="5%" style="background-color:#636e72">Deletar</th>
+                          <th width="5%" style="background-color:#636e72">Editar</th>
                         </tr>
                       </thead>
                       <tbody id="containerFinanceiro2">
@@ -359,6 +442,26 @@
                 </div>
                 
               </form>
+
+              <div id="resultadoPesquisaQualidade">
+                <h2>REGISTROS DE QUALIDADE NÃO APROVADOS</h2>
+                <table id="my-table-qualidade" class="table tqualiade">
+                  <thead>
+                    <tr>
+                      <th >Controle</th>
+                      <th >Etapa</th>
+                      <th >Fotos</th>
+                      <th style="border-top-right-radius: 6px">Relatório</th>
+                      <th width="1%" style="background-color: #F2F3E3!important; color:#F2F3E3"></th>
+                      <th style="border-top-left-radius: 6px; background-color: #d63031">Excluir</th>
+                      <th style="background-color: #636e72">Aprovar</th>
+                    </tr>
+                  </thead>
+                  <tbody id="containerQualiadade">
+                    
+                  </tbody>
+                </table>
+              </div>
             </div>
 
       </div>
@@ -419,6 +522,45 @@
               document.getElementById('confirmarDelete').setAttribute('onclick','deletarUsuario("'+id+'")');
               document.getElementById('ModalDeleteUser').style.display = "block";
             }
+
+            function openModalDeleteRegistro(id) {
+              console.log("executou e recebeu o id: ", id)
+              document.getElementById('confirmarDelete').setAttribute('onclick','deletarRegistro("'+id+'")');
+              document.getElementById('ModalDeleteRegistro').style.display = "block";
+            }
+
+            
+            // Fecha modal delete user
+            function closeModalDeleteRegistro() {
+              document.getElementById('ModalDeleteRegistro').style.display = "none";
+            }
+
+            function openModalEditarUser(id, nome, email, telefone, fidelidade, acesso, produtor) {
+              console.log(id, nome, email, telefone, fidelidade, acesso, produtor);
+              document.getElementById('confirmarUserEditar').setAttribute('onclick','atualizaUsuario("'+id+'")');
+              //fnPopulaEmpresas();
+              document.getElementById("inputNomeEditar").value=nome;
+              document.getElementById("inputEmailEditar").value=email;
+              document.getElementById("inputTelefoneEditar").value=telefone;
+              document.getElementById("select-nivelAcessoEditar").value=acesso;
+              if (fidelidade){
+                document.getElementById("select-fidelidade-editar").value=1;
+              }else{
+                document.getElementById("select-fidelidade-editar").value=0
+              }
+              if (acesso=="Produtor"){
+                $('#escondeCampoEditar').addClass('hidden');
+                $('#select-empresa-editar').val(produtor);
+              }else{
+                $('#escondeCampoEditar').removeClass('hidden');
+              }
+             // document.getElementById("inputTelefoneEditar").value=telefone;
+              document.getElementById('ModalEditarUser').style.display = "block";
+              
+            }
+            function closeModalEditarUser() {
+              document.getElementById('ModalEditarUser').style.display = "none";
+            }
             // Abre modal novo user
             function openModalNovoUser() {
               document.getElementById('ModalNovoUser').style.display = "block";
@@ -441,29 +583,60 @@
               document.getElementById('ModalConfirmarImport').style.display = "none";
             }
             // Abre modal Comentário
-            function openModalComentario(id,texto) {
+            function openModalComentario(id,texto,cod,controleCodigo) {
               document.getElementById('ModalComentario').style.display = "block";
               document.getElementById('confirmarComment').setAttribute('onclick','salvaComentario("'+id+'")');
               document.getElementById('comentario-Controle').value = texto;
+
+              //recebendo nome da empresa
+              document.getElementById('select-empresa-financeiro').value = cod;
+              var e = document.getElementById('select-empresa-financeiro');
+              var sel = e.options[e.selectedIndex].text;
+              document.getElementById('controleCODcmt').innerHTML = sel;
+              document.getElementById('select-empresa-financeiro').value = null;
+
+              
+              document.getElementById('controleCONcmt').innerHTML = controleCodigo.substring(0,controleCodigo.length-5);
+              switch (controleCodigo.substring(controleCodigo.length - 4,controleCodigo.length - 3)) {
+                case 'M':
+                      document.getElementById('controleCULTURAcmt').innerHTML = "MANGA";
+                  break;
+                case 'U':
+                      document.getElementById('controleCULTURAcmt').innerHTML = "UVA";
+                  break;
+                case 'C':
+                     document.getElementById('controleCULTURAcmt').innerHTML = "CACAU";
+                  break;
+              }
+
+              document.getElementById('controleSAFRAcmt').innerHTML = controleCodigo.substring(controleCodigo.length - 4,controleCodigo.length);
+
             }
             // Fecha modal Comentário
             function closeModalComentario() {
               document.getElementById('ModalComentario').style.display = "none";
             }
-            function erroImport(){
-              var checaInput = document.getElementById('input-controle').value;
+            async function erroImport(){
+              //var checaInput = document.getElementById('input-controle').value;
               var checaControle = document.getElementById("input-controle").value;
               var checaAno = document.getElementById("select-ano-safra").value;
               var checaCultura = document.getElementById("select-cultura").value;
               var checaStatus = document.getElementById("select-status").value;
 
-              if (checaInput == "" || checaControle == "" || checaAno == "" || checaCultura == "" || checaStatus == "" ){
+              if (checaControle == "" || checaAno == "" || checaCultura == "" || checaStatus == "" ){
                   
                   document.getElementById('erroImportData').innerHTML="Preencha todos os campos para iniciar a importação";
                   document.getElementById('erroImportData').style.display = "block";
                   setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
                 }else{
-                  importarControle();
+                  console.log(fnComparaControles(checaControle+"-"+checaCultura+"-"+checaAno));
+                  if (await fnComparaControles(checaControle+"-"+checaCultura+"-"+checaAno)){
+                    document.getElementById('erroImportData').innerHTML="Controle importado anteriormente";
+                    document.getElementById('erroImportData').style.display = "block";
+                    setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                  }else{
+                    importarControle();
+                  }
                 };
             }
             function erroQualidade(){
@@ -484,71 +657,44 @@
                   console.log("entrou");
                 };
             }
+            function editRegistroFinanceiro(id, data, historico, nf, valor){
+              console.log(id, data, historico, nf, valor)
+              $('#input-descricao').focus();
+              $('#titleFinanceiro').html("EDITAR REGISTRO");
+              $('#titleFinanceiro').css("width","25%");
+              $('#input-data').val(data);
+              $('#input-descricao').val(historico);
+              $('#input-nf').val(nf);
+              $('#cancelaEdicao').removeClass('hidden');
+              if(valor>=0){
+                $('#input-valor').val(fnConvertValor(valor));
+                $('#select-tipo-entrada').val(" ");
+              }else{
+                $('#input-valor').val(fnConvertValor(valor.substring(1,valor.length)));
+                $('#select-tipo-entrada').val("-");
+              }
+              $('#inserirEntrada').addClass('hidden');
+              $('#editarEntradaFinanceiro').removeClass('hidden');
+              document.getElementById('editarEntradaFinanceiro').setAttribute('onclick','updateFinanceiro("'+id+'")');
+            }
             
-    
+              
+
+            function limpaEditaFinanceiro(){
+              $('#titleFinanceiro').html("INSERIR");
+              $('#input-data').val("");
+              $('#input-descricao').val("");
+              $('#input-nf').val("");    
+              $('#input-valor').val("");
+              $('#titleFinanceiro').css("width","100%");         
+              $('#inserirEntrada').removeClass('hidden');
+              $('#editarEntradaFinanceiro').addClass('hidden');
+              $('#cancelaEdicao').addClass('hidden');
+              $('#select-tipo-entrada').val("");
+            }
 
 
-              (function($, undefined) {
-
-                "use strict";
-
-                // When ready.
-                $(function() {
-                    
-                    var $form = $( "#formEntFinanceira" );
-                    var $input = $form.find( "#input-valor" );
-
-                    $input.on( "keyup", function( event ) {
-                        
-                        
-                        // When user select text in the document, also abort.
-                        var selection = window.getSelection().toString();
-                        if ( selection !== '' ) {
-                            return;
-                        }
-                        
-                        // When the arrow keys are pressed, abort.
-                        if ( $.inArray( event.keyCode, [38,40,37,39] ) !== -1 ) {
-                            return;
-                        }
-                        
-                        
-                        var $this = $( this );
-                        
-                        // Get the value.
-                        var input = $this.val();
-                        var input = input.replace(/[\D\s\._\-]+/g, "");
-                                input = input ? parseInt( input, 10 ) : 0;
-
-                                $this.val( function() {
-                                    return ( input === 0 ) ? "" : input.toLocaleString( "pt-BR" );
-                                } );
-                    } );
-                    
-                    /**
-                     * ==================================
-                     * When Form Submitted
-                     * ==================================
-                     */
-                    $form.on( "submit", function( event ) {
-                        
-                        var $this = $( this );
-                        var arr = $this.serializeArray();
-                    
-                        for (var i = 0; i < arr.length; i++) {
-                                arr[i].value = arr[i].value.replace(/[($)\s\._\-]+/g, ''); // Sanitize the values.
-                        };
-                        
-                        console.log( arr );
-                        
-                        event.preventDefault();
-                    });
-                    
-                });
-                })(jQuery);
-
-
-
+            $('#input-valor').mask('#.##0,00', {reverse: true});
         </script>
         <script src="js/jquery.dm-uploader.min.js"></script>
         <script src="js/control-uploader.js"></script>

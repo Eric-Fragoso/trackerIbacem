@@ -1,4 +1,4 @@
-function uploadGeral(){
+function uploadGeral(controle, etapa){
   /*
    * For the sake keeping the code clean and the examples simple this file
    * contains only the plugin configuration & callbacks.
@@ -11,6 +11,9 @@ function uploadGeral(){
   //var controleId = localStorage.getItem("controleId");
   //var etapa = ;
   var tokenStr = localStorage.getItem("token");
+  var controleG='';
+  var qualidadeG='';
+  console.log(controle, etapa);
   $('.btnAnexa').dmUploader(
     
     { //
@@ -42,7 +45,7 @@ function uploadGeral(){
     onBeforeUpload: function(id){
       // about tho start uploading a file
       //ui_add_log('Starting the upload of #' + id);
-      console.log(document.getElementById("select-controle").value);
+      //console.log(document.getElementById("select-controle").value);
       ui_multi_update_file_status(id, 'enviando', 'Enviando...');
       ui_multi_update_file_progress(id, 0, '', true);
       ui_multi_update_file_controls(id, false, true);  // change control buttons status
@@ -79,14 +82,15 @@ function uploadGeral(){
     },
     onFileSizeError: function(file){
       //ui_add_log('File \'' + file.name + '\' cannot be added: size excess limit', 'danger');
+      
     },
     headers: {
         'Authorization': `Bearer ${tokenStr}`
      },
      extraData:function() {
         return {
-          controle: $('#select-controle').val(),
-          qualidade: $('#select-estagio-qualidade').val()
+          controle:`${controle}`,
+          qualidade: `${etapa}`
         }
      }
   });
@@ -97,11 +101,17 @@ function uploadGeral(){
   $('#btnApiStart').on('click', function(evt){
     evt.preventDefault();
     $('.btnAnexa').dmUploader('start');
+    controleG = $('#select-controle-qualidade').val();
+    qualidadeG = $('#select-estagio-qualidade').val();
+    
   });
+
   $('#btnApiStartAdmin').on('click', function(evt){
     var qualidadeEmpresaControle = document.getElementById('select-empresa-controle').value;
     var qualidadeControle = document.getElementById("select-controle").value;
     var qualidadeEstagio = document.getElementById("select-estagio-qualidade").value;
+    controleG = $('#select-controle').val();
+    qualidadeG = $('#select-estagio-qualidade').val();
 
 
     if (qualidadeEmpresaControle == "" || qualidadeControle == "" || qualidadeEstagio == ""){
@@ -109,11 +119,9 @@ function uploadGeral(){
         document.getElementById('erroAdminQualidade').innerHTML="Preencha todos os campos para anexar os arquivos";
         document.getElementById('erroAdminQualidade').style.display = "block";
         setTimeout(function(){ document.getElementById('erroAdminQualidade').style.display = "none"; }, 4000);
-        console.log("entrou erro");
       }else{
         evt.preventDefault();
         $('.btnAnexa').dmUploader('start');
-        console.log("entrou");
       };
   });
 

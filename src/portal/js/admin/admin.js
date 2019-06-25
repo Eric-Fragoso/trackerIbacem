@@ -2,51 +2,50 @@ document.getElementById("userName").innerHTML = localStorage.getItem("nome");
 
 var fornecedorAtual;
 
-function cadastrar(e){
+const cadastrar = async(e)=> {
 
     e.preventDefault();
-    var valueNome = document.getElementById("inputNome").value;
-    var valueEmail = document.getElementById("inputEmail").value;
-    var valueSenha = document.getElementById("inputSenha").value;
-    var valueSenha2 = document.getElementById("inputSenha2").value;
-    var valueTelefone= document.getElementById("inputTelefone").value;
-    var valueFidelidade = document.getElementById("select-fidelidade").value;
-    var valueAcesso = document.getElementById("select-nivelAcesso").value;
-    var valueEmpresa = document.getElementById("select-empresa").value;
 
-    xmlhttp = new XMLHttpRequest();
-    var urlRegistro = "http://138.204.68.18:3323/auth/register";
-    xmlhttp.open("POST", urlRegistro, true);
-    xmlhttp.setRequestHeader("Content-type", "application/json");
-    xmlhttp.onreadystatechange = function () { 
-      var response = JSON.parse(xmlhttp.responseText);
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+    if(localStorage.getItem("produtorRel")!="IBACEM"){
+      var valueEmpresa = document.getElementById("select-empresa").value;
+    }else{
+      var valueEmpresa = 9999;
+    }
+    let valueNome = document.getElementById("inputNome").value;
+    let valueEmail = document.getElementById("inputEmail").value;
+    let valueSenha = document.getElementById("inputSenha").value;
+    let valueSenha2 = document.getElementById("inputSenha2").value;
+    let valueTelefone= document.getElementById("inputTelefone").value;
+    let valueFidelidade = document.getElementById("select-fidelidade").value;
+    let valueAcesso = document.getElementById("select-nivelAcesso").value;
+   
+      await axios.post(`http://138.204.68.18:3323/auth/register`, 
+                  {
+                    nome:valueNome,
+                    email:valueEmail,
+                    senha:valueSenha,
+                    telefone:valueTelefone,
+                    fidelidade:valueFidelidade,
+                    acesso:valueAcesso,
+                    fornecedorRelacionado:valueEmpresa
+                  }
+      )
+      .then(function(response){
+        console.log(response);
         closeModalNovoUser();
         fnPopulaUsuarios();
-      }
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 400) {
-        //Apresentar erro para o usuário
-        document.getElementById('mensagemErro').innerHTML=response.error;
-        document.getElementById('mensagemErro').style.display = "block";
-        setTimeout(function(){ document.getElementById('mensagemErro').style.display = "none"; }, 4000);
-      }
-      
-      
-    };
-
-    let parametros = JSON.stringify({
-              "nome":valueNome,
-              "email":valueEmail,
-              "senha":valueSenha,
-              "telefone":valueTelefone,
-              "fidelidade":valueFidelidade,
-              "acesso":valueAcesso,
-              "fornecedorRelacionado":valueEmpresa});
-    xmlhttp.send(parametros);
-
-  
-    return false;
+      })
+      .catch(function(error){
+          console.warn(error);
+          document.getElementById('mensagemErro').innerHTML=response.error;
+          document.getElementById('mensagemErro').style.display = "block";
+          setTimeout(function(){ document.getElementById('mensagemErro').style.display = "none"; }, 4000);
+      });
+   
 }
+
+
+
 
 const fnPopulaEmpresas = async()=> {
   await axios.get('http://138.204.68.18:3324/api/fornecedores')
@@ -54,6 +53,14 @@ const fnPopulaEmpresas = async()=> {
       
       document.getElementById('select-empresa').innerHTML = response.data.map(function (empresa) {
       
+        return (
+        "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
+        );
+        
+        }).join('');
+
+      document.getElementById('select-empresa-editar').innerHTML = response.data.map(function (empresa) {
+    
         return (
         "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
         );
@@ -100,8 +107,11 @@ const fnPopulaUsuarios = async()=> {
               if (empresa.COD_FORNECEDOR == usuario.fornecedorRelacionado){
                 nomeProdutor = empresa.FORNECEDOR;
               }
+              if(usuario.fornecedorRelacionado == 9999){
+                nomeProdutor ="IBACEM";
+              }
             }).join('');  
-            linha += "<tr align=\"center\"><td>"+nomeProdutor+"</td><td>"+usuario.nome+"</td><td>"+usuario.acesso+"</td><td>"+usuario.email+"</td><td><a href=\"javascript:;\" title=\"Deletar usuário\" class=\"deletarUsuario\" onclick=\"openModalDeleteUser('"+usuario._id+"');\"><i class=\"fas fa-times-circle\"></i></a></td></tr>"           
+            linha += "<tr align=\"center\"><td>"+nomeProdutor+"</td><td>"+usuario.nome+"</td><td>"+usuario.acesso+"</td><td>"+usuario.email+"</td><td><a href=\"javascript:;\" title=\"Deletar usuário\" class=\"deletarUsuario\" onclick=\"openModalDeleteUser('"+usuario._id+"');\"><i class=\"fas fa-times-circle\"></i></a></td><td><a href=\"javascript:;\" title=\"Editar usuário\" class=\"deletarUsuario\" onclick=\"openModalEditarUser('"+usuario._id+"','"+usuario.nome+"','"+usuario.email+"', '"+usuario.telefone+"', "+usuario.fidelidade+",'"+usuario.acesso+"', '"+usuario.fornecedorRelacionado+"');\"><i class=\"fas fa-user-edit\"></i></a></td></tr>"           
         })
         return (
           document.getElementById('tbody-user').innerHTML = linha
@@ -128,6 +138,36 @@ const deletarUsuario = async(id)=> {
   });
 
 }
+
+
+
+const atualizaUsuario = async(id)=> {
+
+  let tokenStr = localStorage.getItem("token");
+  let nome = document.getElementById("inputNomeEditar").value;
+  let email = document.getElementById("inputEmailEditar").value;
+  let telefone = document.getElementById("inputTelefoneEditar").value;
+  let acesso = document.getElementById("select-nivelAcessoEditar").value;
+  let fidelidade = document.getElementById("select-fidelidade-editar").value;
+  let fornecedor = document.getElementById("select-empresa-editar").value;
+ 
+  await axios.put(`http://138.204.68.18:3323/usuarios/${id}`, 
+              {id:id, nome, email, telefone, acesso, fidelidade, fornecedorRelacionado:fornecedor
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    fnPopulaUsuarios();
+    closeModalEditarUser();
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+
+
 
 
 const importarControle = async()=> {
@@ -185,8 +225,8 @@ const salvaControle = async()=> {
               {codigo: codigo, 
                fornecedorCod:fornecedorAtual,
                importadoPor: importadoPor,
-               passoAtual: statusAtual,
-               comentario:valueComentario
+               passoAtual: statusAtual
+               
               },
           {headers: {"Authorization" : `Bearer ${tokenStr}`} }
   )
@@ -224,7 +264,7 @@ const fnPopulaControles = async()=> {
           var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-edit\"></i></a>";
         }
         return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"');\">"+comentarioAtual+"</div></td></tr>"
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td></tr>"
           );
         
         }).join('');      
@@ -234,6 +274,34 @@ const fnPopulaControles = async()=> {
   });
 
 }
+
+
+
+const fnComparaControles = async(controleCodigo)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/controles',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var controles = (response.data).controles;
+      controles.map(function (controle) {
+        console.log (controleCodigo, controle.codigo)
+        if(controleCodigo==controle.codigo){
+          return true
+        }else{
+          return false        
+        }
+      }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+
+
+
+
+
 
 const atualizaControle = async(id,visivel)=> {
   let tokenStr = localStorage.getItem("token");
@@ -325,14 +393,17 @@ e.preventDefault();
 var valueFornecedorCod = document.getElementById("select-empresa-financeiro").value;
 var valueData = fnPreparaData(document.getElementById("input-data").value);
 var valueHistorico = document.getElementById("input-descricao").value;
+var valueNf = document.getElementById("input-nf").value;
 var valueValor = document.getElementById("select-tipo-entrada").value + document.getElementById("input-valor").value;
-
+valueValor = valueValor.replace(".","");
+valueValor = valueValor.replace(",",".");
 
 await axios.post('http://138.204.68.18:3323/financeiros', 
             {fornecedorCod:valueFornecedorCod,
               data: valueData,
               historico: valueHistorico,
-              valor: valueValor.replace(".","")
+              valor: valueValor,
+              nf:valueNf
             },
         {headers: {"Authorization" : `Bearer ${tokenStr}`} }
 )
@@ -365,11 +436,11 @@ const fnPopulaFinanceiros = async()=> {
           var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${financeiro._id} value="hidden" class="checkboxVisivel"></i></a>`;
           if(financeiro.valor >= 0){
             return (
-              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><div class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</div></td></tr>`
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><div class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</div></td></tr>`
               );
           }else{
             return (
-              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><div class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</div></td></tr>`
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><div class="tdClicavel" onclick="changeCheckboxStateFinan('${financeiro._id}');">${aprovadoAtual}</div></td></tr>`
               );
           }
         }
@@ -385,7 +456,34 @@ const fnPopulaFinanceiros = async()=> {
    setTimeout(rodaTabelas, 1000);    
 }
 
-const atualizaFinan = async(id,aprovado)=> {
+const updateFinanceiro = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  var valueData = fnPreparaData(document.getElementById("input-data").value);
+  var valueHistorico = document.getElementById("input-descricao").value;
+  var valueNf = document.getElementById("input-nf").value;
+  var valueValor = document.getElementById("select-tipo-entrada").value + document.getElementById("input-valor").value;
+  valueValor = valueValor.replace(".","");
+  valueValor = valueValor.replace(",",".");
+  await axios.put(`http://138.204.68.18:3323/financeiros/${id}`, 
+              {id:id,
+               data: valueData,
+               historico: valueHistorico,
+               valor: valueValor,
+               nf:valueNf
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    limpaEditaFinanceiro(); 
+    fnPopulaFinanceirosFornecedor();
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+const atualizaFinan = async(id, aprovado)=> {
   let tokenStr = localStorage.getItem("token");
   await axios.put(`http://138.204.68.18:3323/financeiros/${id}`, 
               {id:id,
@@ -430,11 +528,11 @@ const fnPopulaFinanceirosFornecedor = async()=> {
       document.getElementById('containerFinanceiro2').innerHTML = financeiros.map(function (financeiro) {
         if(financeiro.valor >= 0){
           return (
-            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><a href=\"javascript:;\" title=\"Deletar registro\" class=\"deletarUsuario\" onclick=\"openModalDeleteRegistro('"+usuario._id+"');\"><i class=\"fas fa-times-circle\"></i></a></td></tr>`
+            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" class="invis" style="background-color: #F2F3E3!important; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="openModalDeleteRegistro('${financeiro._id}');"><i class="fas fa-times-circle"></i></a></div></td><td><div><a href="javascript:;" title="Editar registro" class="deletarUsuario" onclick="editRegistroFinanceiro('${financeiro._id}','${fnConvertData(financeiro.data)}','${financeiro.historico}','${financeiro.nf}','${financeiro.valor}');"><i class="fas fa-edit"></i></a></div></tr>`
             );
         }else{
           return (
-            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><a href=\"javascript:;\" title=\"Deletar registro\" class=\"deletarUsuario\" onclick=\"openModalDeleteRegistro('"+usuario._id+"');\"><i class=\"fas fa-times-circle\"></i></a></td></tr>`
+            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" class="invis" style="background-color: #F2F3E3!important; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="openModalDeleteRegistro('${financeiro._id}');"><i class="fas fa-times-circle"></i></a></div></td><td><div><a href="javascript:;" title="Editar registro" class="deletarUsuario" onclick="editRegistroFinanceiro('${financeiro._id}','${fnConvertData(financeiro.data)}','${financeiro.historico}','${financeiro.nf}','${financeiro.valor}');"><i class="fas fa-edit"></i></a></div></tr>`
             );
         }
         
@@ -447,6 +545,23 @@ const fnPopulaFinanceirosFornecedor = async()=> {
     });
 
 }
+
+
+const deletarRegistro = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.delete(`http://138.204.68.18:3323/financeiros/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    fnPopulaFinanceirosFornecedor();  
+    closeModalDeleteRegistro();   
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+
+
 
 const fnPopulaControlesFornecedor = async()=> {
   let tokenStr = localStorage.getItem("token");

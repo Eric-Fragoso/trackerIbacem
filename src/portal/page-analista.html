@@ -11,6 +11,7 @@
         <script src="js/jquery.dynatable.js"></script>
         <link rel="stylesheet" type="text/css" href="js/beanstalk.css">
         <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <script src="js/jquery.mask.min.js"></script>
         <script src="js/all.js"></script>
 
         
@@ -41,6 +42,29 @@
                 <br clear="all">
             </div>
         </div>
+
+        <!--MODAL COMENTÁRIO-->
+        <!--MODAL COMENTÁRIO-->
+        <!--MODAL COMENTÁRIO-->
+        <div id="ModalComentario" class="modal">
+          <span class="close cursor" onclick="closeModalComentario();">&times;</span>
+          <div class="modal-content4">
+              <h2>ADICIONAR COMENTÁRIO</h2>
+              <div id="containerControles2" style="height: 290px;">
+                  <p></p>
+                  <textarea placeholder="DIGITE SEU COMENTÁRIO" id="comentario-Controle" readOnly = true></textarea>
+                  <ul id="dadosComentario">
+                    <li>FORNECEDOR: <span id="controleCODcmt" class="destacaImport">2</span></li>
+                    <li>CONTROLE: <span id="controleCONcmt" class="destacaImport">946</span></li>
+                    <li>CULTURA: <span id="controleCULTURAcmt" class="destacaImport">Manga</span></li>
+                    <li>SAFRA: <span id="controleSAFRAcmt" class="destacaImport">M18</span></li>
+                  </ul>
+              </div>
+              
+               <button class="cancelarDelete" onclick="closeModalComentario();">Fechar</button>
+              <br clear="all">
+          </div>
+      </div>
 
 
 
@@ -94,18 +118,24 @@
                   <button class="importDataControles" onclick="erroImport();"><i class="fas fa-plus-circle"></i> IMPORTAR</button>
                   <p id="erroImportData"></p>
               </div>
-
+              <div id="pesquisaControle">
+                  <h2>FILTRAR POR EMPRESA</h2>
+                  <select name="acesso" id="select-empresa-controle" onchange="filtraEmpresaControle();">
+                      <option value="" data-placeholder>EMPRESA</option>
+                  </select>
+                  <button class="confirmarPesquisa" onclick="filtraEmpresaControle();">FILTRAR</button>
+              </div>
               <div class="tableHolder">
-                  <h2>ÚLTIMOS CONTROLES IMPORTADOS</h2>
                   <table id="my-table" class="table tControles">
                     <thead>
                       <tr>
-                        <th width="15%">Controle</th>
-                        <th width="17%">Data de importação</th>
-                        <th>Status</th>
-                        <th>Importador</th>
-                        <th>Supervisor</th>
-                        <th width="8%">Analisado</th>
+                        <th >Controle</th>
+                        <th >Importação</th>
+                        <th >Status</th>
+                        <th >Importador</th>
+                        <th >Supervisor</th>
+                        <th >Analisado</th>
+                        <th >Comentário</th>
                       </tr>
                     </thead>
                     <tbody id="tbody-controles">
@@ -126,17 +156,19 @@
                 <button class="confirmarPesquisa" onclick="filtraEmpresa();">FILTRAR</button>
               </div>
               <div id="entradaFinanceira" class="hidden">
-                  <h2>INSERIR</h2>
-                  <form id="formEntFinanceira" onsubmit="cadastrarFinanceiro(event);">
+                  <h2 id="titleFinanceiro">INSERIR</h2><a class="hidden" id="cancelaEdicao" href="javascript:;" onclick="limpaEditaFinanceiro();">CANCELAR EDIÇÃO</a>
+                  <form id="formEntFinanceira" >
                     <input id="input-data" type="text" placeholder="DATA" value="" class="datepicker-here" data-language='pt-BR'>
                     <input id="input-descricao" type="text" placeholder="DESCRIÇÃO" value="">
                     <input id="input-valor" type="text" placeholder="VALOR" value="">
+                    <input id="input-nf" type="text" placeholder="Nº N.F." value="">
                     <select name="tipo-entrada" id="select-tipo-entrada">
-                        <option value="x" data-placeholder >MOVIMENTAÇÃO</option>
+                        <option value="x" data-placeholder >MOVIMENTO</option>
                         <option value=" ">CRÉDITO</option>
                         <option value="-">DÉBITO</option>
                     </select>
-                    <button class="confirmarEntrada" type="submit" ><i class="fas fa-plus-circle"></i></i> INSERIR</button>
+                    <a href="javascript:;" id="inserirEntrada" class="confirmarEntrada" onclick="cadastrarFinanceiro(event);"><i class="fas fa-plus-circle"></i></i> INSERIR</a>
+                    <a href="javascript:;" id="editarEntradaFinanceiro" class="editarEntrada hidden" ><i class="fas fa-edit"></i></i> SALVAR</a>
                   </form>
                 </div>
                 <div id="resultadoPesquisaFinanceiro">
@@ -146,8 +178,9 @@
                       <tr>
                         <th width="11%">Data</th>
                         <th >Empresa</th>
-                        <th style="border-top-right-radius: 6px">Histórico</th>
-                        <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
+                        <th >Histórico</th>
+                        <th width="11%"style="border-top-right-radius: 6px">N.F.</th>
+                        <th width="1%" style="background-color: #F2F3E3!important; color:#F2F3E3"></th>
                         <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
                         <th width="11%" style="background-color: #d63031">Débito</th>
                       </tr>
@@ -164,11 +197,13 @@
                       <thead>
                         <tr>
                           <th width="11%">Data</th>
-                          <th style="border-top-right-radius: 6px">Histórico</th>
-                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3">0</th>
+                          <th>Histórico</th>
+                          <th width="11%" style="border-top-right-radius: 6px">N.F.</th>
+                          <th width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></th>
                           <th width="11%" style="border-top-left-radius: 6px; background-color: #0984e3">Crédito</th>
                           <th width="11%" style="background-color: #d63031">Débito</th>
-                          <th width="8%" style="background-color:#636e72">Deletar</th>
+                          <th width="5%" style="background-color:#636e72">Deletar</th>
+                          <th width="5%" style="background-color:#636e72">Editar</th>
                         </tr>
                       </thead>
                       <tbody id="containerFinanceiro2">
@@ -183,11 +218,11 @@
                   <div id="miniDashAnalista">
                       <h2>DOCUMENTOS DA QUALIDADE</h2>
                       <div id="empresaSelect">
-                      <select name="acesso" id="select-empresa-controle" onchange="fnPopulaControlesFornecedor();">
+                      <select name="acesso" id="select-empresa-controle-qualidade" onchange="fnPopulaControlesFornecedorQualidade();">
                           <option value="" data-placeholder>EMPRESA</option>
                       </select>
                       </div>
-                      <select name="etapa" class="hidden" id="select-controle" >
+                      <select name="etapa" class="hidden" id="select-controle-qualidade" >
                         <option value="" data-placeholder >CONTROLES</option>
                       </select>
                       <select name="tipo-entrada" id="select-estagio-qualidade" onchange="guardaDados();">
@@ -202,7 +237,7 @@
                           <input type="file" title="Anexar arquivos" multiple="">
                       </div>
 
-                      <button class="confirmarUpload" id="btnApiStart"><i class="fas fa-cloud-upload-alt"></i> ENVIAR</button><br clear="all">
+                      <button class="confirmarUpload" id="btnApiStart" onclick="erroQualidade();"><i class="fas fa-cloud-upload-alt"></i> ENVIAR</button><br clear="all">
                       <div class="cardUpload">
                           <div class="cardHeader">
                             Lista de arquivos anexados
@@ -235,17 +270,76 @@
             function closeModalDeleteRegistro() {
               document.getElementById('ModalDeleteRegistro').style.display = "none";
             }
-            function filtraEmpresa(){
-              var empresaFiltra = document.getElementById("select-empresa-financeiro").options[document.getElementById('select-empresa-financeiro').selectedIndex].innerText;;
 
-
-              document.getElementById("entradaFinanceira").style.display = "block";
-              document.getElementById("resultadoFiltraPesquisaFinanceiro").style.display = "block";
-              document.getElementById("resultadoPesquisaFinanceiro").style.display = "none";
-              document.getElementById("nomeFiltraEmpresa").innerHTML = empresaFiltra;
-
-              fnPopulaFinanceirosFornecedor();
+            function editRegistroFinanceiro(id, data, historico, nf, valor){
+              console.log(id, data, historico, nf, valor)
+              $('#input-descricao').focus();
+              $('#titleFinanceiro').html("EDITAR REGISTRO");
+              $('#titleFinanceiro').css("width","25%");
+              $('#input-data').val(data);
+              $('#input-descricao').val(historico);
+              $('#input-nf').val(nf);
+              $('#cancelaEdicao').removeClass('hidden');
+              if(valor>=0){
+                $('#input-valor').val(fnConvertValor(valor));
+                $('#select-tipo-entrada').val(" ");
+              }else{
+                $('#input-valor').val(fnConvertValor(valor.substring(1,valor.length)));
+                $('#select-tipo-entrada').val("-");
+              }
+              $('#inserirEntrada').addClass('hidden');
+              $('#editarEntradaFinanceiro').removeClass('hidden');
+              document.getElementById('editarEntradaFinanceiro').setAttribute('onclick','updateFinanceiro("'+id+'")');
             }
+            
+              $('#input-valor').mask('#.##0,00', {reverse: true});
+
+            function limpaEditaFinanceiro(){
+              $('#titleFinanceiro').html("INSERIR");
+              $('#input-data').val("");
+              $('#input-descricao').val("");
+              $('#input-nf').val("");    
+              $('#input-valor').val("");
+              $('#titleFinanceiro').css("width","100%");         
+              $('#inserirEntrada').removeClass('hidden');
+              $('#editarEntradaFinanceiro').addClass('hidden');
+              $('#cancelaEdicao').addClass('hidden');
+              $('#select-tipo-entrada').val("");
+            }
+
+            function openModalComentario(id,texto,cod,controleCodigo) {
+              document.getElementById('ModalComentario').style.display = "block";
+              document.getElementById('comentario-Controle').value = texto;
+
+              //recebendo nome da empresa
+              document.getElementById('select-empresa-financeiro').value = cod;
+              var e = document.getElementById('select-empresa-financeiro');
+              var sel = e.options[e.selectedIndex].text;
+              document.getElementById('controleCODcmt').innerHTML = sel;
+              document.getElementById('select-empresa-financeiro').value = null;
+
+              
+              document.getElementById('controleCONcmt').innerHTML = controleCodigo.substring(0,controleCodigo.length-5);
+              switch (controleCodigo.substring(controleCodigo.length - 4,controleCodigo.length - 3)) {
+                case 'M':
+                      document.getElementById('controleCULTURAcmt').innerHTML = "MANGA";
+                  break;
+                case 'U':
+                      document.getElementById('controleCULTURAcmt').innerHTML = "UVA";
+                  break;
+                case 'C':
+                     document.getElementById('controleCULTURAcmt').innerHTML = "CACAU";
+                  break;
+              }
+
+              document.getElementById('controleSAFRAcmt').innerHTML = controleCodigo.substring(controleCodigo.length - 4,controleCodigo.length);
+
+            }
+            // Fecha modal Comentário
+            function closeModalComentario() {
+              document.getElementById('ModalComentario').style.display = "none";
+            }
+            
 
 
             function openCity(evt, cityName) {
@@ -273,32 +367,6 @@
             
 
 
-            jQuery(document).ready(function($) {
-                
-                $('#my-table-analista').dynatable({
-                  features: {
-                    paginate: false,
-                    sort: false,
-                    pushState: false,
-                    search: false,
-                    recordCount: false,
-                    perPageSelect: false
-                  },
-                  dataset: {
-                      ajax: true,
-                      ajaxUrl: 'json/analista-qualidade.json',
-                      ajaxOnLoad: true,
-                      records: []
-                  }
-                });
-                fnPopulaEmpresas();
-
-                $('#input-data').datepicker({
-                    language: 'pt-BR',
-                    maxDate: new Date()
-                })
-            });
-
             function erroImport(){
               var checaInput = document.getElementById('input-controle').value;
               var checaControle = document.getElementById("input-controle").value;
@@ -316,65 +384,27 @@
               };
             }
             
-            (function($, undefined) {
+            
 
-                "use strict";
+                function erroQualidade(){
+                  var qualidadeEmpresaControle = document.getElementById('select-empresa-controle-qualidade').value;
+                  var qualidadeControle = document.getElementById("select-controle-qualidade").value;
+                  var qualidadeEstagio = document.getElementById("select-estagio-qualidade").value;
 
-                // When ready.
-                $(function() {
-                    
-                    var $form = $( "#formEntFinanceira" );
-                    var $input = $form.find( "#input-valor" );
 
-                    $input.on( "keyup", function( event ) {
-                        
-                        
-                        // When user select text in the document, also abort.
-                        var selection = window.getSelection().toString();
-                        if ( selection !== '' ) {
-                            return;
-                        }
-                        
-                        // When the arrow keys are pressed, abort.
-                        if ( $.inArray( event.keyCode, [38,40,37,39] ) !== -1 ) {
-                            return;
-                        }
-                        
-                        
-                        var $this = $( this );
-                        
-                        // Get the value.
-                        var input = $this.val();
-                        var input = input.replace(/[\D\s\._\-]+/g, "");
-                                input = input ? parseInt( input, 10 ) : 0;
-
-                                $this.val( function() {
-                                    return ( input === 0 ) ? "" : input.toLocaleString( "pt-BR" );
-                                } );
-                    } );
+                  if (qualidadeEmpresaControle == "" || qualidadeControle == "" || qualidadeEstagio == ""){
+                      
+                     // document.getElementById('erroAdminQualidade').innerHTML="Preencha todos os campos para anexar os arquivos";
+                     // document.getElementById('erroAdminQualidade').style.display = "block";
+                     // setTimeout(function(){ document.getElementById('erroAdminQualidade').style.display = "none"; }, 4000);
+                      
+                  }else{
+                    evt.preventDefault();
+                    $('.btnAnexa').dmUploader('start');
                     
-                    /**
-                     * ==================================
-                     * When Form Submitted
-                     * ==================================
-                     */
-                    $form.on( "submit", function( event ) {
-                        
-                        var $this = $( this );
-                        var arr = $this.serializeArray();
-                    
-                        for (var i = 0; i < arr.length; i++) {
-                                arr[i].value = arr[i].value.replace(/[($)\s\._\-]+/g, ''); // Sanitize the values.
-                        };
-                        
-                        console.log( arr );
-                        
-                        event.preventDefault();
-                    });
-                    
-                });
-                })(jQuery);
-                
+                  };
+                }
+         $('#input-valor').mask('#.##0,00', {reverse: true});       
         </script>
 
         <script src="js/analista/analista.js"></script>

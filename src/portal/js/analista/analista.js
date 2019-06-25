@@ -15,6 +15,13 @@ const fnPopulaEmpresas = async()=> {
           "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
         );
         }).join('');
+
+        document.getElementById('select-empresa-controle-qualidade').innerHTML = response.data.map(function (empresa) {
+          
+          return (
+            "<option value=\""+empresa.COD_FORNECEDOR+"\">"+empresa.FORNECEDOR+"</option><br/>"
+          );
+          }).join('');
     })
     .catch(function(error){
         console.warn(error);
@@ -35,14 +42,17 @@ const cadastrarFinanceiro = async(e)=> {
   var valueFornecedorCod = document.getElementById("select-empresa-financeiro").value;
   var valueData = fnPreparaData(document.getElementById("input-data").value);
   var valueHistorico = document.getElementById("input-descricao").value;
+  var valueNf = document.getElementById("input-nf").value;
   var valueValor = document.getElementById("select-tipo-entrada").value + document.getElementById("input-valor").value;
-
-
+  valueValor = valueValor.replace(".","");
+  valueValor = valueValor.replace(",",".");
+  
   await axios.post('http://138.204.68.18:3323/financeiros', 
               {fornecedorCod:valueFornecedorCod,
                 data: valueData,
                 historico: valueHistorico,
-                valor: valueValor.replace(".","")
+                valor: valueValor,
+                nf:valueNf
               },
           {headers: {"Authorization" : `Bearer ${tokenStr}`} }
   )
@@ -67,11 +77,11 @@ const fnPopulaFinanceiros = async()=> {
       document.getElementById('containerFinanceiro1').innerHTML = financeiros.map(function (financeiro) {
         if(financeiro.valor >= 0){
           return (
-            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td></tr>`
+            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td></tr>`
             );
         }else{
           return (
-            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td></tr>`
+            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.fornecedorCod}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td></tr>`
             );
         }
         
@@ -82,7 +92,7 @@ const fnPopulaFinanceiros = async()=> {
       console.warn(error);
 
     });
-
+    
 }
 
 const fnPopulaFinanceirosFornecedor = async()=> {
@@ -91,15 +101,28 @@ const fnPopulaFinanceirosFornecedor = async()=> {
   .then(function(response){
     var financeiros = (response.data).financeiros;
       document.getElementById('containerFinanceiro2').innerHTML = financeiros.map(function (financeiro) {
-        if(financeiro.valor >= 0){
-          return (
-            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><a href=\"javascript:;\" title=\"Deletar registro\" class=\"deletarUsuario\" onclick=\"openModalDeleteRegistro('"+usuario._id+"');\"><i class=\"fas fa-times-circle\"></i></a></td></tr>`
-            );
+        if(calcula60(fnConvertData(financeiro.data))){
+          if(financeiro.valor >= 0){
+            return (
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td></td><td></td></tr>`
+              );
+          }else{
+            return (
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td></td></tr>`
+              );
+          }
         }else{
-          return (
-            `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><a href=\"javascript:;\" title=\"Deletar registro\" class=\"deletarUsuario\" onclick=\"openModalDeleteRegistro('"+usuario._id+"');\"><i class=\"fas fa-times-circle\"></i></a></td></tr>`
-            );
+          if(financeiro.valor >= 0){
+            return (
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="openModalDeleteRegistro('${financeiro._id}');"><i class="fas fa-times-circle"></i></a></div></td><td><div><a href="javascript:;" title="Editar registro" class="deletarUsuario" onclick="editRegistroFinanceiro('${financeiro._id}','${fnConvertData(financeiro.data)}','${financeiro.historico}','${financeiro.nf}','${financeiro.valor}');"><i class="fas fa-edit"></i></a></div></tr>`
+              );
+          }else{
+            return (
+              `<tr align="center"><td>${fnConvertData(financeiro.data)}</td><td>${financeiro.historico}</td><td>${financeiro.nf}</td><td width="1%" style="background-color: #F2F3E3; color:#F2F3E3"></td><td></td><td>R$ ${fnConvertValor(financeiro.valor)}</td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="openModalDeleteRegistro('${financeiro._id}');"><i class="fas fa-times-circle"></i></a></div></td><td><div><a href="javascript:;" title="Editar registro" class="deletarUsuario" onclick="editRegistroFinanceiro('${financeiro._id}','${fnConvertData(financeiro.data)}','${financeiro.historico}','${financeiro.nf}','${financeiro.valor}');"><i class="fas fa-edit"></i></a></div></td></tr>`
+              );
+          }
         }
+        
         
         
         }).join('');      
@@ -111,13 +134,89 @@ const fnPopulaFinanceirosFornecedor = async()=> {
 
 }
 
+const updateFinanceiro = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  var valueData = fnPreparaData(document.getElementById("input-data").value);
+  var valueHistorico = document.getElementById("input-descricao").value;
+  var valueNf = document.getElementById("input-nf").value;
+  var valueValor = document.getElementById("select-tipo-entrada").value + document.getElementById("input-valor").value;
+  valueValor = valueValor.replace(".","");
+  valueValor = valueValor.replace(",",".");
+  await axios.put(`http://138.204.68.18:3323/financeiros/${id}`, 
+              {id:id,
+               data: valueData,
+               historico: valueHistorico,
+               valor: valueValor,
+               nf:valueNf
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    limpaEditaFinanceiro(); 
+    fnPopulaFinanceirosFornecedor();
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+const deletarRegistro = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.delete(`http://138.204.68.18:3323/financeiros/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    fnPopulaFinanceirosFornecedor();  
+    closeModalDeleteRegistro();   
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
 
 const fnPopulaControlesFornecedor = async()=> {
   let tokenStr = localStorage.getItem("token");
   await axios.get(`http://138.204.68.18:3323/controles/fornecedor/${document.getElementById("select-empresa-controle").value}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     var controles = (response.data).controles;
-      document.getElementById('select-controle').innerHTML = controles.map(function (controle) {
+    document.getElementById('tbody-controles').innerHTML = controles.map(function (controle) {
+        
+      if (controle.analisado == false){
+        var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"hidden\" class=\"checkboxVisivel\"></i></a>";
+      }else{
+        var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+      }
+
+
+      if(controle.comentario!=" "){
+        var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+        return (
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"lerComentario('"+controle._id+"');\">"+comentarioAtual+"</div></td></tr>"
+          );
+      }else{
+        var comentarioAtual = "";
+        return (
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td></tr>"
+          );
+      }
+      
+      
+      }).join('');    
+        
+  })
+  .catch(function(error){
+      console.warn(error);
+    });
+  
+}
+
+const fnPopulaControlesFornecedorQualidade = async()=> {
+  console.log("tá por aqui");
+  let tokenStr = localStorage.getItem("token");
+  await axios.get(`http://138.204.68.18:3323/controles/fornecedor/${document.getElementById("select-empresa-controle-qualidade").value}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var controles = (response.data).controles;
+      document.getElementById('select-controle-qualidade').innerHTML = controles.map(function (controle) {
         console.log(controle)
         return (
             "<option value=\""+controle._id+"\">"+controle.codigo+"</option><br/>"
@@ -135,7 +234,33 @@ const fnPopulaControlesFornecedor = async()=> {
 function guardaDados(){
  // window.localStorage.setItem("controleId",document.getElementById("select-controle").value);
   //window.localStorage.setItem("etapa",document.getElementById("select-estagio-qualidade").value);
-  uploadGeral(document.getElementById("select-controle").value, document.getElementById("select-estagio-qualidade").value);
+  uploadGeral(document.getElementById("select-controle-qualidade").value, document.getElementById("select-estagio-qualidade").value);
+}
+
+
+function calcula60(data){
+  
+  let dia = data.substring(0,2);
+  let mes = data.substring(3,5);
+  let ano = data.substring(6,10);
+  
+  if(parseInt(mes) <= 09 ){
+    mes = mes.substring(1,2);
+  }
+  
+  dataBusca = new Date(mes+"/"+dia+"/"+ano); 
+  now = new Date;
+  
+
+  var timeDiff = Math.abs(now.getTime() - dataBusca.getTime());
+  var diferenca = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+  
+  if (diferenca<=60){
+    return false
+  }else{
+    return true
+  }
+
 }
 
 
@@ -185,9 +310,6 @@ function fnConvertValor(valorInt){
 if(localStorage.getItem("acesso")!=="Analista"){
   window.location.replace("index.html");
 }
-
-fnPopulaFinanceiros();
-
 
 
 /* FROM ADMIN */
@@ -279,16 +401,28 @@ const fnPopulaControles = async()=> {
         }else{
           var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
         }
-        return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</td></tr>"
-          );
+
+
+        if(controle.comentario!=" "){
+          var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+          return (
+            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td></tr>"
+            );
+        }else{
+          var comentarioAtual = "";
+          return (
+            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td></tr>"
+            );
+        }
+        
         
         }).join('');      
   })
   .catch(function(error){
       console.warn(error);
   });
-
+  rodaTabelas();
+  
 }
 
 
@@ -320,14 +454,14 @@ function changeCheckboxState(id){
   var checkbox = document.getElementById(id);
   checkbox.checked = !checkbox.checked;
   if (checkbox.checked == true){
-    atualizaControle(id,checkbox.checked);
+    
     document.getElementById(id).parentElement.classList.remove("fa-times-circle");
     document.getElementById(id).parentElement.classList.add("fa-check-circle");
   }else{
     document.getElementById(id).parentElement.classList.add("fa-times-circle");
     document.getElementById(id).parentElement.classList.remove("fa-check-circle");
   } 
-  
+  atualizaControle(id,checkbox.checked);
 }
 
 
@@ -342,4 +476,67 @@ function fnConvertData(data){
   return dia+"/"+mes+"/"+ano;
 }
 
+function rodaTabelas(){  
+  $('#my-table-analista').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false
+    }
+  })
+  $('#my-table-financeiro').dynatable({
+    features: {
+      paginate: false,
+      sort: true,
+      pushState: false,
+      search: false,
+      recordCount: false,
+      perPageSelect: false
+    }
+  });
+  $('#my-table').dynatable({
+    features: {
+      paginate: false,
+      sort:true,
+      pushState: false,
+      search: true,
+      recordCount: false,
+      perPageSelect: false,
+    }    
+  });
+  $('#input-data').datepicker({
+    language: 'pt-BR',
+    maxDate: new Date()
+  })
+}
+
+function filtraEmpresa(){
+  var empresaFiltra = document.getElementById("select-empresa-financeiro").options[document.getElementById('select-empresa-financeiro').selectedIndex].innerText;
+
+
+  document.getElementById("entradaFinanceira").style.display = "block";
+  document.getElementById("resultadoFiltraPesquisaFinanceiro").style.display = "block";
+  document.getElementById("resultadoPesquisaFinanceiro").style.display = "none";
+  document.getElementById("nomeFiltraEmpresa").innerHTML = empresaFiltra;
+
+  fnPopulaFinanceirosFornecedor();
+}
+
+function filtraEmpresaControle(){
+  var empresaFiltra = document.getElementById("select-empresa-controle").options[document.getElementById('select-empresa-controle').selectedIndex].innerText;
+
+
+  //document.getElementById("entradaFinanceira").style.display = "block";
+  //document.getElementById("resultadoFiltraPesquisaControle").style.display = "block";
+  //document.getElementById("resultadoPesquisaFinanceiro").style.display = "none";
+  //document.getElementById("nomeFiltraEmpresaControle").innerHTML = empresaFiltra;
+
+  fnPopulaControlesFornecedor();
+}
+
 fnPopulaControles();
+fnPopulaEmpresas();
+fnPopulaFinanceiros();
