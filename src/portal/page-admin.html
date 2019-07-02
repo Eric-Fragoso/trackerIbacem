@@ -33,6 +33,32 @@
                 <br clear="all">
             </div>
         </div>
+
+<!--MODAL VIEW CONTROLE-->
+        <!--MODAL VIEW CONTROLE-->
+        <!--MODAL VIEW CONTROLE-->
+        <div id="ModalViewControle" class="modal">
+          <span class="close cursor" onclick="closeModalViewControle();">&times;</span>
+          <div class="modal-content5">
+              <h2>DETALHES DO CONTROLE</h2>
+              <div id="containerControles3">
+                  <ul>
+                    <li>FORNECEDOR: <span id="controleViewCOD" class="destacaImport">2</span></li>
+                    <li>CULTURA: <span id="controleViewCULTURA" class="destacaImport">2018</span></li>
+                    <li>VARIEDADE: <span id="controleViewVARIEDADE" class="destacaImport">11</span></li>
+                    <li>VOLUME TOTAL: <span id="controleViewKG" class="destacaImport">44</span></li>
+                    <li>MERCADO: <span id="controleViewMercado" class="destacaImport">01/11/2018</span></li>
+                    <li>NAVIOS: <span id="controleViewNavios" class="destacaImport">Manga</span></li>
+                    <li>ENTRADAS: <span id="controleViewEntradas" class="destacaImport">8990</span></li>
+                    <li>CAIXAS: <span id="controleViewCaixas" class="destacaImport">8990</span></li>
+                    <li>NET: <span id="controleViewNet" class="destacaImport">8990</span></li>
+                  </ul>
+              </div>
+               <button class="cancelarDelete" onclick="closeModalViewControle();">FECHAR</button>
+              <br clear="all">
+          </div>
+      </div>
+
         <!-- MODAL NOVO USUARIO -->
         <!-- MODAL NOVO USUARIO -->
         <!-- MODAL NOVO USUARIO -->
@@ -69,6 +95,15 @@
                         <select name="acesso" id="select-empresa">
                             <option value="" data-placeholder>EMPRESA</option>
                         </select>
+                        <div id="escondeAnalistas" class="hidden">
+                          <select name="subacesso" id="select-nivelAnalista">
+                            <option value=" " data-placeholder>NÍVEL DE ANALISTA</option>
+                            <option value="controle">ANALISTA DE CONTROLE</option>
+                            <option value="financeiro">ANALISTA DE FINANCEIRO</option>
+                            <option value="qualidade">ANALISTA DE QUALIDADE</option>
+                            <option value="senior">ANALISTA SENIOR</option>
+                        </select>
+                        </div>
                     </fieldset>
                     <button class="cancelarUser" onclick="closeModalNovoUser();">CANCELAR</button> 
                     <button id="confirmarUser" class="confirmarUser" type="submit">CONFIRMAR CADASTRO</button>
@@ -110,6 +145,15 @@
                       <select name="acesso" id="select-empresa-editar">
                           <option value="" data-placeholder>EMPRESA</option>
                       </select>
+                      <div id="escondeAnalistasEditar">
+                        <select name="subacesso" id="select-nivelAcessoAnalista-Editar">
+                          <option value="" data-placeholder>NÍVEL DE ANALISTA</option>
+                          <option value="controle">ANALISTA DE CONTROLE</option>
+                          <option value="financeiro">ANALISTA DE FINANCEIRO</option>
+                          <option value="qualidade">ANALISTA DE QUALIDADE</option>
+                          <option value="senior">ANALISTA SENIOR</option>
+                      </select>
+                      </div>
                   </fieldset>
                   <a href="javascript:;" class="cancelarUserEditar" onclick="closeModalEditarUser();">CANCELAR</a> 
                   <a href="javascript:;" id="confirmarUserEditar" class="confirmarUserEditar">SALVAR ALTERAÇÕES</a>
@@ -141,9 +185,16 @@
               var strUser = e.options[e.selectedIndex].value;
               if(strUser == "Produtor"){
                 document.getElementById("escondeCampo").style.display="none";
+                document.getElementById("escondeAnalistas").style.display="none";
                 window.localStorage.setItem("produtorRel","outro");
+              }else if (strUser == "Analista"){
+                document.getElementById("escondeAnalistas").style.display="block";
+                document.getElementById("escondeCampo").style.display="block";
+                document.getElementById("select-empresa").style.display="";
+                window.localStorage.setItem("produtorRel","IBACEM");
               }else{
                 document.getElementById("escondeCampo").style.display="block";
+                document.getElementById("escondeAnalistas").style.display="none";
                 window.localStorage.setItem("produtorRel","IBACEM");
               }
           }
@@ -163,7 +214,7 @@
             <div class="modal-content2">
                 <h2>CONFIRMAR AÇÃO</h2>
                 <p>Deseja realmente deletar este usuário?<b> Essa ação não poderá ser desfeita</b></p>
-                 <button id="confirmarDelete">SIM</button> <button class="cancelarDelete" onclick="closeModalDeleteUser();">CANCELAR</button>
+                 <button id="confirmarDeleteModal" class="confirmarDeleteModal">SIM</button> <button class="cancelarDelete" onclick="closeModalDeleteUser();">CANCELAR</button>
                 <br clear="all">
             </div>
         </div>
@@ -274,6 +325,13 @@
                     <button class="importDataControles" onclick="erroImport();"><i class="fas fa-plus-circle"></i> IMPORTAR</button>
                     <p id="erroImportData"></p>
                 </div>
+                <div id="pesquisaControle">
+                  <h2>FILTRAR POR EMPRESA</h2>
+                  <select name="acesso" id="select-empresa-controle" onchange="filtraEmpresaControle();">
+                      <option value="" data-placeholder>EMPRESA</option>
+                  </select>
+                  <button class="confirmarPesquisa" onclick="filtraEmpresaControle();">FILTRAR</button>
+              </div>
 
                 <div class="tableHolder">
                     <h2>ÚLTIMOS CONTROLES IMPORTADOS</h2>
@@ -288,6 +346,8 @@
                           <th width="9%">Analisado</th>
                           <th width="7%">Público</th>
                           <th width="8%">Comentar</th>
+                          <th width="5%">Ver</th>
+                          <th width="7%">Apagar</th>
                         </tr>
                       </thead>
                       <tbody id="tbody-controles">
@@ -519,7 +579,7 @@
 
             
             function openModalDeleteUser(id) {
-              document.getElementById('confirmarDelete').setAttribute('onclick','deletarUsuario("'+id+'")');
+              document.getElementById('confirmarDeleteModal').setAttribute('onclick','deletarUsuario("'+id+'")');
               document.getElementById('ModalDeleteUser').style.display = "block";
             }
 
@@ -616,6 +676,15 @@
             function closeModalComentario() {
               document.getElementById('ModalComentario').style.display = "none";
             }
+
+            function openModalViewControle() {
+              document.getElementById('ModalViewControle').style.display = "block";
+            }
+            // Fecha modal delete user
+            function closeModalViewControle() {
+              document.getElementById('ModalViewControle').style.display = "none";
+            }
+
             async function erroImport(){
               //var checaInput = document.getElementById('input-controle').value;
               var checaControle = document.getElementById("input-controle").value;
@@ -628,15 +697,25 @@
                   document.getElementById('erroImportData').innerHTML="Preencha todos os campos para iniciar a importação";
                   document.getElementById('erroImportData').style.display = "block";
                   setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-                }else{
-                  console.log(fnComparaControles(checaControle+"-"+checaCultura+"-"+checaAno));
-                  if (await fnComparaControles(checaControle+"-"+checaCultura+"-"+checaAno)){
-                    document.getElementById('erroImportData').innerHTML="Controle importado anteriormente";
-                    document.getElementById('erroImportData').style.display = "block";
-                    setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-                  }else{
-                    importarControle();
-                  }
+              }else{
+                  let codigo = checaControle+"-"+checaCultura+"-"+checaAno;
+                  
+                  let tokenStr = localStorage.getItem("token");
+                  await axios.get(`http://138.204.68.18:3323/controles/${codigo}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+                  .then(function(response){
+                    var controle = (response.data).controle;
+
+                    if (controle.length==1){
+                      document.getElementById('erroImportData').innerHTML="Controle importado anteriormente";
+                      document.getElementById('erroImportData').style.display = "block";
+                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                    }else{
+                      importarControle();
+                    }
+                  })
+                  .catch(function(error){
+                      console.warn(error);
+                  });
                 };
             }
             function erroQualidade(){

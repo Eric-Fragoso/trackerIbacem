@@ -186,17 +186,19 @@ const fnPopulaControlesFornecedor = async()=> {
       }else{
         var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
       }
-
+      
+      var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
+      var view = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>"
 
       if(controle.comentario!=" "){
-        var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+        var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-comment-dots\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
         return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"lerComentario('"+controle._id+"');\">"+comentarioAtual+"</div></td></tr>"
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
           );
       }else{
         var comentarioAtual = "";
         return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td></tr>"
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
           );
       }
       
@@ -319,33 +321,32 @@ if(localStorage.getItem("acesso")!=="Analista"){
 /* FROM ADMIN */
 
 const importarControle = async()=> {
-  var valueControle = document.getElementById("input-controle").value;
-  var valueAno = document.getElementById("select-ano-safra").value;
-  var valueCultura = document.getElementById("select-cultura").value;
-
+  let valueControle = document.getElementById("input-controle").value;
+  let valueAno = document.getElementById("select-ano-safra").value;
+  let valueCultura = document.getElementById("select-cultura").value;
 
 
   await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
   .then(function(response){
-    var controles = (response.data);
+    let controles = (response.data);
       document.getElementById('containerControles').innerHTML = controles.map(function (controle) {
         openModalExibeImportacao();
         fornecedorAtual = controle.COD_FORNECEDOR;
-        return (
-          `<ul>
-            <li>COD_FORNECEDOR: <span id="controleCOD" class="destacaImport" value="${controle.COD_FORNECEDOR}">${controle.COD_FORNECEDOR}</span></li>
-            <li>ANO: <span id="controleANO" class="destacaImport">${controle.ANO}</span></li>
-            <li>MÊS: <span id="controleMES" class="destacaImport">${controle.MES}</span></li>
-            <li>SEMANA: <span id="controleSEMANA" class="destacaImport">${controle.SEMANA}</span></li>
-            <li>DATA: <span id="controleDATA" class="destacaImport">${controle.DATA}</span></li>
-            <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
-            <li>VARIEDADE: <span id="controleVAR" class="destacaImport">${controle.VARIEDADE}</span></li>
-            <li>CONTROLE: <span id="controleCON" class="destacaImport">${controle.CONTROLE}</span></li>
-            <li>SAFRA: <span id="controleSAFRA" class="destacaImport">${controle.SAFRA}</span></li>
-            <li>VOLUME EM KG: <span id="controleCOD" class="destacaImport">${controle.VOLUME_KG}</span></li>
-          </ul>`
-          );
-        
+
+            return (
+              `<ul>
+                <li>COD_FORNECEDOR: <span id="controleCOD" class="destacaImport" value="${controle.COD_FORNECEDOR}">${controle.COD_FORNECEDOR}</span></li>
+                <li>ANO: <span id="controleANO" class="destacaImport">${controle.ANO}</span></li>
+                <li>MÊS: <span id="controleMES" class="destacaImport">${controle.MES}</span></li>
+                <li>SEMANA: <span id="controleSEMANA" class="destacaImport">${controle.SEMANA}</span></li>
+                <li>DATA: <span id="controleDATA" class="destacaImport">${controle.DATA}</span></li>
+                <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
+                <li>VARIEDADE: <span id="controleVAR" class="destacaImport">${controle.VARIEDADE}</span></li>
+                <li>CONTROLE: <span id="controleCON" class="destacaImport">${controle.CONTROLE}</span></li>
+                <li>SAFRA: <span id="controleSAFRA" class="destacaImport">${controle.SAFRA}</span></li>
+                <li>VOLUME EM KG: <span id="controleCOD" class="destacaImport">${controle.VOLUME_KG}</span></li>
+              </ul>`
+              );
         }).join(''); 
       
   })
@@ -401,17 +402,19 @@ const fnPopulaControles = async()=> {
         }else{
           var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
         }
-
+        
+        var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
+        var view = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>"
 
         if(controle.comentario!=" "){
-          var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+          var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-comment-dots\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
           return (
-            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td></tr>"
+            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
             );
         }else{
           var comentarioAtual = "";
           return (
-            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td></tr>"
+            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
             );
         }
         
@@ -537,6 +540,194 @@ function filtraEmpresaControle(){
   fnPopulaControlesFornecedor();
 }
 
+function openModalExibeImportacao() {
+  document.getElementById('ModalConfirmarImport').style.display = "block";
+}
+// Fecha modal exibe importação
+function closeModalExibeImportacao() {
+  document.getElementById('ModalConfirmarImport').style.display = "none";
+} 
+
+const apagaControle = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.delete(`http://138.204.68.18:3323/controles/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    fnPopulaControles(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+function viewControle(controleCod, fornecedorCod ) {
+  var cod;
+        switch (controleCod.length){
+          case 9 :
+            cod = controleCod.substring(0,4);
+          break;
+          case 8 :
+            cod = controleCod.substring(0,3);
+          break;
+          case 7 :
+            cod = controleCod.substring(0,2);
+          break;
+          case 6 :
+            cod = controleCod.substring(0,1);
+          break;
+          default:
+        }
+  axios.get(`http://138.204.68.18:3324/api/comercial/${fornecedorCod}/${cod}`)
+        .then(function(resposta){
+          let controls = (resposta.data);
+          let cultura;
+          let variedade;
+          let arrayMaster=[];
+          let arrayKG=[];
+          let arrayMercado=[];
+          let arrayNavios=[];
+          let arrayCaixas=[];
+          let arrayNET=[];
+
+
+          controls.map(function (control) {
+              let arraySingle=[];
+              cultura = control.CULTURA;
+              variedade = control.VARIEDADE;
+              //let kgtotal = control.TIPO_CX * control.QTD_CAIXA;
+              let kgtotal = Math.round10(control.PESO_CX,-2);
+              let nettotal = control.NET_CX * control.QTD_CAIXA;
+              console.log(nettotal)
+              arrayKG.push(kgtotal);
+              arrayMercado.push(control.MERCADO);
+              arrayNavios.push(control.NAVIO);
+              arrayCaixas.push(control.QTD_CAIXA);
+              arrayNET.push(nettotal);
+              arraySingle.push(control.CONTAINER, control.DATA_CHEGADA, control.CAIXA, control.QTD_CAIXA, control.CALIBRE, control.MOEDA, control.VALOR_BRUTO_CX, control.VALOR_COMISSAOIMP_CX, control.VALOR_CUSTOIMP_CX, control.RESU_FOB, control.VALOR_CX_MI, control.RESU_MI, control.DESP_FRETE, control.COMISSAO_IBACEM, control.CUSTO_PH, control.COMISSAO_MI, control.NET_CX, control.NET_KG, kgtotal, nettotal )
+              arrayMaster.push(arraySingle);
+              
+          }).join(' '); 
+          var total = arrayKG.reduce(function(anterior, atual) {
+            return anterior + atual;
+          });
+          
+          var mercadoFinal = arrayMercado.filter(function (a) {
+            return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true);
+          }, Object.create(null));
+
+          var navioFinal = arrayNavios.filter(function (a) {
+            return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true);
+          }, Object.create(null));
+
+          var totalCaixas = arrayCaixas.reduce(function(anterior, atual) {
+            return anterior + atual;
+          });
+
+          var totalNet = arrayNET.reduce(function(anterior, atual) {
+            return anterior + atual;
+          });
+
+          console.log(mercadoFinal);
+          document.getElementById("controleViewCOD").innerHTML = fornecedorCod;
+          document.getElementById("controleViewCULTURA").innerHTML = cultura;
+          document.getElementById("controleViewVARIEDADE").innerHTML = variedade;
+          document.getElementById("controleViewKG").innerHTML =  Math.round10(total) + " Kg";
+          document.getElementById("controleViewMercado").innerHTML = mercadoFinal;
+          document.getElementById("controleViewNavios").innerHTML = navioFinal;
+          document.getElementById("controleViewEntradas").innerHTML = arrayKG.length;
+          document.getElementById("controleViewCaixas").innerHTML = totalCaixas;
+          document.getElementById("controleViewNet").innerHTML = totalNet;
+          //document.getElementById("controleCOD").innerHTML = empresaFiltra;
+          
+        });
+        
+        openModalViewControle();
+}
+
+
 fnPopulaControles();
 fnPopulaEmpresas();
 fnPopulaFinanceiros();
+
+switch (localStorage.getItem("subacesso")){
+  case " ":
+      //ações para administrador
+
+      break;
+  case "controle":
+      document.getElementById('default').style.display = "block";
+      document.getElementById('abaFinan').style.display = "none";
+      document.getElementById('abaQuali').style.display = "none";
+      
+      break;
+  case "financeiro":
+      document.getElementById('default').style.display = "none";
+      document.getElementById('abaFinan').style.display = "block";
+      document.getElementById('abaQuali').style.display = "none";
+      break;
+  case "qualidade":
+    document.getElementById('default').style.display = "none";
+    document.getElementById('abaFinan').style.display = "none";
+    document.getElementById('abaQuali').style.display = "block";//ações para produtor
+
+      break;
+  case "senior":
+    document.getElementById('default').style.display = "block";
+    document.getElementById('abaFinan').style.display = "block";
+    document.getElementById('abaQuali').style.display = "block";
+
+      break;
+  default:
+      //apresentar erro de usuário sem acesso definido.
+}
+
+
+(function(){
+
+	/**
+	 * Ajuste decimal de um número.
+	 *
+	 * @param	{String}	type	O tipo de arredondamento.
+	 * @param	{Number}	value	O número a arredondar.
+	 * @param	{Integer}	exp		O expoente (o logaritmo decimal da base pretendida).
+	 * @returns	{Number}			O valor depois de ajustado.
+	 */
+	function decimalAdjust(type, value, exp) {
+		// Se exp é indefinido ou zero...
+		if (typeof exp === 'undefined' || +exp === 0) {
+			return Math[type](value);
+		}
+		value = +value;
+		exp = +exp;
+		// Se o valor não é um número ou o exp não é inteiro...
+		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+			return NaN;
+		}
+		// Transformando para string
+		value = value.toString().split('e');
+		value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+		// Transformando de volta
+		value = value.toString().split('e');
+		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+	}
+
+	// Arredondamento decimal
+	if (!Math.round10) {
+		Math.round10 = function(value, exp) {
+			return decimalAdjust('round', value, exp);
+		};
+	}
+	// Decimal arredondado para baixo
+	if (!Math.floor10) {
+		Math.floor10 = function(value, exp) {
+			return decimalAdjust('floor', value, exp);
+		};
+	}
+	// Decimal arredondado para cima
+	if (!Math.ceil10) {
+		Math.ceil10 = function(value, exp) {
+			return decimalAdjust('ceil', value, exp);
+		};
+	}
+
+})();

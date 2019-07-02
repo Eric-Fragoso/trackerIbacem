@@ -18,6 +18,9 @@ const cadastrar = async(e)=> {
     let valueTelefone= document.getElementById("inputTelefone").value;
     let valueFidelidade = document.getElementById("select-fidelidade").value;
     let valueAcesso = document.getElementById("select-nivelAcesso").value;
+    let vAa = document.getElementById("select-nivelAnalista").value;
+
+    console.log(vAa);
    
       await axios.post(`http://138.204.68.18:3323/auth/register`, 
                   {
@@ -27,7 +30,8 @@ const cadastrar = async(e)=> {
                     telefone:valueTelefone,
                     fidelidade:valueFidelidade,
                     acesso:valueAcesso,
-                    fornecedorRelacionado:valueEmpresa
+                    fornecedorRelacionado:valueEmpresa,
+                    acessoAnalista: vAa                    
                   }
       )
       .then(function(response){
@@ -128,6 +132,7 @@ const fnPopulaUsuarios = async()=> {
 
 const deletarUsuario = async(id)=> {
   let tokenStr = localStorage.getItem("token");
+  console.log(id);
   await axios.delete(`http://138.204.68.18:3323/usuarios/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     fnPopulaUsuarios();  
@@ -150,9 +155,10 @@ const atualizaUsuario = async(id)=> {
   let acesso = document.getElementById("select-nivelAcessoEditar").value;
   let fidelidade = document.getElementById("select-fidelidade-editar").value;
   let fornecedor = document.getElementById("select-empresa-editar").value;
+  let acessoAnalista = document.getElementById("select-nivelAcessoAnalista-editar").value
  
   await axios.put(`http://138.204.68.18:3323/usuarios/${id}`, 
-              {id:id, nome, email, telefone, acesso, fidelidade, fornecedorRelacionado:fornecedor
+              {id:id, nome, email, telefone, acesso, fidelidade, fornecedorRelacionado:fornecedor, acessoAnalista
               },
           {headers: {"Authorization" : `Bearer ${tokenStr}`} }
   )
@@ -247,7 +253,8 @@ const fnPopulaControles = async()=> {
   .then(function(response){
     var controles = (response.data).controles;
       document.getElementById('tbody-controles').innerHTML = controles.map(function (controle) {
-        
+        var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
+        var view = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>"
         if (controle.visivel == false){
           var visivelAtual = "<a href=\"javascript:;\"><i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"hidden\" class=\"checkboxVisivel\"></i></a>";
         }else{
@@ -263,8 +270,9 @@ const fnPopulaControles = async()=> {
         }else{
           var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-edit\"></i></a>";
         }
+        //var resumoIcon = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>";
         return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td></tr>"
+          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
           );
         
         }).join('');      
@@ -274,32 +282,6 @@ const fnPopulaControles = async()=> {
   });
 
 }
-
-
-
-const fnComparaControles = async(controleCodigo)=> {
-  let tokenStr = localStorage.getItem("token");
-  await axios.get('http://138.204.68.18:3323/controles',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
-  .then(function(response){
-    var controles = (response.data).controles;
-      controles.map(function (controle) {
-        console.log (controleCodigo, controle.codigo)
-        if(controleCodigo==controle.codigo){
-          return true
-        }else{
-          return false        
-        }
-      }).join('');      
-  })
-  .catch(function(error){
-      console.warn(error);
-  });
-
-}
-
-
-
-
 
 
 
@@ -357,6 +339,24 @@ function changeCheckboxState(id){
     atualizaControle(id,checkbox.checked);
     document.getElementById(id).parentElement.classList.add("fa-times-circle");
     document.getElementById(id).parentElement.classList.remove("fa-check-circle");
+  } 
+  
+}
+
+
+function changeCheckboxStateFornecedor(id){
+  console.log(id);
+  var checkbox = document.getElementById(id+"forn");
+  console.log(checkbox);
+  checkbox.checked = !checkbox.checked;
+  if (checkbox.checked == true){
+    atualizaControle(id,checkbox.checked);
+    document.getElementById(id+"forn").parentElement.classList.remove("fa-times-circle");
+    document.getElementById(id+"forn").parentElement.classList.add("fa-check-circle");
+  }else{
+    atualizaControle(id,checkbox.checked);
+    document.getElementById(id+"forn").parentElement.classList.add("fa-times-circle");
+    document.getElementById(id+"forn").parentElement.classList.remove("fa-check-circle");
   } 
   
 }
@@ -670,7 +670,210 @@ function rodaTabelas(){
   })
 }
 
+const fnPopulaControlesFornecedorLista = async()=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get(`http://138.204.68.18:3323/controles/fornecedor/${document.getElementById("select-empresa-controle").value}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var controles = (response.data).controles;
+    document.getElementById('tbody-controles').innerHTML = controles.map(function (controle) {
+       
+      if (controle.visivel == false){
+        var visivelAtual = "<a href=\"javascript:;\"><i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+'forn'+" value=\"hidden\" class=\"checkboxVisivel\"></i></a>";
+      }else{
+        var visivelAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+'forn'+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+      }
+
+      if (controle.analisado == false){
+        var analisadoAtual = "<i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"hidden\" class=\"checkboxVisivel\"></i>";
+      }else{
+        var analisadoAtual = "<i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i>";
+      }
+      
+      var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
+      var view = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>"
+
+      if (controle.comentario != " "){
+        var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-comment-dots\"></i></a>";
+      }else{
+        var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-edit\"></i></a>";
+      }
+      //var resumoIcon = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>";
+      return (
+        "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxStateFornecedor('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
+        );
+      
+      
+      }).join('');    
+        
+  })
+  .catch(function(error){
+      console.warn(error);
+    });
+  
+}
+
+function filtraEmpresaControle(){
+  var empresaFiltra = document.getElementById("select-empresa-controle").options[document.getElementById('select-empresa-controle').selectedIndex].innerText;
+
+
+  //document.getElementById("entradaFinanceira").style.display = "block";
+  //document.getElementById("resultadoFiltraPesquisaControle").style.display = "block";
+  //document.getElementById("resultadoPesquisaFinanceiro").style.display = "none";
+  //document.getElementById("nomeFiltraEmpresaControle").innerHTML = empresaFiltra;
+
+  fnPopulaControlesFornecedorLista();
+}
+
+
+
+const apagaControle = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.delete(`http://138.204.68.18:3323/controles/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    fnPopulaControles(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+function viewControle(controleCod, fornecedorCod ) {
+  var cod;
+        switch (controleCod.length){
+          case 9 :
+            cod = controleCod.substring(0,4);
+          break;
+          case 8 :
+            cod = controleCod.substring(0,3);
+          break;
+          case 7 :
+            cod = controleCod.substring(0,2);
+          break;
+          case 6 :
+            cod = controleCod.substring(0,1);
+          break;
+          default:
+        }
+  axios.get(`http://138.204.68.18:3324/api/comercial/${fornecedorCod}/${cod}`)
+        .then(function(resposta){
+          let controls = (resposta.data);
+          let cultura;
+          let variedade;
+          let arrayMaster=[];
+          let arrayKG=[];
+          let arrayMercado=[];
+          let arrayNavios=[];
+          let arrayCaixas=[];
+          let arrayNET=[];
+
+
+          controls.map(function (control) {
+              let arraySingle=[];
+              cultura = control.CULTURA;
+              variedade = control.VARIEDADE;
+              //let kgtotal = control.TIPO_CX * control.QTD_CAIXA;
+              let kgtotal = Math.round10(control.PESO_CX,-2);
+              let nettotal = control.NET_CX * control.QTD_CAIXA;
+              console.log(nettotal);
+              arrayKG.push(kgtotal);
+              arrayMercado.push(control.MERCADO);
+              arrayNavios.push(control.NAVIO);
+              arrayCaixas.push(control.QTD_CAIXA);
+              arrayNET.push(nettotal);
+              arraySingle.push(control.CONTAINER, control.DATA_CHEGADA, control.CAIXA, control.QTD_CAIXA, control.CALIBRE, control.MOEDA, control.VALOR_BRUTO_CX, control.VALOR_COMISSAOIMP_CX, control.VALOR_CUSTOIMP_CX, control.RESU_FOB, control.VALOR_CX_MI, control.RESU_MI, control.DESP_FRETE, control.COMISSAO_IBACEM, control.CUSTO_PH, control.COMISSAO_MI, control.NET_CX, control.NET_KG, kgtotal, nettotal )
+              arrayMaster.push(arraySingle);
+              
+          }).join(' '); 
+          var total = arrayKG.reduce(function(anterior, atual) {
+            return anterior + atual;
+          });
+          
+          var mercadoFinal = arrayMercado.filter(function (a) {
+            return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true);
+          }, Object.create(null));
+
+          var navioFinal = arrayNavios.filter(function (a) {
+            return !this[JSON.stringify(a)] && (this[JSON.stringify(a)] = true);
+          }, Object.create(null));
+
+          var totalCaixas = arrayCaixas.reduce(function(anterior, atual) {
+            return anterior + atual;
+          });
+
+          var totalNet = arrayNET.reduce(function(anterior, atual) {
+            return anterior + atual;
+          });
+
+          console.log(mercadoFinal);
+          document.getElementById("controleViewCOD").innerHTML = fornecedorCod;
+          document.getElementById("controleViewCULTURA").innerHTML = cultura;
+          document.getElementById("controleViewVARIEDADE").innerHTML = variedade;
+          document.getElementById("controleViewKG").innerHTML =  Math.round10(total) + " Kg";
+          document.getElementById("controleViewMercado").innerHTML = mercadoFinal;
+          document.getElementById("controleViewNavios").innerHTML = navioFinal;
+          document.getElementById("controleViewEntradas").innerHTML = arrayKG.length;
+          document.getElementById("controleViewCaixas").innerHTML = totalCaixas;
+          document.getElementById("controleViewNet").innerHTML = totalNet;
+          //document.getElementById("controleCOD").innerHTML = empresaFiltra;
+          
+        });
+        
+        openModalViewControle();
+}
+
 fnPopulaControles(); 
 fnPopulaUsuarios();
 fnPopulaEmpresas();
 fnPopulaFinanceiros();
+
+
+(function(){
+
+	/**
+	 * Ajuste decimal de um número.
+	 *
+	 * @param	{String}	type	O tipo de arredondamento.
+	 * @param	{Number}	value	O número a arredondar.
+	 * @param	{Integer}	exp		O expoente (o logaritmo decimal da base pretendida).
+	 * @returns	{Number}			O valor depois de ajustado.
+	 */
+	function decimalAdjust(type, value, exp) {
+		// Se exp é indefinido ou zero...
+		if (typeof exp === 'undefined' || +exp === 0) {
+			return Math[type](value);
+		}
+		value = +value;
+		exp = +exp;
+		// Se o valor não é um número ou o exp não é inteiro...
+		if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+			return NaN;
+		}
+		// Transformando para string
+		value = value.toString().split('e');
+		value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+		// Transformando de volta
+		value = value.toString().split('e');
+		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+	}
+
+	// Arredondamento decimal
+	if (!Math.round10) {
+		Math.round10 = function(value, exp) {
+			return decimalAdjust('round', value, exp);
+		};
+	}
+	// Decimal arredondado para baixo
+	if (!Math.floor10) {
+		Math.floor10 = function(value, exp) {
+			return decimalAdjust('floor', value, exp);
+		};
+	}
+	// Decimal arredondado para cima
+	if (!Math.ceil10) {
+		Math.ceil10 = function(value, exp) {
+			return decimalAdjust('ceil', value, exp);
+		};
+	}
+
+})();

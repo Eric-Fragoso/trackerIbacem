@@ -42,6 +42,57 @@
                 <br clear="all">
             </div>
         </div>
+        <!--MODAL CONFIRMAR IMPORT-->
+        <!--MODAL CONFIRMAR IMPORT-->
+        <!--MODAL CONFIRMAR IMPORT-->
+        <div id="ModalConfirmarImport" class="modal">
+          <span class="close cursor" onclick="closeModalExibeImportacao();">&times;</span>
+          <div class="modal-content3">
+              <h2>CONFIRMAR IMPORTAÇÃO</h2>
+              <div id="containerControles">
+                  <ul>
+                    <li>COD_FORNECEDOR: <span id="controleCOD" class="destacaImport">2</span></li>
+                    <li>ANO: <span id="controleANO" class="destacaImport">2018</span></li>
+                    <li>MÊS: <span id="controleMES" class="destacaImport">11</span></li>
+                    <li>SEMANA: <span id="controleSEMANA" class="destacaImport">44</span></li>
+                    <li>DATA: <span id="controleDATA" class="destacaImport">01/11/2018</span></li>
+                    <li>CULTURA: <span id="controleCULTURA" class="destacaImport">Manga</span></li>
+                    <li>VARIEDADE: <span id="controleVAR" class="destacaImport">TOMMY ATKINS</span></li>
+                    <li>CONTROLE: <span id="controleCON" class="destacaImport">946</span></li>
+                    <li>SAFRA: <span id="controleSAFRA" class="destacaImport">M18</span></li>
+                    <li>VOLUME EM KG: <span id="controleCOD" class="destacaImport">8990</span></li>
+                  </ul>
+              </div>
+               <button id="confirmarImport" onclick="salvaControle();">SIM</button> <button class="cancelarDelete" onclick="closeModalExibeImportacao();">CANCELAR</button>
+              <br clear="all">
+          </div>
+      </div>
+
+
+        <!--MODAL VIEW CONTROLE-->
+        <!--MODAL VIEW CONTROLE-->
+        <!--MODAL VIEW CONTROLE-->
+        <div id="ModalViewControle" class="modal">
+          <span class="close cursor" onclick="closeModalViewControle();">&times;</span>
+          <div class="modal-content5">
+              <h2>DETALHES DO CONTROLE</h2>
+              <div id="containerControles3">
+                  <ul>
+                    <li>FORNECEDOR: <span id="controleViewCOD" class="destacaImport">2</span></li>
+                    <li>CULTURA: <span id="controleViewCULTURA" class="destacaImport">2018</span></li>
+                    <li>VARIEDADE: <span id="controleViewVARIEDADE" class="destacaImport">11</span></li>
+                    <li>VOLUME TOTAL: <span id="controleViewKG" class="destacaImport">44</span></li>
+                    <li>MERCADO: <span id="controleViewMercado" class="destacaImport">01/11/2018</span></li>
+                    <li>NAVIOS: <span id="controleViewNavios" class="destacaImport">Manga</span></li>
+                    <li>ENTRADAS: <span id="controleViewEntradas" class="destacaImport">8990</span></li>
+                    <li>CAIXAS: <span id="controleViewCaixas" class="destacaImport">8990</span></li>
+                    <li>NET: <span id="controleViewNet" class="destacaImport">8990</span></li>
+                  </ul>
+              </div>
+               <button class="cancelarDelete" onclick="closeModalViewControle();">FECHAR</button>
+              <br clear="all">
+          </div>
+      </div>
 
         <!--MODAL COMENTÁRIO-->
         <!--MODAL COMENTÁRIO-->
@@ -83,8 +134,8 @@
         <div id="menuHolder" >
             <div id="abas">
                 <button class="tablinks" onclick="openCity(event, 'pageControlesAnalista')" id="default">CONTROLES</button>
-                <button class="tablinks" onclick="openCity(event, 'pageFinanceiroAnalista')">FINANCEIRO</button>
-                <button class="tablinks" onclick="openCity(event, 'pageQualidadeAnalista')">QUALIDADE</button>
+                <button class="tablinks" onclick="openCity(event, 'pageFinanceiroAnalista')" id="abaFinan">FINANCEIRO</button>
+                <button class="tablinks" onclick="openCity(event, 'pageQualidadeAnalista')"id="abaQuali">QUALIDADE</button>
             </div>
         </div>
 
@@ -109,10 +160,10 @@
                   </select>
                   <select name="status" id="select-status">
                       <option value="" data-placeholder>STATUS</option>
-                      <option value="Recepção">Recepção</option>
-                      <option value="Seleção">Seleção</option>
+                      <option value="Recepcao">Recepção</option>
+                      <option value="Selecao">Seleção</option>
                       <option value="Embalagem">Embalagem</option>
-                      <option value="Expedição">Expedição</option>
+                      <option value="Expedicao">Expedição</option>
                       <option value="Comercial">Comercial</option>
                   </select>
                   <button class="importDataControles" onclick="erroImport();"><i class="fas fa-plus-circle"></i> IMPORTAR</button>
@@ -136,6 +187,8 @@
                         <th >Supervisor</th>
                         <th >Analisado</th>
                         <th >Comentário</th>
+                        <th >Visualizar</th>
+                        <th >Excluir</th>
                       </tr>
                     </thead>
                     <tbody id="tbody-controles">
@@ -271,6 +324,14 @@
               document.getElementById('ModalDeleteRegistro').style.display = "none";
             }
 
+            function openModalViewControle() {
+              document.getElementById('ModalViewControle').style.display = "block";
+            }
+            // Fecha modal delete user
+            function closeModalViewControle() {
+              document.getElementById('ModalViewControle').style.display = "none";
+            }
+
             function editRegistroFinanceiro(id, data, historico, nf, valor){
               console.log(id, data, historico, nf, valor)
               $('#input-descricao').focus();
@@ -356,6 +417,9 @@
               document.getElementById(cityName).style.display = "block";
               evt.currentTarget.className += " active";
             }
+
+            
+
             document.getElementById("default").click(); 
 
 
@@ -367,21 +431,40 @@
             
 
 
-            function erroImport(){
-              var checaInput = document.getElementById('input-controle').value;
+            async function erroImport(){
+              //var checaInput = document.getElementById('input-controle').value;
               var checaControle = document.getElementById("input-controle").value;
               var checaAno = document.getElementById("select-ano-safra").value;
               var checaCultura = document.getElementById("select-cultura").value;
               var checaStatus = document.getElementById("select-status").value;
 
-              if (checaInput == "" || checaControle == "" || checaAno == "" || checaCultura == "" || checaStatus == "" ){
+              if (checaControle == "" || checaAno == "" || checaCultura == "" || checaStatus == "" ){
                   
                   document.getElementById('erroImportData').innerHTML="Preencha todos os campos para iniciar a importação";
                   document.getElementById('erroImportData').style.display = "block";
                   setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-                }else{
-                  importarControle();
-              };
+              }else{
+                  let codigo = checaControle+"-"+checaCultura+"-"+checaAno;
+                  
+                  let tokenStr = localStorage.getItem("token");
+                  await axios.get(`http://138.204.68.18:3323/controles/${codigo}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+                  .then(function(response){
+                    var controle = (response.data).controle;
+
+                    if (controle.length==1){
+                      document.getElementById('erroImportData').innerHTML="Controle importado anteriormente";
+                      document.getElementById('erroImportData').style.display = "block";
+                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                    }else{
+                      importarControle();
+                    }
+                  })
+                  .catch(function(error){
+                      console.warn(error);
+                  });
+                  
+                  
+                };
             }
             
             
@@ -404,7 +487,12 @@
                     
                   };
                 }
-         $('#input-valor').mask('#.##0,00', {reverse: true});       
+                
+          
+               
+          
+          $('#input-valor').mask('#.##0,00', {reverse: true});  
+             
         </script>
 
         <script src="js/analista/analista.js"></script>

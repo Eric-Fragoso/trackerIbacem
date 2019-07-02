@@ -15,7 +15,7 @@ function logar(e){
         window.localStorage.setItem("nome",response.user.nome);
         window.localStorage.setItem("fornecedor",response.user.fornecedorRelacionado);
         window.localStorage.setItem("acesso",response.user.acesso);
-
+        console.log(response.user.acessoAnalista);
         switch (response.user.acesso){
             case "Produtor":
                 //ações para administrador
@@ -23,7 +23,9 @@ function logar(e){
                 break;
             case "Analista":
                 //ações para supervisor
+                window.localStorage.setItem("subacesso",response.user.acessoAnalista);
                 window.location.replace("page-analista.html");
+                
                 break;
             case "Supervisor":
                 //ações para importador
