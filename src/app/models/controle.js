@@ -10,12 +10,12 @@ const ControleSchema = new mongoose.Schema({
     publicadoPor:{
         type: String,
         require:true,
-        default:"",
+        default:" ",
      },
      analisadoPor:{
         type: String,
         require:true,
-        default:"",
+        default:" ",
      },
     codigo:{
         type: String,
@@ -52,13 +52,73 @@ const ControleSchema = new mongoose.Schema({
     passoAtual:{
         type:String,
         require:true,
-        default:"",
+        default:" ",
     },
     importadoEm:{
         type:Date,
         default: Date.now,
     },
     comentario:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    cultura:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    variedade:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    volumeKG:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    volumeKG_MI:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    volumeKG_ME:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    volumeKG_Refugo:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    mercado:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    container:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    embarque:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    caixa:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    qtd_cx:{
+        type:String,
+        required:false,
+        default:" ",
+    },
+    KG:{
         type:String,
         required:false,
         default:" ",
