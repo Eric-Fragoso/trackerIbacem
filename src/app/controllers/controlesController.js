@@ -21,7 +21,13 @@ router.get('/', async(req, res)=>{
 });
 
 router.get('/:controleId', async(req, res)=>{
-    res.send({ Controle: req.controleId});
+    try{
+        const controle = await Controle.find({codigo:controleId}).sort({ importadoEm: -1 });
+
+        return res.send({controle});
+    }catch(err){
+        return res.status(400).send({error: ' Erro carregando controle'});
+    }
 });
 
 router.get('/fornecedor/:fornecedorID', async(req, res)=>{
