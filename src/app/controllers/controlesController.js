@@ -22,8 +22,8 @@ router.get('/', async(req, res)=>{
 
 router.get('/:controleId', async(req, res)=>{
     
-    let codigo = `${controleId}`;
-    console.log(controleId, codigo);
+    let codigo = `${ req.params.controleId}`;
+    console.log( req.params.controleId, codigo);
     try{
         const controle = await Controle.find({codigo}).sort({ importadoEm: -1 });
 
