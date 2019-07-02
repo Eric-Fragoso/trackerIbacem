@@ -61,7 +61,7 @@ const ControleSchema = new mongoose.Schema({
     comentario:{
         type:String,
         required:false,
-        default:"",
+        default:" ",
     }
 });
 
