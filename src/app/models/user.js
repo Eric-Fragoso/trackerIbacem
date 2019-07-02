@@ -33,6 +33,10 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    acessoAnalista:{
+        type:String,
+        required:false,
+    },
     ativo:{
         type:Boolean,
         default:true,
