@@ -409,12 +409,12 @@ const fnPopulaControles = async()=> {
         if(controle.comentario!=" "){
           var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-comment-dots\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
           return (
-            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
+            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"','"+controle.passoAtual+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
             );
         }else{
           var comentarioAtual = "";
           return (
-            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
+            "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+analisadoAtual+"</div></td><td><div>"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"','"+controle.passoAtual+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
             );
         }
         
@@ -560,8 +560,11 @@ const apagaControle = async(id)=> {
 
 }
 
-function viewControle(controleCod, fornecedorCod ) {
-  var cod;
+function viewControle(controleCod, fornecedorCod, faseAtual ) {
+  let cod;
+  let ano = controleCod.substring(controleCod.length-2,controleCod.length);
+  let cultura = controleCod.substring(controleCod.length-4,controleCod.length-3);
+  let fase;
         switch (controleCod.length){
           case 9 :
             cod = controleCod.substring(0,4);
@@ -577,7 +580,31 @@ function viewControle(controleCod, fornecedorCod ) {
           break;
           default:
         }
-  axios.get(`http://138.204.68.18:3324/api/comercial/${fornecedorCod}/${cod}`)
+        switch (faseAtual){
+          case "Recepção" :
+            fase = "viewRecepcao";
+            exibeResumoREC(ano,cod,cultura);
+          break;
+          case "Selecao"  :
+            fase = "viewSelecao";
+            exibeResumoSEL(ano,cod,cultura);
+          break;
+          case "Embalagem"  :
+            fase = "viewEmbalamento";
+            exibeResumoEMB(ano,cod,cultura);
+          break;
+          case "Expedicao"  :
+            fase = "viewExpedicao";
+            exibeResumoEXP(ano,cod,cultura);
+          break;
+          case "Comercial"  :
+            fase = "viewComercial";
+          break;
+          default:
+        }
+
+        escondeDivs(fase);
+        /*axios.get(`http://138.204.68.18:3324/api/comercial/${fornecedorCod}/${cod}`)
         .then(function(resposta){
           let controls = (resposta.data);
           let cultura;
@@ -639,9 +666,250 @@ function viewControle(controleCod, fornecedorCod ) {
           document.getElementById("controleViewNet").innerHTML = totalNet;
           //document.getElementById("controleCOD").innerHTML = empresaFiltra;
           
-        });
+        });*/
         
         openModalViewControle();
+}
+
+async function exibeResumoREC(ano,cod,cultura){
+  await axios.get(`http://138.204.68.18:3324/api/controles/${cod}/${ano}/${cultura}`)
+  .then(function(response){
+    let controles = (response.data);
+      document.getElementById('viewRecepcao').innerHTML = controles.map(function (controle) {
+            return (
+              `<ul>
+                <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+                <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport2">${controle.COD_FORNECEDOR}</span></li>
+                <li>CULTURA: <span id="controleCULTURA" class="destacaImport2">${controle.CULTURA}</span></li>
+                <li>VARIEDADE: <span id="controleVARIEDADE" class="destacaImport2">${controle.VARIEDADE}</span></li>
+                <li>VOLUME: <span id="controleVOLUME" class="destacaImport2">${controle.VOLUME_KG+"Kg"}</span></li>
+              </ul>`
+              );
+        }).join(''); 
+      
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+}
+
+async function exibeResumoSEL(ano,cod,cultura){
+  await axios.get(`http://138.204.68.18:3324/api/controlessel/${cod}/${ano}/${cultura}`)
+  .then(function(response){
+    let controles = (response.data);
+    fornecedorCod = '';
+
+    let mercados = [];
+    for(i = 0; i< controles.length; i++){    
+        if(mercados.indexOf(controles[i].MERCADO) === -1){
+          mercados.push(controles[i].MERCADO);   
+          fornecedorCod = controles[i].COD_FORNECEDOR;   
+          console.log(controles[i]) ; 
+        }        
+    }
+
+    acumulaMI = 0;
+    acumulaME = 0;
+    acumulaMR = 0;
+    acumulaCL = [];
+
+    let mi =[];
+    let me =[];
+    let mr =[];
+    let cl =[];
+    for(i = 0; i< mercados.length; i++){    
+      calibres = [];
+      for(x = 0; x< controles.length; x++){    
+        if(mercados[i] === controles[x].MERCADO){
+          acumulaMI = acumulaMI + controles[x].VOLUME_KG_MI;
+          acumulaME = acumulaME + controles[x].VOLUME_KG_ME;
+          acumulaMR = acumulaMR + controles[x].VOLUME_KG_REFUGO;
+          acumulaCL.push(controles[x].CALIBRE) ;
+        }        
+      }
+    
+      for(z = 0; z< acumulaCL.length; z++){    
+        if(calibres.indexOf(acumulaCL[z]) === -1){
+          calibres.push(acumulaCL[z]);        
+        }        
+      }
+
+      mi.push(acumulaMI);
+      me.push(acumulaME);
+      mr.push(acumulaMR);
+      cl.push(calibres);
+
+    acumulaMI = 0;
+    acumulaME = 0;
+    acumulaMR = 0;
+    acumulaCL = [];
+    }
+    let content = `<ul>
+                    <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+                    <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport2">${fornecedorCod}</span></li>
+                  </ul>
+          <table id="my-table" class="table tControles">
+        <thead>
+          <tr>
+            <th width="25%">Mercado</th>
+            <th width="25%">Calibres</th>
+            <th width="18%">Volume MI</th>
+            <th width="18%">Volume ME</th>
+            <th width="14%">Volume Refugo</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-controles">`;
+
+      for(i = 0; i< mercados.length; i++){ 
+        content+=`<tr>
+        <td>${mercados[i]}</td>
+        <td>${cl[i]}</td>
+        <td>${Math.round10(mi[i])+" KG"}</td>
+        <td>${Math.round10(me[i])+" KG"}</td>
+        <td>${Math.round10(mr[i])+" KG"}</td> 
+      </tr>`;
+      
+      };
+      content += `</tbody>
+                  </table>`;
+      document.getElementById('viewSelecao').innerHTML = content;
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+}
+
+
+async function exibeResumoEMB(ano,cod,cultura){
+  await axios.get(`http://138.204.68.18:3324/api/controlesemb/${cod}/${ano}/${cultura}`)
+  .then(function(response){
+    let controles = (response.data);
+    fornecedorCod = '';
+
+    let calibres = [];
+    for(i = 0; i< controles.length; i++){    
+        if(calibres.indexOf(controles[i].CALIBRE) === -1){
+          calibres.push(controles[i].CALIBRE);   
+          fornecedorCod = controles[i].COD_FORNECEDOR;   
+        }        
+    }
+
+    acumulaMI = 0;
+    acumulaME = 0;
+    acumulaMR = 0;
+    pesototal = 0;
+    refugoTotal = 0
+    let mi =[];
+    let me =[];
+    let mr =[];
+    for(i = 0; i< calibres.length; i++){    
+      for(x = 0; x< controles.length; x++){    
+        if(calibres[i] === controles[x].CALIBRE){
+          acumulaMI = acumulaMI + controles[x].VOLUME_KG_MI;
+          acumulaME = acumulaME + controles[x].VOLUME_KG_ME;
+          acumulaMR = acumulaMR + controles[x].VOLUME_KG_REFUGO;
+          pesototal = pesototal + controles[x].VOLUME_KG_MI + controles[x].VOLUME_KG_ME + controles[x].VOLUME_KG_REFUGO;
+          refugoTotal = refugoTotal + controles[x].VOLUME_KG_REFUGO;
+        }        
+      }
+
+      mi.push(acumulaMI);
+      me.push(acumulaME);
+      mr.push(acumulaMR);
+
+    acumulaMI = 0;
+    acumulaME = 0;
+    acumulaMR = 0;
+    }
+    let content = `<ul>
+                    <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+                    <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport2">${fornecedorCod}</span></li>
+                    <li>REFUGO TOTAL: <span id="controleCOD" class="destacaImport2">${Math.round10(refugoTotal)+" KG"}</span></li>
+                    <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport2">${Math.round10(pesototal)+" KG"}</span></li>
+                  </ul>
+          <table id="my-table" class="table tControles">
+        <thead>
+          <tr>
+            <th width="25%">Calibre</th>
+            <th width="18%">Peso Liquido</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-controles">
+        `;
+
+      for(i = 0; i< calibres.length; i++){ 
+        content+=`<tr>
+        <td>${calibres[i]}</td>
+        <td>${Math.round10(mi[i])+Math.round10(me[i])+Math.round10(mr[i])+" KG"}</td>
+      </tr>`;
+      
+      };
+      content += `</tbody>
+                  </table>`;
+      document.getElementById('viewEmbalamento').innerHTML = content;
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+}
+
+
+async function exibeResumoEXP(ano,cod,cultura){
+  await axios.get(`http://138.204.68.18:3324/api/controlesexp/${cod}/${ano}/${cultura}`)
+  .then(function(response){
+    let controles = (response.data);
+
+    console.log(controles);
+
+    pesototal=0;
+
+    for(i = 0; i< controles.length; i++){    
+      pesototal = pesototal + controles[i].KG;
+    }
+
+    let content = `<ul>
+                    <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+                    <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport2">${Math.round10(pesototal)+" KG"}</span></li>
+                  </ul>
+          <table id="my-table" class="table tControles">
+        <thead>
+          <tr>
+            <th width="25%">Mercado</th>
+            <th width="25%">Carregamento</th>
+            <th width="18%">Qtd. Caixas</th>
+            <th width="18%">Peso</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-controles">
+        `;
+
+      for(i = 0; i< controles.length; i++){ 
+        content+=`<tr>
+        <td>${controles[i].MERCADO}</td>
+        <td>${fnConvertData(controles[i].DATA_EMBARQUE)}</td>
+        <td>${controles[i].QTD_CAIXA}</td>
+        <td>${Math.round10(controles[i].KG)+" KG"}</td>
+      </tr>`;
+      
+      };
+      content += `</tbody>
+                  </table>`;
+      document.getElementById('viewExpedicao').innerHTML = content;
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+}
+
+
+
+function escondeDivs(visivel){
+  document.getElementById('viewRecepcao').style.display = "none";
+  document.getElementById('viewSelecao').style.display = "none";
+  document.getElementById('viewEmbalamento').style.display = "none";
+  document.getElementById('viewExpedicao').style.display = "none";
+  document.getElementById('viewComercial').style.display = "none";
+  document.getElementById(visivel).style.display = "block";
 }
 
 
@@ -658,23 +926,39 @@ switch (localStorage.getItem("subacesso")){
       document.getElementById('default').style.display = "block";
       document.getElementById('abaFinan').style.display = "none";
       document.getElementById('abaQuali').style.display = "none";
-      
+
+      document.getElementById('pageControlesAnalista').style.display = "block";
+      document.getElementById('pageFinanceiroAnalista').style.display = "none";
+      document.getElementById('pageQualidadeAnalista').style.display = "none";
       break;
   case "financeiro":
       document.getElementById('default').style.display = "none";
       document.getElementById('abaFinan').style.display = "block";
       document.getElementById('abaQuali').style.display = "none";
+
+      document.getElementById('pageControlesAnalista').style.display = "none";
+      document.getElementById('pageFinanceiroAnalista').style.display = "block";
+      document.getElementById('pageQualidadeAnalista').style.display = "none";
+      
       break;
   case "qualidade":
-    document.getElementById('default').style.display = "none";
-    document.getElementById('abaFinan').style.display = "none";
-    document.getElementById('abaQuali').style.display = "block";//ações para produtor
+      document.getElementById('default').style.display = "none";
+      document.getElementById('abaFinan').style.display = "none";
+      document.getElementById('abaQuali').style.display = "block";
+      
+      document.getElementById('pageControlesAnalista').style.display = "none";
+      document.getElementById('pageFinanceiroAnalista').style.display = "none";
+      document.getElementById('pageQualidadeAnalista').style.display = "block";
+      
 
       break;
   case "senior":
-    document.getElementById('default').style.display = "block";
-    document.getElementById('abaFinan').style.display = "block";
-    document.getElementById('abaQuali').style.display = "block";
+      document.getElementById('default').style.display = "block";
+      document.getElementById('abaFinan').style.display = "block";
+      document.getElementById('abaQuali').style.display = "block";
+      document.getElementById('pageControlesAnalista').style.display = "block";
+      document.getElementById('pageFinanceiroAnalista').style.display = "block";
+      document.getElementById('pageQualidadeAnalista').style.display = "block";
 
       break;
   default:

@@ -291,7 +291,7 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
   margin: auto;
   padding: 40px 80px;
   width: 90%;
-  max-width: 450px;
+  max-width: 550px;
   animation: fadeEffect 0.5s;
   border-radius: 6px;
 }
@@ -301,11 +301,13 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 .modal-content4 ul{text-align:left; margin:20px 0; padding:0 0 20px 0 ; font-size: 13px;}
 .modal-content4 ul li{margin:5px 0}
 
-.destacaImport{font-weight: bolder;font-size: 13px}
+.destacaImport{font-weight: bolder;font-size: 13px} 
+.destacaImport2{font-weight: bolder;font-size: 13px; color: #029184; margin-left: 5px}
 #containerControles{overflow: scroll; overflow-x: hidden;height: 352px; margin:20px 0 20px 0;}
 #containerControles2{height: 352px; margin:20px 0 20px 0;}
   #containerControles2 textarea {resize: none; width: 100%; height: 170px; padding:10px}
 #containerControles3{height: 352px; margin:20px 0 20px 0;}
+.containerControles3{margin:20px 0 20px 0;}
 
 
 /* The Close Button */
