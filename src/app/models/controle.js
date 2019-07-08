@@ -72,56 +72,6 @@ const ControleSchema = new mongoose.Schema({
         type:String,
         required:false,
         default:" ",
-    },
-    volumeKG:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    volumeKG_MI:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    volumeKG_ME:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    volumeKG_Refugo:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    mercado:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    container:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    embarque:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    caixa:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    qtd_cx:{
-        type:String,
-        required:false,
-        default:" ",
-    },
-    KG:{
-        type:String,
-        required:false,
-        default:" ",
     }
 });
 
