@@ -30,5 +30,28 @@ router.get('/:controleID/:etapa', async(req, res)=>{
     }
 });
 
+router.delete('/:qualidadeId', async(req, res)=>{
+    try{
+        await Image.findByIdAndRemove(req.params.qualidadeId);
+        return res.send();
+     }catch(err){
+         return res.status(400).send({error: 'Erro deletando registro'});
+     }
+});
+
+router.put('/:qualidadeId', async(req, res)=>{
+    const {id, aprovado} = req.body;
+    console.log(id);
+    try{
+        const image = await Image.findByIdAndUpdate(id, req.body,{new:true});
+        console.log(Image);
+        return res.send({
+            image
+        });
+    }catch(err){
+        return res.status(400).send({error:'Atualização não efetuada'});
+    }
+});
+
 
 module.exports = app => app.use('/images', router);
