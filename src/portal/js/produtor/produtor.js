@@ -47,49 +47,49 @@ const fnPopulaControles = async()=> {
           default:
         }
 
-
-        await axios.get(`http://138.204.68.18:3324/api/controles/acompanhamento/${cod}/${ano}/${cultura}`)
-        .then(function(resposta){
-          var controls = (resposta.data);
-           controls.map(function (control) {
-             if (localStorage.getItem("dataInicial")){
-               if(taNoRange(fnConvertData(control.DATA_CONTROLE), localStorage.getItem("dataInicial"), localStorage.getItem("dataFinal"))){
-                  objetoInsert = objetoInsert +
-                  `<tr align="center">
-                        <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                        <td>${control.CONTROLE}</td>
-                        <td>${Math.round(control.RECEPCAO)} Kg</td>
-                        <td>${Math.round(control.SELECAO)} Kg</td>
-                        <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                        <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                        <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
-                  </tr>`
-                  
-               }
-             }else{
-              objetoInsert = objetoInsert +
-              `<tr align="center">
-                    <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                    <td>${control.CONTROLE}</td>
-                    <td>${Math.round(control.RECEPCAO)} Kg</td>
-                    <td>${Math.round(control.SELECAO)} Kg</td>
-                    <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                    <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                    <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
-              </tr>`
-             }
+        if(controle.visivel){
+              await axios.get(`http://138.204.68.18:3324/api/controles/acompanhamento/${cod}/${ano}/${cultura}`)
+              .then(function(resposta){
+                var controls = (resposta.data);
+                controls.map(function (control) {
+                  if (localStorage.getItem("dataInicial")){
+                    if(taNoRange(fnConvertData(control.DATA_CONTROLE), localStorage.getItem("dataInicial"), localStorage.getItem("dataFinal"))){
+                        objetoInsert = objetoInsert +
+                        `<tr align="center">
+                              <td>${fnConvertData(control.DATA_CONTROLE)}</td>
+                              <td>${control.CONTROLE}</td>
+                              <td>${Math.round(control.RECEPCAO)} Kg</td>
+                              <td>${Math.round(control.SELECAO)} Kg</td>
+                              <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                              <td>${Math.round(control.EXPEDICAO)} Kg</td>
+                              <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
+                        </tr>`
+                        
+                    }
+                  }else{
+                    objetoInsert = objetoInsert +
+                    `<tr align="center">
+                          <td>${fnConvertData(control.DATA_CONTROLE)}</td>
+                          <td>${control.CONTROLE}</td>
+                          <td>${Math.round(control.RECEPCAO)} Kg</td>
+                          <td>${Math.round(control.SELECAO)} Kg</td>
+                          <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                          <td>${Math.round(control.EXPEDICAO)} Kg</td>
+                          <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
+                    </tr>`
+                  }
+                      
+                  }).join('');  
                 
-            }).join('');  
-          
-            return (document.getElementById('containerControles').innerHTML = objetoInsert);
-            
-        })
-        .catch(function(error){
-          console.warn(error);
-      });
-   
+                  return (document.getElementById('containerControles').innerHTML = objetoInsert);
+                  
+              })
+              .catch(function(error){
+                console.warn(error);
+            });
+          }
       }).join('');   
-      
+    
       fnPopulaControlesComercial();
      
   })
@@ -339,33 +339,36 @@ const fnPopulaControlesQualidade = async()=> {
   .then(function(response){
     var controles = (response.data).controles;
       controles.map(function (controle) {
-        objetoInsert = objetoInsert +`<tr align="center"><td>${controle.codigo}</td>`;
-        if(controle.qRecepcao){
-          objetoInsert = objetoInsert + `<td><a href="javascript:;" class="visualizarQualidade" onclick="galeria('${controle._id}', 'Recepcao');"><i class="fas fa-images"></i> Galeria</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="linkPdf('${controle._id}', 'Recepcao');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
-        }else{
-          objetoInsert = objetoInsert + `<td></td>`;
-        }
+        if(controle.visivel){
+          objetoInsert = objetoInsert +`<tr align="center"><td>${controle.codigo}</td>`;
+          if(controle.qRecepcao){
+            objetoInsert = objetoInsert + `<td><a href="javascript:;" onclick="linkPdf('${controle._id}', 'Recepcao');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
+          }else{
+            objetoInsert = objetoInsert + `<td></td>`;
+          }
 
-        if(controle.qSelecao){
-          objetoInsert = objetoInsert + `<td><a href="javascript:;" class="visualizarQualidade" onclick="galeria('${controle._id}', 'Selecao');"><i class="fas fa-images"></i> Galeria</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="linkPdf('${controle._id}', 'Selecao');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
-        }else{
-          objetoInsert = objetoInsert + `<td></td>`;
-        }
+          if(controle.qSelecao){
+            objetoInsert = objetoInsert + `<td><a href="javascript:;" onclick="linkPdf('${controle._id}', 'Selecao');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
+          }else{
+            objetoInsert = objetoInsert + `<td></td>`;
+          }
 
-        if(controle.qEmbalamento){
-          objetoInsert = objetoInsert + `<td><a href="javascript:;" class="visualizarQualidade" onclick="galeria('${controle._id}', 'Embalamento');"><i class="fas fa-images"></i> Galeria</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="linkPdf('${controle._id}', 'Embalamento');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
-        }else{
-          objetoInsert = objetoInsert + `<td></td>`;
-        }
+          if(controle.qEmbalamento){
+            objetoInsert = objetoInsert + `<td><a href="javascript:;" onclick="linkPdf('${controle._id}', 'Embalamento');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
+          }else{
+            objetoInsert = objetoInsert + `<td></td>`;
+          }
 
-        if(controle.qExpedicao){
-          objetoInsert = objetoInsert + `<td><a href="javascript:;" class="visualizarQualidade" onclick="galeria('${controle._id}', 'Expedicao');"><i class="fas fa-images"></i> Galeria</a>&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="linkPdf('${controle._id}', 'Expedicao');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
-        }else{
-          objetoInsert = objetoInsert + `<td></td>`;
-        }
-          objetoInsert = objetoInsert + `</tr>`;
+          if(controle.qExpedicao){
+            objetoInsert = objetoInsert + `<td><a href="javascript:;" onclick="linkPdf('${controle._id}', 'Expedicao');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
+          }else{
+            objetoInsert = objetoInsert + `<td></td>`;
+          }
+            objetoInsert = objetoInsert + `</tr>`;
+        } 
         }).join('');   
-        return (document.getElementById('containerQualidade').innerHTML = objetoInsert);      
+        return (document.getElementById('containerQualidade').innerHTML = objetoInsert);  
+        
   })
   .catch(function(error){
       console.warn(error);

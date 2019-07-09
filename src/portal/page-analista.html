@@ -480,8 +480,13 @@
                   .then(function(response){
                     var controle = (response.data).controle;
 
-                    if (controle.length==1){
-                      document.getElementById('erroImportData').innerHTML="Controle importado anteriormente";
+                    console.log(checaStatus, controle[0].passoAtual,);
+                    if (controle.length==1 && controle[0].passoAtual == checaStatus && controle[0].visivel){
+                      document.getElementById('erroImportData').innerHTML="Este controle já possui importação visível dessa etapa";
+                      document.getElementById('erroImportData').style.display = "block";
+                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                    }else if (controle.length==1 && controle[0].passoAtual == checaStatus){
+                      document.getElementById('erroImportData').innerHTML="Este controle já possui importação para essa etapa verifique se deve tornar ela visivel";
                       document.getElementById('erroImportData').style.display = "block";
                       setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
                     }else{
@@ -506,12 +511,12 @@
 
                   if (qualidadeEmpresaControle == "" || qualidadeControle == "" || qualidadeEstagio == ""){
                       
-                     // document.getElementById('erroAdminQualidade').innerHTML="Preencha todos os campos para anexar os arquivos";
-                     // document.getElementById('erroAdminQualidade').style.display = "block";
-                     // setTimeout(function(){ document.getElementById('erroAdminQualidade').style.display = "none"; }, 4000);
+                      document.getElementById('erroAdminQualidade').innerHTML="Preencha todos os campos para anexar os arquivos";
+                      document.getElementById('erroAdminQualidade').style.display = "block";
+                      setTimeout(function(){ document.getElementById('erroAdminQualidade').style.display = "none"; }, 4000);
                       
                   }else{
-                    evt.preventDefault();
+                    //evt.preventDefault();
                     $('.btnAnexa').dmUploader('start');
                     
                   };
@@ -546,6 +551,8 @@
             </div>
           </li>
         </script>
+        <script src="js/vendor/jspdf.min.js"></script>
+        <script src="js/vendor/jspdf.plugin.autotable.js"></script>
         
         
     </body>
