@@ -480,7 +480,7 @@
                   .then(function(response){
                     var controle = (response.data).controle;
 
-                    console.log(checaStatus, controle[0].passoAtual,);
+                    console.log(checaStatus, controle[0].passoAtual);
                     if (controle.length==1 && controle[0].passoAtual == checaStatus && controle[0].visivel){
                       document.getElementById('erroImportData').innerHTML="Este controle já possui importação visível dessa etapa";
                       document.getElementById('erroImportData').style.display = "block";
