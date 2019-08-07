@@ -185,8 +185,12 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
   await axios.get(`http://138.204.68.18:3324/api/relatorio/${fornecedorCod}/${controleCod}`)
         .then(function(resposta){
           var controls = (resposta.data);
+          var soma1=0;
+          var soma2=0;
 
           controls.map(function(controle){
+            soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
+            soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
             objetoInsert = objetoInsert +
             `<tr align="center">
                   <td>${controle.MERCADO}</td>
@@ -202,6 +206,8 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   <td>${controle.DESC_COMERCIAL}</td>
                   <td>${controle.OUTRAS_DESP_CX}</td>
                   <td>${controle.RESU_FOB}</td>
+                  <td>${controle.CAMBIO}</td>
+                  <td>${controle.RESU_FOB_BR}</td>
                   <td>${controle.COMISSAO_IBACEM}</td>
                   <td>${controle.DESP_FRETE_CX}</td>
                   <td>${controle.COMISSAO_REP}</td>
@@ -210,20 +216,125 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   <td>${controle.FUNRURAL}</td>
                   <td>${controle.NET_KG}</td>
                   <td>${controle.VOLUME}</td>
-                  <td>${controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL}</td>
+                  <td>${soma1}</td>
                   <td>${controle.ADT_CX_ENTRES}</td>
                   <td>${controle.ADT_CX_ETOTAL}</td>
                   <td>${controle.ADT_CX_SAIDA}</td>
                   <td>${controle.ADT_CX_STOTAL}</td>
-                  <td>${controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL}</td>
-                  <td><a href="javascript:;" onclick="imprimeResumoComercial(${controle})" class="editarControleProdutor"><i class="fas fa-print"></i>  Imprimir</a></td>
+                  <td>${soma2}</td>
+                  <td><a href="javascript:;" onclick="imprimeResumoComercial('${controle.MERCADO}',
+                                                                             '${controle.NAVIO}',
+                                                                             '${controle.CONTAINER}',
+                                                                             '${controle.DATA_CHEGADA}',
+                                                                             '${controle.COD_CLIENTE}',
+                                                                             '${controle.TIPO_CX}',
+                                                                             '${controle.QTD_CAIXA}',
+                                                                             '${controle.CALIBRE}',
+                                                                             '${controle.VALOR_BRUTO_CX}',
+                                                                             '${controle.VALOR_COMISSAOIMP_CX}',
+                                                                             '${controle.DESC_COMERCIAL}',
+                                                                             '${controle.OUTRAS_DESP_CX}',
+                                                                             '${controle.RESU_FOB}',
+                                                                             '${controle.CAMBIO}',
+                                                                             '${controle.RESU_FOB_BR}',
+                                                                             '${controle.COMISSAO_IBACEM}',
+                                                                             '${controle.DESP_FRETE_CX}',
+                                                                             '${controle.COMISSAO_REP}',
+                                                                             '${controle.CUSTO_PH}',
+                                                                             '${controle.FRETE_COLHEITA}',
+                                                                             '${controle.FUNRURAL}',
+                                                                             '${controle.NET_KG}',
+                                                                             '${controle.VOLUME}',
+                                                                             '${soma1}',
+                                                                             '${controle.ADT_CX_ENTRES}',
+                                                                             '${controle.ADT_CX_ETOTAL}',
+                                                                             '${controle.ADT_CX_SAIDA}',
+                                                                             '${controle.ADT_CX_STOTAL}',
+                                                                             '${soma2}',
+                                                                             '${controle.CONTROLE}',
+                                                                             '${controle.CULTURA}',
+                                                                             '${controle.VARIEDADE}')" 
+                  class="editarControleProdutor"><i class="fas fa-print"></i></a></td>
             </tr>`            
           }).join('');
+          
+          document.getElementById('tituloFornecedorComerciais').innerHTML = controls[0].FORNECEDOR;
+          document.getElementById('tituloControlesComerciais').innerHTML = `Relatório do Controle ${controls[0].CONTROLE}, ${controls[0].CULTURA} - ${controls[0].VARIEDADE}`;
           return (document.getElementById('containerResumeComercial').innerHTML = objetoInsert);
         })
   openModalComercial();
 }
 
+function imprimeResumoComercial(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l15,l16,l17,l18,l19,l20,l21,l22,l23,l24,l25,l26,l27,l28,l29, CC, C, V){
+    
+  localStorage.removeItem("linha1");
+  localStorage.setItem("linha1", l1);
+  localStorage.removeItem("linha2");
+  localStorage.setItem("linha2", l2);
+  localStorage.removeItem("linha3");
+  localStorage.setItem("linha3", l3);
+  localStorage.removeItem("linha4");
+  localStorage.setItem("linha4", l4);
+  localStorage.removeItem("linha5");
+  localStorage.setItem("linha5", l5);
+  localStorage.removeItem("linha6");
+  localStorage.setItem("linha6", l6);
+  localStorage.removeItem("linha7");
+  localStorage.setItem("linha7", l7);
+  localStorage.removeItem("linha8");
+  localStorage.setItem("linha8", l8);
+  localStorage.removeItem("linha9");
+  localStorage.setItem("linha9", l9);
+  localStorage.removeItem("linha10");
+  localStorage.setItem("linha10", l10);
+  localStorage.removeItem("linha11");
+  localStorage.setItem("linha11", l11);
+  localStorage.removeItem("linha12");
+  localStorage.setItem("linha12", l12);
+  localStorage.removeItem("linha13");
+  localStorage.setItem("linha13", l13);
+  localStorage.removeItem("linha14");
+  localStorage.setItem("linha14", l14);
+  localStorage.removeItem("linha15");
+  localStorage.setItem("linha15", l15);
+  localStorage.removeItem("linha16");
+  localStorage.setItem("linha16", l16);
+  localStorage.removeItem("linha17");
+  localStorage.setItem("linha17", l17);
+  localStorage.removeItem("linha18");
+  localStorage.setItem("linha18", l18);
+  localStorage.removeItem("linha19");
+  localStorage.setItem("linha19", l19);
+  localStorage.removeItem("linha20");
+  localStorage.setItem("linha20", l20);
+  localStorage.removeItem("linha21");
+  localStorage.setItem("linha21", l21);
+  localStorage.removeItem("linha22");
+  localStorage.setItem("linha22", l22);
+  localStorage.removeItem("linha23");
+  localStorage.setItem("linha23", l23);
+  localStorage.removeItem("linha24");
+  localStorage.setItem("linha24", l24);
+  localStorage.removeItem("linha25");
+  localStorage.setItem("linha25", l25);
+  localStorage.removeItem("linha26");
+  localStorage.setItem("linha26", l26);
+  localStorage.removeItem("linha27");
+  localStorage.setItem("linha27", l27);
+  localStorage.removeItem("linha28");
+  localStorage.setItem("linha28", l28);
+  localStorage.removeItem("linha29");
+  localStorage.setItem("linha29", l29);
+  localStorage.removeItem("ControleComercial");
+  localStorage.setItem("ControleComercial", CC);
+  localStorage.removeItem("Cultura");
+  localStorage.setItem("Cultura", C);
+  localStorage.removeItem("Variedade");
+  localStorage.setItem("Variedade", V);
+                 
+  var myWindow=window.open('page-produtor-linha-comercial.html');
+
+}
 
 /*
 function geraPDF(fornecedorCod, controleCod){

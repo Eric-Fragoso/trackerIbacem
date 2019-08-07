@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+       
+        <link rel="stylesheet" media="screen" type="text/css" href="css/ibacemprint.css">
+        <link rel="stylesheet" media="print" type="text/css" href="css/ibacemprint.css">
+
+  
+        
+        <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+        <header style="margin-bottom: 40px;">
+            <div class="wrapper">
+                <h1><img src="img/Logo-Ibacem_HOR.png"  /></h1>
+                <h2 id="tituloLinha">RELATÓRIO DE CONTROLE<br><span id="controleComercial"></span> - <span id="cultura"></span> - <span id="variedade"></span></h2>
+                
+            </div>
+        </header>
+
+
+        <div class="wrapper">
+            <h4>Mercado: <span id="linha-mercado"></span></h4>
+            
+            <h4>Navio: <span id="linha-navio"></span></h4>
+            
+            <h4>Container: <span id="linha-container"></span></h4>
+            
+            <h4>Data de chegada: <span id="linha-datachegada"></span></h4>
+            
+            <h4>Código do cliente: <span id="linha-codcliente"></span></h4>
+            
+            <h4>Tipo de Caixa: <span id="linha-tpcaixa"></span></h4>
+            
+            <h4>Quantidade de Caixas: <span id="linha-qtcaixas"></span></h4>
+            
+            <h4>Calibre: <span id="linha-calibre"></span></h4>
+            
+            <h4>Preço de Venda: <span id="linha-precovenda"></span></h4>
+            
+            <h4>Comissão do Importador: <span id="linha-comimportador"></span></h4>
+            
+            <h4>Desconto Comercial Varejo: <span id="linha-desccomercial"></span></h4>
+            
+            <h4>Custo do Importador: <span id="linha-custoimportador"></span></h4>
+            
+            <h4>Resultado FOB na moeda: <span id="linha-resultadoFOBmoeda"></span></h4>
+            
+            <h4>Câmbio: <span id="linha-cambio"></span></h4>
+            
+            <h4>Resultado FOB em R$: <span id="linha-resultadoFOBr"></span></h4>
+            
+            <h4>Comissão da IBACEM: <span id="linha-comIBACEM"></span></h4>
+            
+            <h4>Custo da logística no Brasil: <span id="linha-custologistica"></span></h4>
+            
+            <h4>Comissão RC: <span id="linha-comRC"></span></h4>
+            
+            <h4>Custo Pack: <span id="linha-custopack"></span></h4>
+            
+            <h4>Custo de colheita: <span id="linha-custocolheita"></span></h4>
+            
+            <h4>INSS (Funrural): <span id="linha-INSS"></span></h4>
+            
+            <h4>Resultado Net KG: <span id="linha-resultadonetKG"></span></h4>
+            
+            <h4>KG Total: <span id="linha-KGtotal"></span></h4>
+            
+            <h4>Resultado Net Total: <span id="linha-resultadonettotal"></span></h4>
+            
+            <h4>Adto entressafra cx: <span id="linha-adtoentressafracx"></span></h4>
+            
+            <h4>Adto entressafra: <span id="linha-adtoentressafra"></span></h4>
+            
+            <h4>Adto saída cx: <span id="linha-adtosaidacx"></span></h4>
+            
+            <h4>Adto saída: <span id="linha-adtosaida"></span></h4>
+            
+            <h4>Saldo a receber: <span id="linha-saldo"></span></h4>
+            
+        </div>
+        <script>
+            jQuery(document).ready(function($) {
+                
+                fnPrint();
+                
+            });
+            function fnPrint(){
+              $('#controleComercial').html(localStorage.getItem("ControleComercial")) ;
+              $('#cultura').html(localStorage.getItem("Cultura")) ;
+              $('#variedade').html(localStorage.getItem("Variedade")) ;
+              $('#linha-mercado').html(localStorage.getItem("linha1")) ;
+              $('#linha-navio').html(localStorage.getItem("linha2")) ;
+              $('#linha-container').html(localStorage.getItem("linha3")) ;
+              $('#linha-datachegada').html(localStorage.getItem("linha4")) ;
+              $('#linha-codcliente').html(localStorage.getItem("linha5")) ;
+              $('#linha-tpcaixa').html(localStorage.getItem("linha6")) ;
+              $('#linha-qtcaixas').html(localStorage.getItem("linha7")) ;
+              $('#linha-calibre').html(localStorage.getItem("linha8")) ;
+              $('#linha-precovenda').html(localStorage.getItem("linha9")) ;
+              $('#linha-comimportador').html(localStorage.getItem("linha10")) ;
+              $('#linha-desccomercial').html(localStorage.getItem("linha11")) ;
+              $('#linha-custoimportador').html(localStorage.getItem("linha12")) ;
+              $('#linha-resultadoFOBmoeda').html(localStorage.getItem("linha13")) ;
+              $('#linha-cambio').html(localStorage.getItem("linha14")) ;
+              $('#linha-resultadoFOBr').html(localStorage.getItem("linha15")) ;
+              $('#linha-comIBACEM').html(localStorage.getItem("linha16")) ;
+              $('#linha-custologistica').html(localStorage.getItem("linha17")) ;
+              $('#linha-comRC').html(localStorage.getItem("linha18")) ;
+              $('#linha-custopack').html(localStorage.getItem("linha19")) ;
+              $('#linha-custocolheita').html(localStorage.getItem("linha20")) ;
+              $('#linha-INSS').html(localStorage.getItem("linha21")) ;
+              $('#linha-resultadonetKG').html(localStorage.getItem("linha22")) ;
+              $('#linha-KGtotal').html(localStorage.getItem("linha23")) ;
+              $('#linha-resultadonettotal').html(localStorage.getItem("linha24")) ;
+              $('#linha-adtoentressafracx').html(localStorage.getItem("linha25")) ;
+              $('#linha-adtoentressafra').html(localStorage.getItem("linha26")) ;
+              $('#linha-adtosaidacx').html(localStorage.getItem("linha27")) ;
+              $('#linha-adtosaida').html(localStorage.getItem("linha28")) ;
+              $('#linha-saldo').html(localStorage.getItem("linha29")) ;
+              window.print();
+              window.close();
+            }
+            
+            
+
+        </script>       
+    </body>

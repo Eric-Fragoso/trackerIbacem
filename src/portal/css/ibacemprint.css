@@ -15,6 +15,7 @@ h1{font-size: 18px; display:block; height: 64px; width: 180px; float: left}
 header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 70px}
 .wrapper{width: 1000px; margin:0 auto;}
 #tituloExtrato{float:right; font-size: 20px; margin:35px 0 0 0 ;}
+#tituloLinha{float:right; font-size: 20px; margin:19px 0 0 0 ;}
 
 .conteudoAba {  padding: 40px 0 0 0 ;border-top: none;  animation: fadeEffect 1s;}
 
@@ -86,3 +87,7 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 .editarControleProdutor i, .visualizarQualidade i{font-size: 16px!important; color: #d63031}
 .visualizarQualidade i{color: #0984e3!important;}
 
+
+
+h4{font-size: 17px; margin-top: 10px; margin-bottom: 21px;}
+h4 span{font-weight: normal; font-style: italic;}
