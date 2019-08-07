@@ -278,8 +278,8 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
   background-color: rgb(242, 243, 227);
   margin: auto;
   padding: 20px 20px;
-  width: 40%;
-  
+  width: 95%;
+  overflow-x: scroll;
   animation: fadeEffect 0.5s;
   border-radius: 6px;
   text-align: center;
@@ -308,7 +308,7 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
   #containerControles2 textarea {resize: none; width: 100%; height: 170px; padding:10px}
 #containerControles3{height: 352px; margin:20px 0 20px 0;}
 .containerControles3{margin:20px 0 20px 0;}
-
+#containerControles4{height: 430px; margin:20px 0 20px 0;overflow: scroll; margin-bottom: 20px}
 
 /* The Close Button */
 .close {

@@ -33,6 +33,60 @@
                 </div>
             </div>
         </header>
+
+        <!--MODAL Comercial-->
+        <!--MODAL Comercial-->
+        <!--MODAL Comercial-->
+        <div id="ModalComercial" class="modal">
+            <span class="close cursor" onclick="closeModalComercial();">&times;</span>
+            <div class="modal-content4">
+                <h2>Relatório do controle: </h2>
+                <div id="containerControles4" >
+                    <table id="my-table-resume-comercial" class="table tControlesComercial">
+                        <thead>
+                          <tr>
+                            <th >Mercado</th>
+                            <th >Navio</th>
+                            <th >Container</th>
+                            <th >Data da Chegada</th>
+                            <th >Cod. Cliente</th>
+                            <th >Tipo de Caixa</th>
+                            <th >Quantidade de Caixas</th>
+                            <th >Calibre</th>
+                            <th >Preço de Venda</th>
+                            <th >Comissão Importador</th>
+                            <th >Desconto Comercial Varejo</th>
+                            <th >Custo Importador</th>
+                            <th >Resultado FOB na moeda</th>
+                            <th >Cambio </th>
+                            <th >Resultado FOB R$</th>
+                            <th >Comissão IBACEM</th>
+                            <th >Custo logística BR</th>
+                            <th >Comissão RC</th>
+                            <th >Custo Pack</th>
+                            <th >Custo colheita</th>
+                            <th >INSS (Funrural)</th>
+                            <th >Resultado Net KG</th>
+                            <th >KG Total</th>
+                            <th >Resultado Net Total</th>
+                            <th >Adto entressafra cx</th>
+                            <th >Adto entressafra</th>
+                            <th >Adto saída cx</th>
+                            <th >Adto saída</th>
+                            <th >Saldo a receber</th>
+                          </tr>
+                        </thead>
+                        <tbody id="containerResumeComercial">
+                          
+                        </tbody>
+                      </table>
+                </div>                
+                 <button class="cancelarDelete" onclick="closeModalComercial();">SAIR</button>
+                <br clear="all">
+            </div>
+        </div>
+
+
         <div id="menuHolder" >
             <div id="abas">
                 <button class="tablinks" onclick="openCity(event, 'pageControlesProdutor')" id="default">CONTROLES</button>
@@ -176,6 +230,16 @@
 
         <script src="js/produtor/produtor.js"></script>
         <script type="text/javascript">
+            // Abre modal Comercial
+            function openModalComercial() {
+              document.getElementById('ModalComercial').style.display = "block";              
+            }
+            // Fecha modal Comercial
+            function closeModalComercial() {
+              document.getElementById('ModalComercial').style.display = "none";
+            }
+
+
             function openCity(evt, cityName) {
               // Declare all variables
               var i, tabcontent, tablinks;

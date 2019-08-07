@@ -1,0 +1,261 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+       
+        <link rel="stylesheet" media="screen" type="text/css" href="css/ibacemprint-comercial.css">
+        <link rel="stylesheet" media="print" type="text/css" href="css/ibacemprint-comercial.css">
+        
+
+  
+        
+        <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+        <header>
+            <div class="wrapper">
+                <h1><img src="img/Logo-Ibacem_HOR.png"  /></h1>
+                <h2 id="tituloExtrato">0000007 - IBACEM AGRICOLA COMERCIO E EXPORTACAO LTDA</h2>
+            </div>
+        </header>
+
+
+        <div class="wrapper" >
+                <div id="pageFinanceiroProdutor" class="conteudoAba">
+                
+
+
+                <div class="tableHolder" id="imprimivel">
+                    
+
+
+                      <table id="my-table-financeiro" class="tg table tFinanceiro" style="table-layout: fixed; width: 1600px">
+                      <colgroup>
+                      <col style="width: 64px">
+                      <col style="width: 74px">
+                      <col style="width: 61px">
+                      <col style="width: 63px">
+                      <col style="width: 76px">
+                      <col style="width: 67px">
+                      <col style="width: 57px">
+                      <col style="width: 96px">
+                      <col style="width: 133px">
+                      <col style="width: 64px">
+                      <col style="width: 63px">
+                      <col style="width: 111px">
+                      <col style="width: 68px">
+                      <col style="width: 70px">
+                      <col style="width: 55px">
+                      <col style="width: 71px">
+                      <col style="width: 58px">
+                      <col style="width: 87px">
+                      </colgroup>
+                      
+                      <tbody>
+                        <tr>
+                          <td class="tg-s268 destFont" colspan="3">Safra: <span id="safraTb">M19</span></td>
+                          <td class="tg-s268 destFont"></td>
+                          <td class="tg-s268"></td>
+                          <td class="tg-s268 destFont"colspan="3">Variedade: <span id="variedadeTb">00 - TODAS</span></td>
+                          <td class="tg-s268 destFont" ></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"colspan="5" style="font-size: 11px; text-align: right"><span style="color:#c0392b">Dados da Fruta Embalada em PH Próprio</span><br>Previsão<div style="background-color:#c0392b; width: 15px; height: 15px; float: right; margin-left: 10px"></div></td>
+                        </tr>
+                        <tr class="line">
+                          <td class="line" colspan="18"></td>
+                        </tr>
+                        <tr>
+                          <td class="tg-s268" colspan="18"><span style="font-weight: bold">Semana :</span> <span id="semanaTb">XXX</span></td>
+                        </tr>
+                        <tr class="backcinza">
+                          <td class="tg-s268" colspan="2"><span style="font-weight: bold">Carregamento:</span></td>
+                          <td class="tg-s268 textL" colspan="2"><span id="carregamentoTb">XXX</span></td>
+                          <td class="tg-s268"><span style="font-weight: bold">Container:</span></td>
+                          <td class="tg-s268 textL" colspan="2"><span id="containerTb">XXX</span></td>
+                          <td class="tg-0lax"><span style="font-weight: bold">Embarque:</span></td>
+                          <td class="tg-0lax textL" colspan="2"><span id="embarqueTb">XXX</span></td>
+                          <td class="tg-0lax"><span style="font-weight: bold">NF:</span></td>
+                          <td class="tg-0lax textL" colspan="7"><span id="notafiscalTb">XXXX</span></td>
+                        </tr>
+                        <tr>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-baqh" colspan="5" style="text-align: center;border-bottom: 1px solid #029184"><span style="font-weight:bold;">RESULTADO</span></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-baqh" colspan="4" style="text-align: center;border-bottom: 1px solid #029184"><span style="font-weight:bold;">DESCONTOS R$</span></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                        </tr>
+                        <tr style="text-align: center">
+                          <td class="tg-0lax">Controle</td>
+                          <td class="tg-0lax">Variedade</td>
+                          <td class="tg-0lax">QTD Cx</td>
+                          <td class="tg-0lax">Peso Kg</td>
+                          <td class="tg-0lax">Bruto</td>
+                          <td class="tg-0lax">Despesa</td>
+                          <td class="tg-0lax">Liquido</td>
+                          <td class="tg-0lax">Comissão %</td>
+                          <td class="tg-0lax">Comissão IBACEM</td>
+                          <td class="tg-0lax">Moeda</td>
+                          <td class="tg-0lax">Câmbio</td>
+                          <td class="tg-0lax">Comissão Brasil</td>
+                          <td class="tg-0lax">Logística</td>
+                          <td class="tg-0lax">Custo PH</td>
+                          <td class="tg-0lax">Adiant.</td>
+                          <td class="tg-0lax">R$ / Cx</td>
+                          <td class="tg-0lax">R$ / Kg</td>
+                          <td class="tg-0lax">Líquido R$</td>
+                        </tr>
+                        <tr class="backcinza">
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax">0000</td>
+                          <td class="tg-0lax">0000</td>
+                          <td class="tg-0lax"></td>
+                        </tr>
+                        <tr>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax">0000</td>
+                          <td class="tg-0lax">0000</td>
+                          <td class="tg-0lax"></td>
+                        </tr>
+                        <tr class="backcinza">
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax">0000</td>
+                          <td class="tg-0lax">0000</td>
+                          <td class="tg-0lax"></td>
+                        </tr>
+                        <tr>
+                          <td class="tg-baqh" colspan="3">TOTAL</td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax"></td>
+                          <td class="tg-0lax">000</td>
+                          <td class="tg-0lax">000</td>
+                          <td class="tg-0lax"></td>
+                        </tr>
+                      </tbody>
+                      </table>
+                      <div id="resultadosTabela">
+                        <table width="100%">
+                          <tr>
+                            <td width="50%">Líquido Vendas</td>
+                            <td style=" text-align: right"><span style="font-weight: bold">XXXXX</span></td>
+                          </tr>
+                          <tr>
+                            <td>Adiantamento</td>
+                            <td style=" text-align: right"><span style="font-weight: bold">XXXX</span></td>
+                          </tr>
+                          <tr>
+                            <td>Frete / Compra</td>
+                            <td style=" text-align: right"><span style="font-weight: bold">XXXX</span></td>
+                          </tr>
+                          <tr>
+                            <td>Saldo à receber</td>
+                            <td style=" text-align: right"><span style="font-weight: bold">XXXX</span></td>
+                          </tr>
+                        </table>
+
+                      </div>
+
+
+
+
+
+                </div>
+              </div>
+              </div>
+        <script>
+            jQuery(document).ready(function($) {
+                
+                $('#my-table-financeiro').dynatable({
+                  features: {
+                    paginate: false,
+                    sort: false,
+                    pushState: false,
+                    search: false,
+                    recordCount: false,
+                    perPageSelect: false
+                  }
+                });
+                
+                fnPrint();
+                
+            });
+            function fnPrint(){
+              $('#my-table-financeiro').html(localStorage.getItem("print")) ;
+              window.print();
+              window.close();
+            }
+            
+            
+
+        </script>
+        <script src="js/vendor/jspdf.min.js"></script>
+        <script src="js/vendor/jspdf.plugin.autotable.js"></script>
+        
+        
+    </body>
