@@ -174,7 +174,9 @@
                       <select name="acesso" id="select-empresa-editar">
                           <option value="" data-placeholder>EMPRESA</option>
                       </select>
-                      <div id="escondeAnalistasEditar">
+                  </fieldset>
+                  <fieldset>
+                      <div id="escondeAnalistasEditar"></div>
                         <select name="subacesso" id="select-nivelAcessoAnalista-Editar">
                           <option value="" data-placeholder>NÍVEL DE ANALISTA</option>
                           <option value="controle">ANALISTA DE CONTROLE</option>
@@ -182,8 +184,8 @@
                           <option value="qualidade">ANALISTA DE QUALIDADE</option>
                           <option value="senior">ANALISTA SENIOR</option>
                       </select>
-                      </div>
-                  </fieldset>
+                  </fieldset>  <br clear="all"> 
+                  
                   <a href="javascript:;" class="cancelarUserEditar" onclick="closeModalEditarUser();">CANCELAR</a> 
                   <a href="javascript:;" id="confirmarUserEditar" class="confirmarUserEditar">SALVAR ALTERAÇÕES</a>
               </form>
@@ -284,7 +286,7 @@
         <!--MODAL COMENTÁRIO-->
         <div id="ModalComentario" class="modal">
           <span class="close cursor" onclick="closeModalComentario();">&times;</span>
-          <div class="modal-content4">
+          <div class="modal-content6">
               <h2>ADICIONAR COMENTÁRIO</h2>
               <div id="containerControles2" style="height: 290px;">
                   <p></p>
@@ -302,7 +304,63 @@
           </div>
       </div>
 
-
+        <!--MODAL Comercial-->
+        <!--MODAL Comercial-->
+        <!--MODAL Comercial-->
+        <div id="ModalComercial" class="modal">
+            <span class="close cursor" onclick="closeModalComercial();">&times;</span>
+            <div class="modal-content4">
+                <div id="saldoComercialRelatorio">
+                  <small>SALDO DO RELATÓRIO</small><br>
+                  <span id="saldoComercialValor">R$ 0</span>
+                </div>
+                <h2 id="tituloFornecedorComerciais"> </h2>
+                <h4 id="tituloControlesComerciais"> </h4>
+                <div id="containerControles4" >
+                    <table id="my-table-resume-comercial" class="table tControlesComercial">
+                        <thead>
+                          <tr>
+                            <th>Mercado</th>
+                            <th>Navio</th>
+                            <th>Container</th>
+                            <th>Data da Chegada</th>
+                            <th>Cod. Cliente</th>
+                            <th>Tipo de Caixa</th>
+                            <th>Quantidade de Caixas</th>
+                            <th>Calibre</th>
+                            <th>Preço de Venda</th>
+                            <th>Comissão Importador</th>
+                            <th>Desconto Comercial Varejo</th>
+                            <th>Custo Importador</th>
+                            <th>Resultado FOB na moeda</th>
+                            <th>Cambio </th>
+                            <th>Resultado FOB R$</th>
+                            <th>Comissão IBACEM</th>
+                            <th>Custo logística BR</th>
+                            <th>Comissão RC</th>
+                            <th>Custo Pack</th>
+                            <th>Custo colheita</th>
+                            <th>INSS (Funrural)</th>
+                            <th>Resultado Net KG</th>
+                            <th>KG Total</th>
+                            <th>Resultado Net Total</th>
+                            <th>Adto entressafra cx</th>
+                            <th>Adto entressafra</th>
+                            <th>Adto saída cx</th>
+                            <th>Adto saída</th>
+                            <th>Saldo a receber</th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody id="containerResumeComercial">
+                          
+                        </tbody>
+                      </table>
+                </div>                
+                 
+                <br clear="all">
+            </div>
+        </div>
 
 
         <header>
@@ -511,6 +569,7 @@
                         <option value="Selecao">SELEÇÃO</option>
                         <option value="Embalamento">EMBALAMENTO</option>
                         <option value="Expedicao">EXPEDIÇÃO</option>
+                        <option value="Destino">DESTINO</option>
                     </select>
                     <div class="btnAnexa">
                         <span>ANEXAR ARQUIVOS</span>
@@ -638,6 +697,11 @@
               if (acesso=="Produtor"){
                 $('#escondeCampoEditar').addClass('hidden');
                 $('#select-empresa-editar').val(produtor);
+                $('#escondeAnalistasEditar').removeClass('hidden');
+              }else if(acesso=="Analista"){
+                $('#escondeAnalistasEditar').addClass('hidden');
+                $('#escondeCampoEditar').removeClass('hidden');
+                $('#select-nivelAcessoAnalista-Editar').val(nome);
               }else{
                 $('#escondeCampoEditar').removeClass('hidden');
               }
@@ -707,7 +771,7 @@
             function openModalViewControle() {
               document.getElementById('ModalViewControle').style.display = "block";
             }
-            // Fecha modal delete user
+            
             function closeModalViewControle() {
               document.getElementById('ModalViewControle').style.display = "none";
             }
@@ -791,6 +855,19 @@
               $('#inserirEntrada').addClass('hidden');
               $('#editarEntradaFinanceiro').removeClass('hidden');
               document.getElementById('editarEntradaFinanceiro').setAttribute('onclick','updateFinanceiro("'+id+'")');
+            }
+
+
+
+
+
+            // Abre modal Comercial
+            function openModalComercial() {
+              document.getElementById('ModalComercial').style.display = "block";              
+            }
+            // Fecha modal Comercial
+            function closeModalComercial() {
+              document.getElementById('ModalComercial').style.display = "none";
             }
             
               

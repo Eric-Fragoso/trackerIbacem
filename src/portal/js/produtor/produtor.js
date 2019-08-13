@@ -187,10 +187,12 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
           var controls = (resposta.data);
           var soma1=0;
           var soma2=0;
+          var total=0;
 
           controls.map(function(controle){
             soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
             soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
+            total = total + soma2;
             objetoInsert = objetoInsert +
             `<tr align="center">
                   <td>${controle.MERCADO}</td>
@@ -201,27 +203,27 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   <td>${controle.TIPO_CX}</td>
                   <td>${controle.QTD_CAIXA}</td>
                   <td>${controle.CALIBRE}</td>
-                  <td>${controle.VALOR_BRUTO_CX}</td>
+                  <td>${(controle.VALOR_BRUTO_CX).toFixed(2)}</td>
                   <td>${controle.VALOR_COMISSAOIMP_CX}</td>
                   <td>${controle.DESC_COMERCIAL}</td>
-                  <td>${controle.OUTRAS_DESP_CX}</td>
-                  <td>${controle.RESU_FOB}</td>
-                  <td>${controle.CAMBIO}</td>
-                  <td>${controle.RESU_FOB_BR}</td>
+                  <td>${(controle.OUTRAS_DESP_CX).toFixed(2)}</td>
+                  <td>${(controle.RESU_FOB).toFixed(2)}</td>
+                  <td>${(controle.CAMBIO).toFixed(4)}</td>
+                  <td>${(controle.RESU_FOB_BR).toFixed(2)}</td>
                   <td>${controle.COMISSAO_IBACEM}</td>
-                  <td>${controle.DESP_FRETE_CX}</td>
+                  <td>${(controle.DESP_FRETE_CX).toFixed(2)}</td>
                   <td>${controle.COMISSAO_REP}</td>
                   <td>${controle.CUSTO_PH}</td>
                   <td>${controle.FRETE_COLHEITA}</td>
                   <td>${controle.FUNRURAL}</td>
                   <td>${controle.NET_KG}</td>
-                  <td>${controle.VOLUME}</td>
-                  <td>${soma1}</td>
+                  <td>${(controle.VOLUME).toFixed(2)}</td>
+                  <td>${(soma1).toFixed(2)}</td>
                   <td>${controle.ADT_CX_ENTRES}</td>
                   <td>${controle.ADT_CX_ETOTAL}</td>
                   <td>${controle.ADT_CX_SAIDA}</td>
                   <td>${controle.ADT_CX_STOTAL}</td>
-                  <td>${soma2}</td>
+                  <td>${(soma2).toFixed(2)}</td>
                   <td><a href="javascript:;" onclick="imprimeResumoComercial('${controle.MERCADO}',
                                                                              '${controle.NAVIO}',
                                                                              '${controle.CONTAINER}',
@@ -230,34 +232,35 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                                                                              '${controle.TIPO_CX}',
                                                                              '${controle.QTD_CAIXA}',
                                                                              '${controle.CALIBRE}',
-                                                                             '${controle.VALOR_BRUTO_CX}',
+                                                                             '${(controle.VALOR_BRUTO_CX).toFixed(2)}',
                                                                              '${controle.VALOR_COMISSAOIMP_CX}',
                                                                              '${controle.DESC_COMERCIAL}',
-                                                                             '${controle.OUTRAS_DESP_CX}',
-                                                                             '${controle.RESU_FOB}',
-                                                                             '${controle.CAMBIO}',
-                                                                             '${controle.RESU_FOB_BR}',
+                                                                             '${(controle.OUTRAS_DESP_CX).toFixed(2)}',
+                                                                             '${(controle.RESU_FOB).toFixed(2)}',
+                                                                             '${(controle.CAMBIO).toFixed(4)}',
+                                                                             '${(controle.RESU_FOB_BR).toFixed(2)}',
                                                                              '${controle.COMISSAO_IBACEM}',
-                                                                             '${controle.DESP_FRETE_CX}',
+                                                                             '${(controle.DESP_FRETE_CX).toFixed(2)}',
                                                                              '${controle.COMISSAO_REP}',
                                                                              '${controle.CUSTO_PH}',
                                                                              '${controle.FRETE_COLHEITA}',
                                                                              '${controle.FUNRURAL}',
                                                                              '${controle.NET_KG}',
-                                                                             '${controle.VOLUME}',
-                                                                             '${soma1}',
+                                                                             '${(controle.VOLUME).toFixed(2)}',
+                                                                             '${(soma1).toFixed(2)}',
                                                                              '${controle.ADT_CX_ENTRES}',
                                                                              '${controle.ADT_CX_ETOTAL}',
                                                                              '${controle.ADT_CX_SAIDA}',
                                                                              '${controle.ADT_CX_STOTAL}',
-                                                                             '${soma2}',
+                                                                             '${(soma2).toFixed(2)}',
                                                                              '${controle.CONTROLE}',
                                                                              '${controle.CULTURA}',
                                                                              '${controle.VARIEDADE}')" 
                   class="editarControleProdutor"><i class="fas fa-print"></i></a></td>
             </tr>`            
           }).join('');
-          
+          document.getElementById('imprimirTudo').innerHTML = `<button class="imprimirTudo" href="javascript:;" onclick="imprimeTudo(${fornecedorCod},${controleCod});"><i class="fas fa-print"></i> IMPRIMIR TUDO</button>`;
+          document.getElementById('saldoComercialValor').innerHTML = `R$  ${(total).toFixed(2)}`;
           document.getElementById('tituloFornecedorComerciais').innerHTML = controls[0].FORNECEDOR;
           document.getElementById('tituloControlesComerciais').innerHTML = `Relatório do Controle ${controls[0].CONTROLE}, ${controls[0].CULTURA} - ${controls[0].VARIEDADE}`;
           return (document.getElementById('containerResumeComercial').innerHTML = objetoInsert);
@@ -334,6 +337,15 @@ function imprimeResumoComercial(l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13,l14,l
                  
   var myWindow=window.open('page-produtor-linha-comercial.html');
 
+}
+
+function imprimeTudo(fornecedor,controle){
+  console.log("Entrou", fornecedor, controle);
+  localStorage.removeItem("fornecedorTotal");
+  localStorage.removeItem("controleTotal");
+  localStorage.setItem("fornecedorTotal", fornecedor);
+  localStorage.setItem("controleTotal", controle);
+  var myWindow=window.open('page-produtor-linha-comercial-total.html');
 }
 
 /*
@@ -511,6 +523,12 @@ const fnPopulaControlesQualidade = async()=> {
           }else{
             objetoInsert = objetoInsert + `<td></td>`;
           }
+
+          if(controle.qDestino){
+            objetoInsert = objetoInsert + `<td><a href="javascript:;" onclick="linkPdf('${controle._id}', 'Destino');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td>`;
+          }else{
+            objetoInsert = objetoInsert + `<td></td>`;
+          }
             objetoInsert = objetoInsert + `</tr>`;
         } 
         }).join('');   
@@ -613,6 +631,10 @@ function fnConvertData(data){
 
   return dia+"/"+mes+"/"+ano;
 }
+
+function arredonda2 (numero) {
+  return +(Math.floor(numero + ('e+' + 2)) + ('e-' + 2));
+};
 
 function fnConvertValor(valorInt){
   let valor;

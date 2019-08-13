@@ -257,10 +257,34 @@ const salvaControle = async()=> {
 
 const fnPopulaControles = async()=> {
   let tokenStr = localStorage.getItem("token");
+  let valueFornecedor = 0;
+  let cod = "julio";
   await axios.get('http://138.204.68.18:3323/controles',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     var controles = (response.data).controles;
       document.getElementById('tbody-controles').innerHTML = controles.map(function (controle) {
+
+        switch (controle.codigo.length){
+          case 9 :
+            cod = controle.codigo.substring(0,4);
+          break;
+          case 8 :
+            cod = controle.codigo.substring(0,3);
+          break;
+          case 7 :
+            cod = controle.codigo.substring(0,2);
+          break;
+          case 6 :
+            cod = controle.codigo.substring(0,1);
+          break;
+          default:
+        }
+
+
+
+        
+        valueFornecedor = controle.fornecedorCod;
+        
         var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
         var view = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>"
         if (controle.visivel == false){
@@ -279,9 +303,20 @@ const fnPopulaControles = async()=> {
           var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-edit\"></i></a>";
         }
         //var resumoIcon = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>";
-        return (
-          "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxState('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"','"+controle.passoAtual+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
-          );
+        return (`
+          <tr align="center">
+            <td>${controle.codigo}</td>
+            <td>${fnConvertData(controle.importadoEm)}</td>
+            <td>${controle.passoAtual}</td>
+            <td>${controle.importadoPor}</td>
+            <td>${controle.publicadoPor}</td>
+            <td>${analisadoAtual}</td>
+            <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor(${controle._id});">${visivelAtual}</div></td>
+            <td><div class="tdClicavel" onclick="openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});">${comentarioAtual}</div></td>
+            <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
+            <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+          </tr>
+          `);
         
         }).join('');      
   })
@@ -749,9 +784,20 @@ const fnPopulaControlesFornecedorLista = async()=> {
         var comentarioAtual = "<a href=\"javascript:;\"><i class=\"fas fa-edit\"></i></a>";
       }
       //var resumoIcon = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>";
-      return (
-        "<tr align=\"center\"><td>"+controle.codigo+"</td><td>"+fnConvertData(controle.importadoEm)+"</td><td>"+controle.passoAtual+"</td><td>"+controle.importadoPor+"</td><td>"+controle.publicadoPor+"</td><td>"+analisadoAtual+"</td><td><div class=\"tdClicavel\" onclick=\"changeCheckboxStateFornecedor('"+controle._id+"');\">"+visivelAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"openModalComentario('"+controle._id+"','"+controle.comentario+"','"+controle.fornecedorCod+"','"+controle.codigo+"');\">"+comentarioAtual+"</div></td><td><div class=\"tdClicavel\" onclick=\"viewControle('"+controle.codigo+"','"+controle.fornecedorCod+"','"+controle.passoAtual+"');\">"+view+"</div></td><td><div class=\"tdClicavel\" onclick=\"apagaControle('"+controle._id+"');\">"+apagar+"</div></td></tr>"
-        );
+      return (`
+      <tr align="center">
+        <td>${controle.codigo}</td>
+        <td>${fnConvertData(controle.importadoEm)}</td>
+        <td>${controle.passoAtual}</td>
+        <td>${controle.importadoPor}</td>
+        <td>${controle.publicadoPor}</td>
+        <td>${analisadoAtual}</td>
+        <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor(${controle._id});">${visivelAtual}</div></td>
+        <td><div class="tdClicavel" onclick="openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});">${comentarioAtual}</div></td>
+        <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
+        <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+      </tr>
+        `);
       
       
       }).join('');    
@@ -1204,7 +1250,7 @@ const fnPopulaQualidades = async()=> {
     
       document.getElementById('containerQualiadade').innerHTML = images.map(function (qualidade) {
         if (qualidade.aprovado == false){
-          console.log(qualidade.controleRelacionado, qualidade.etapaRelacionada);
+          
           var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
             return (
               `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
@@ -1303,3 +1349,61 @@ fnPopulaQualidades();
 	}
 
 })();
+
+
+
+
+async function carregaResumoComercial(fornecedorCod, controleCod){
+  let objetoInsert= '';
+  await axios.get(`http://138.204.68.18:3324/api/relatorio/${fornecedorCod}/${controleCod}`)
+        .then(function(resposta){
+          var controls = (resposta.data);
+          var soma1=0;
+          var soma2=0;
+          var total=0;
+
+          controls.map(function(controle){
+            soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
+            soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
+            total = total + soma2;
+            objetoInsert = objetoInsert +
+            `<tr align="center">
+            <td>${controle.MERCADO}</td>
+            <td>${controle.NAVIO}</td>
+            <td>${controle.CONTAINER}</td>
+            <td>${controle.DATA_CHEGADA}</td>
+            <td>${controle.COD_CLIENTE}</td>
+            <td>${controle.TIPO_CX}</td>
+            <td>${controle.QTD_CAIXA}</td>
+            <td>${controle.CALIBRE}</td>
+            <td>${(controle.VALOR_BRUTO_CX).toFixed(2)}</td>
+            <td>${controle.VALOR_COMISSAOIMP_CX}</td>
+            <td>${controle.DESC_COMERCIAL}</td>
+            <td>${(controle.OUTRAS_DESP_CX).toFixed(2)}</td>
+            <td>${(controle.RESU_FOB).toFixed(2)}</td>
+            <td>${(controle.CAMBIO).toFixed(4)}</td>
+            <td>${(controle.RESU_FOB_BR).toFixed(2)}</td>
+            <td>${controle.COMISSAO_IBACEM}</td>
+            <td>${(controle.DESP_FRETE_CX).toFixed(2)}</td>
+            <td>${controle.COMISSAO_REP}</td>
+            <td>${controle.CUSTO_PH}</td>
+            <td>${controle.FRETE_COLHEITA}</td>
+            <td>${controle.FUNRURAL}</td>
+            <td>${controle.NET_KG}</td>
+            <td>${(controle.VOLUME).toFixed(2)}</td>
+            <td>${(soma1).toFixed(2)}</td>
+            <td>${controle.ADT_CX_ENTRES}</td>
+            <td>${controle.ADT_CX_ETOTAL}</td>
+            <td>${controle.ADT_CX_SAIDA}</td>
+            <td>${controle.ADT_CX_STOTAL}</td>
+            <td>${(soma2).toFixed(2)}</td>
+                  
+            </tr>`            
+          }).join('');
+          document.getElementById('saldoComercialValor').innerHTML = `R$  ${total}`;
+          document.getElementById('tituloFornecedorComerciais').innerHTML = controls[0].FORNECEDOR;
+          document.getElementById('tituloControlesComerciais').innerHTML = `Relatório do Controle ${controls[0].CONTROLE}, ${controls[0].CULTURA} - ${controls[0].VARIEDADE}`;
+          return (document.getElementById('containerResumeComercial').innerHTML = objetoInsert);
+        })
+  openModalComercial();
+}

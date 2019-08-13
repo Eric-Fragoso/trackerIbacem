@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400, 500, 600, 700, 800, 900" rel="stylesheet">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+       
+        <link rel="stylesheet" media="screen" type="text/css" href="css/ibacemprint.css">
+        <link rel="stylesheet" media="print" type="text/css" href="css/ibacemprint.css">
+
+  
+        
+        <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
+        <script src="js/vendor/jquery-1.7.2.min.js"></script>
+        <script src="js/jquery.dynatable.js"></script>
+        <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+
+        <div id="content">
+
+        </div>
+        <script>
+            jQuery(document).ready(function($) {
+                
+                fnPrint();
+                
+            });
+            async function fnPrint(){
+                let objetoInsert= '';
+                    await axios.get(`http://138.204.68.18:3324/api/relatorio/${localStorage.getItem("fornecedorTotal")}/${localStorage.getItem("controleTotal")}`)
+                            .then(function(resposta){
+                            var controls = (resposta.data);
+                            var soma1=0;
+                            var soma2=0;
+                            var total=0;
+
+                            controls.map(function(controle){
+                                soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
+                                soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
+                                total = total + soma2;
+                                objetoInsert = objetoInsert +
+                                `<div class="conteudoIndividualRelatorioTotal">
+                                    <header style="margin-bottom: 40px;">
+                                        <div class="wrapper">
+                                            <h1><img src="img/Logo-Ibacem_HOR.png"  /></h1>
+                                            <h2 id="tituloLinha">RELATÓRIO DE CONTROLE<br><span id="controleComercial">${localStorage.getItem("controleTotal")}</span> - <span id="cultura">${localStorage.getItem("Cultura")}</span> - <span id="variedade">${localStorage.getItem("Variedade")}</span></h2>
+                                            
+                                        </div>
+                                    </header>
+
+
+                                    <div class="wrapper">
+                                        <h4>Mercado: <span id="linha-mercado">${controle.MERCADO}</span></h4>                                        
+                                        <h4>Navio: <span id="linha-navio">${controle.NAVIO}</span></h4>                                        
+                                        <h4>Container: <span id="linha-container">${controle.CONTAINER}</span></h4>                                        
+                                        <h4>Data de chegada: <span id="linha-datachegada">${controle.DATA_CHEGADA}</span></h4>                                        
+                                        <h4>Código do cliente: <span id="linha-codcliente">${controle.COD_CLIENTE}</span></h4>                                        
+                                        <h4>Tipo de Caixa: <span id="linha-tpcaixa">${controle.TIPO_CX}</span></h4>                                        
+                                        <h4>Quantidade de Caixas: <span id="linha-qtcaixas">${controle.QTD_CAIXA}</span></h4>                                        
+                                        <h4>Calibre: <span id="linha-calibre">${controle.CALIBRE}</span></h4>                                        
+                                        <h4>Preço de Venda: <span id="linha-precovenda">${(controle.VALOR_BRUTO_CX).toFixed(2)}</span></h4>                                        
+                                        <h4>Comissão do Importador: <span id="linha-comimportador">${controle.VALOR_COMISSAOIMP_CX}</span></h4>                                        
+                                        <h4>Desconto Comercial Varejo: <span id="linha-desccomercial">${controle.DESC_COMERCIAL}</span></h4>                                        
+                                        <h4>Custo do Importador: <span id="linha-custoimportador">${(controle.OUTRAS_DESP_CX).toFixed(2)}</span></h4>                                        
+                                        <h4>Resultado FOB na moeda: <span id="linha-resultadoFOBmoeda">${(controle.RESU_FOB).toFixed(2)}</span></h4>                                        
+                                        <h4>Câmbio: <span id="linha-cambio">${(controle.CAMBIO).toFixed(4)}</span></h4>                                        
+                                        <h4>Resultado FOB em R$: <span id="linha-resultadoFOBr">${(controle.RESU_FOB_BR).toFixed(2)}</span></h4>                                        
+                                        <h4>Comissão da IBACEM: <span id="linha-comIBACEM">${controle.COMISSAO_IBACEM}</span></h4>                                        
+                                        <h4>Custo da logística no Brasil: <span id="linha-custologistica">${(controle.DESP_FRETE_CX).toFixed(2)}</span></h4>                                        
+                                        <h4>Comissão RC: <span id="linha-comRC">${controle.COMISSAO_REP}</span></h4>                                        
+                                        <h4>Custo Pack: <span id="linha-custopack">${controle.CUSTO_PH}</span></h4>                                        
+                                        <h4>Custo de colheita: <span id="linha-custocolheita">${controle.FRETE_COLHEITA}</span></h4>                                        
+                                        <h4>INSS (Funrural): <span id="linha-INSS">${controle.FUNRURAL}</span></h4>                                        
+                                        <h4>Resultado Net KG: <span id="linha-resultadonetKG">${controle.NET_KG}</span></h4>                                        
+                                        <h4>KG Total: <span id="linha-KGtotal">${(controle.VOLUME).toFixed(2)}</span></h4>                                        
+                                        <h4>Resultado Net Total: <span id="linha-resultadonettotal">${(soma1).toFixed(2)}</span></h4>                                        
+                                        <h4>Adto entressafra cx: <span id="linha-adtoentressafracx">${controle.ADT_CX_ENTRES}</span></h4>                                        
+                                        <h4>Adto entressafra: <span id="linha-adtoentressafra">${controle.ADT_CX_ETOTAL}</span></h4>                                        
+                                        <h4>Adto saída cx: <span id="linha-adtosaidacx">${controle.ADT_CX_SAIDA}</span></h4>                                        
+                                        <h4>Adto saída: <span id="linha-adtosaida">${controle.ADT_CX_STOTAL}</span></h4>                                        
+                                        <h4>Saldo a receber: <span id="linha-saldo">R$ ${(soma2).toFixed(2)}</span></h4>                                        
+                                    </div>
+                                </div>`            
+                            }).join('');
+                              return (document.getElementById('content').innerHTML = objetoInsert);
+                            })
+              window.print();
+              window.close();
+            }
+            
+            
+
+        </script>       
+    </body>

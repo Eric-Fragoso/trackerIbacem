@@ -40,6 +40,12 @@
         <div id="ModalComercial" class="modal">
             <span class="close cursor" onclick="closeModalComercial();">&times;</span>
             <div class="modal-content4">
+                <div id="saldoComercialRelatorio">
+                  <small>SALDO DO RELATÓRIO</small><br>
+                  <span id="saldoComercialValor">R$ 0</span>
+                  
+                </div>
+                <span id="imprimirTudo">Imprimir</span>
                 <h2 id="tituloFornecedorComerciais"> </h2>
                 <h4 id="tituloControlesComerciais"> </h4>
                 <div id="containerControles4" >
@@ -83,7 +89,7 @@
                         </tbody>
                       </table>
                 </div>                
-                 <button class="cancelarDelete" onclick="closeModalComercial();">SAIR</button>
+                 
                 <br clear="all">
             </div>
         </div>
@@ -166,7 +172,7 @@
                     <button class="imprimirExtrato" onclick="imprimirExtrato();"><i class="fas fa-print"></i></i> IMPRIMIR EXTRATO</button> <button class="imprimirImposto hidden"><i class="fas fa-file-invoice-dollar"></i></i> IMPOSTO DE RENDA</button>
                     <div id="saldoProdutor">
                       <small>SALDO DISPONÍVEL</small>
-                      <span id="valorSaldoProdutor">R$ 17.855,00</span>
+                      <span id="valorSaldoProdutor">R$ 0</span>
                     </div>
                 </div>
 
@@ -205,10 +211,11 @@
                       <thead>
                         <tr>
                           <th width="10%">Controle</th>
-                           <th width="20%">Recepção</th>
-                          <th width="20%">Seleção</th>
-                          <th width="20%">Embalamento</th>
-                          <th width="20%">Expedição</th>
+                          <th width="15%">Recepção</th>
+                          <th width="15%">Seleção</th>
+                          <th width="15%">Embalamento</th>
+                          <th width="15%">Expedição</th>
+                          <th width="15%">Destino</th>
                         </tr>
                       </thead>
                       <tbody id="containerQualidade">

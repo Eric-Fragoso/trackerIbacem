@@ -119,6 +119,10 @@ router.post('/gallery', upload.single('file'), async(req, res)=>{
             console.log("entrou em" + req.body.qualidade);
             controle = await Controle.findByIdAndUpdate(req.body.controle, {qExpedicao:true},{new:true})
         break;
+        case "Destino":
+            console.log("entrou em" + req.body.qualidade);
+            controle = await Controle.findByIdAndUpdate(req.body.controle, {qDestino:true},{new:true})
+        break;
     
         default:
             break;

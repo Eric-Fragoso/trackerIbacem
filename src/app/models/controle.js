@@ -49,6 +49,10 @@ const ControleSchema = new mongoose.Schema({
         type:Boolean,
         default:false,
     },
+    qDestino:{
+        type:Boolean,
+        default:false,
+    },
     passoAtual:{
         type:String,
         require:true,
