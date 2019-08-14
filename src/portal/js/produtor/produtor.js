@@ -198,7 +198,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   <td>${controle.MERCADO}</td>
                   <td>${controle.NAVIO}</td>
                   <td>${controle.CONTAINER}</td>
-                  <td>${controle.DATA_CHEGADA}</td>
+                  <td>${fnConvertData(controle.DATA_CHEGADA)}</td>
                   <td>${controle.COD_CLIENTE}</td>
                   <td>${controle.TIPO_CX}</td>
                   <td>${controle.QTD_CAIXA}</td>

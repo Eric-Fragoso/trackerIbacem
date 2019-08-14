@@ -199,7 +199,7 @@ const fnPopulaControlesFornecedor = async()=> {
             <td>${controle.passoAtual}</td>
             <td>${controle.importadoPor}</td>
             <td>${controle.publicadoPor}</td>
-            <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});\">${analisadoAtual}</div></td>
+            <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});">${analisadoAtual}</div></td>
             <td><div class="tdClicavel" onclick="openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});">${comentarioAtual}</div></td>
             <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
             <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
@@ -214,8 +214,8 @@ const fnPopulaControlesFornecedor = async()=> {
             <td>${controle.passoAtual}</td>
             <td>${controle.importadoPor}</td>
             <td>${controle.publicadoPor}</td>
-            <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});\">${analisadoAtual}</div></td>
-            <td><div>"+comentarioAtual+"</div></td>
+            <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});">${analisadoAtual}</div></td>
+            <td><div>${comentarioAtual}</div></td>
             <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
             <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
           </tr>
@@ -1131,7 +1131,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
             <td>${controle.MERCADO}</td>
             <td>${controle.NAVIO}</td>
             <td>${controle.CONTAINER}</td>
-            <td>${controle.DATA_CHEGADA}</td>
+            <td>${fnConvertData(controle.DATA_CHEGADA)}</td>
             <td>${controle.COD_CLIENTE}</td>
             <td>${controle.TIPO_CX}</td>
             <td>${controle.QTD_CAIXA}</td>
@@ -1160,7 +1160,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   
             </tr>`            
           }).join('');
-          document.getElementById('saldoComercialValor').innerHTML = `R$  ${total}`;
+          document.getElementById('saldoComercialValor').innerHTML = `R$  ${total.toFixed(2)}`;
           document.getElementById('tituloFornecedorComerciais').innerHTML = controls[0].FORNECEDOR;
           document.getElementById('tituloControlesComerciais').innerHTML = `Relatório do Controle ${controls[0].CONTROLE}, ${controls[0].CULTURA} - ${controls[0].VARIEDADE}`;
           return (document.getElementById('containerResumeComercial').innerHTML = objetoInsert);

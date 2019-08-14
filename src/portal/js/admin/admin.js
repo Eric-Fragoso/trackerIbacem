@@ -311,10 +311,10 @@ const fnPopulaControles = async()=> {
             <td>${controle.importadoPor}</td>
             <td>${controle.publicadoPor}</td>
             <td>${analisadoAtual}</td>
-            <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor(${controle._id});">${visivelAtual}</div></td>
-            <td><div class="tdClicavel" onclick="openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});">${comentarioAtual}</div></td>
+            <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor('${controle._id}');">${visivelAtual}</div></td>
+            <td><div class="tdClicavel" onclick="openModalComentario('${controle._id}','${controle.comentario}','${controle.fornecedorCod}','${controle.codigo}');">${comentarioAtual}</div></td>
             <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
-            <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+            <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
           </tr>
           `);
         
@@ -792,10 +792,10 @@ const fnPopulaControlesFornecedorLista = async()=> {
         <td>${controle.importadoPor}</td>
         <td>${controle.publicadoPor}</td>
         <td>${analisadoAtual}</td>
-        <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor(${controle._id});">${visivelAtual}</div></td>
-        <td><div class="tdClicavel" onclick="openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});">${comentarioAtual}</div></td>
+        <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor('${controle._id}');">${visivelAtual}</div></td>
+        <td><div class="tdClicavel" onclick="openModalComentario('${controle._id}','${controle.comentario}','${controle.fornecedorCod}','${controle.codigo}');">${comentarioAtual}</div></td>
         <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
-        <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+        <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
       </tr>
         `);
       
@@ -824,6 +824,7 @@ function filtraEmpresaControle(){
 
 
 const apagaControle = async(id)=> {
+  console.log("reeccebeu o id", id);
   let tokenStr = localStorage.getItem("token");
   await axios.delete(`http://138.204.68.18:3323/controles/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
@@ -1371,7 +1372,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
             <td>${controle.MERCADO}</td>
             <td>${controle.NAVIO}</td>
             <td>${controle.CONTAINER}</td>
-            <td>${controle.DATA_CHEGADA}</td>
+            <td>${fnConvertData(controle.DATA_CHEGADA)}</td>
             <td>${controle.COD_CLIENTE}</td>
             <td>${controle.TIPO_CX}</td>
             <td>${controle.QTD_CAIXA}</td>
@@ -1400,7 +1401,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   
             </tr>`            
           }).join('');
-          document.getElementById('saldoComercialValor').innerHTML = `R$  ${total}`;
+          document.getElementById('saldoComercialValor').innerHTML = `R$  ${(total).toFixed(2)}`;
           document.getElementById('tituloFornecedorComerciais').innerHTML = controls[0].FORNECEDOR;
           document.getElementById('tituloControlesComerciais').innerHTML = `Relatório do Controle ${controls[0].CONTROLE}, ${controls[0].CULTURA} - ${controls[0].VARIEDADE}`;
           return (document.getElementById('containerResumeComercial').innerHTML = objetoInsert);
