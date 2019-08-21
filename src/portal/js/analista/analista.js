@@ -199,10 +199,10 @@ const fnPopulaControlesFornecedor = async()=> {
             <td>${controle.passoAtual}</td>
             <td>${controle.importadoPor}</td>
             <td>${controle.publicadoPor}</td>
-            <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});">${analisadoAtual}</div></td>
-            <td><div class="tdClicavel" onclick="openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});">${comentarioAtual}</div></td>
-            <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
-            <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+            <td><div class="tdClicavel" onclick="changeCheckboxState('${controle._id}');">${analisadoAtual}</div></td>
+            <td><div class="tdClicavel" onclick="openModalComentario('${controle._id}','${controle.comentario}','${controle.fornecedorCod}','${controle.codigo}');">${comentarioAtual}</div></td>
+            <td><div class="tdClicavel" onclick="viewControle('${controle.codigo}','${controle.fornecedorCod}','${controle.passoAtual}');">${view}</div></td>
+            <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
           </tr>
           `);
       }else{
@@ -214,10 +214,10 @@ const fnPopulaControlesFornecedor = async()=> {
             <td>${controle.passoAtual}</td>
             <td>${controle.importadoPor}</td>
             <td>${controle.publicadoPor}</td>
-            <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});">${analisadoAtual}</div></td>
+            <td><div class="tdClicavel" onclick="changeCheckboxState('${controle._id}');">${analisadoAtual}</div></td>
             <td><div>${comentarioAtual}</div></td>
-            <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
-            <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+            <td><div class="tdClicavel" onclick="viewControle('${controle.codigo}','${controle.fornecedorCod}','${controle.passoAtual}');">${view}</div></td>
+            <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
           </tr>
           `);
       }
@@ -440,9 +440,9 @@ const fnPopulaControles = async()=> {
         valueFornecedor = controle.fornecedorCod;
         
         if (controle.analisado == false){
-          var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"hidden\" class=\"checkboxVisivel\"></i></a>";
+          var analisadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id="${controle._id}" value="hidden" class="checkboxVisivel"></i></a>`;
         }else{
-          var analisadoAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+          var analisadoAtual = `<a href="javascript:;"><i class="fas fa-check-circle"><input type="checkbox" id="${controle._id}" value="show" class="checkboxVisivel" checked></i></a>`;
         }
         
         var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
@@ -457,10 +457,10 @@ const fnPopulaControles = async()=> {
               <td>${controle.passoAtual}</td>
               <td>${controle.importadoPor}</td>
               <td>${controle.publicadoPor}</td>
-              <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});">${analisadoAtual}</div></td>
-              <td><div class=\"tdClicavel\" onclick=\"openModalComentario(${controle._id},${controle.comentario},${controle.fornecedorCod},${controle.codigo});\">${comentarioAtual}</div></td>
-              <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
-              <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+              <td><div class="tdClicavel" onclick="changeCheckboxState('${controle._id}');">${analisadoAtual}</div></td>
+              <td><div class="tdClicavel" onclick="openModalComentario('${controle._id}','${controle.comentario}','${controle.fornecedorCod}','${controle.codigo}');">${comentarioAtual}</div></td>
+              <td><div class="tdClicavel" onclick="viewControle('${controle.codigo}','${controle.fornecedorCod}','${controle.passoAtual}');">${view}</div></td>
+              <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
             </tr>
             `);
         }else{
@@ -472,10 +472,10 @@ const fnPopulaControles = async()=> {
               <td>${controle.passoAtual}</td>
               <td>${controle.importadoPor}</td>
               <td>${controle.publicadoPor}</td>
-              <td><div class="tdClicavel" onclick="changeCheckboxState(${controle._id});">${analisadoAtual}</div></td>
+              <td><div class="tdClicavel" onclick="changeCheckboxState('${controle._id}');">${analisadoAtual}</div></td>
               <td><div>${comentarioAtual}</div></td>
-              <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
-              <td><div class="tdClicavel" onclick="apagaControle(${controle._id});">${apagar}</div></td>
+              <td><div class="tdClicavel" onclick="viewControle('${controle.codigo}','${controle.fornecedorCod}','${controle.passoAtual}');">${view}</div></td>
+              <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
             </tr>
             `);
         }
@@ -643,7 +643,7 @@ function viewControle(controleCod, fornecedorCod, faseAtual ) {
           default:
         }
         switch (faseAtual){
-          case "Recepção" :
+          case "Recepcao" :
             fase = "viewRecepcao";
             exibeResumoREC(ano,cod,cultura);
           break;
@@ -676,14 +676,18 @@ async function exibeResumoCOM(ano,cod,cultura){
   await axios.get(`http://138.204.68.18:3324/api/controles/${cod}/${ano}/${cultura}`)
   .then(function(response){
     let controles = (response.data);
-      document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
+    document.getElementById('viewComercial').innerHTML = `<ul>
+    <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+    <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${cod})" class="editarControleProdutor">Ver relatório</a></span></li>
+  </ul>`
+      /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
             return (
               `<ul>
                 <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
-                <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="geraPDF(${controle.COD_FORNECEDOR},${cod})" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Ver PDF</a></span></li>
+                <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="carregaResumoComercial(${controle.COD_FORNECEDOR},${cod})" class="editarControleProdutor">Ver relatório</a></span></li>
               </ul>`
               );
-        }).join(''); 
+        }).join(''); */
       
   })
   .catch(function(error){
@@ -1005,6 +1009,7 @@ function escondeDivs(visivel){
   document.getElementById('viewEmbalamento').style.display = "none";
   document.getElementById('viewExpedicao').style.display = "none";
   document.getElementById('viewComercial').style.display = "none";
+  console.log(visivel);
   document.getElementById(visivel).style.display = "block";
 }
 

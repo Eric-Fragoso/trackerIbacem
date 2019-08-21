@@ -5,26 +5,15 @@
         <link rel="stylesheet" type="text/css" href="css/ibacemj.css">
         <link rel="stylesheet" type="text/css" href="css/all.css" >
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-        
-        
         <script src="js/jquery.dynatable.js"></script>
         <link rel="stylesheet" type="text/css" href="js/beanstalk.css">
         <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
         <script src="js/jquery.mask.min.js"></script>
         <script src="js/all.js"></script>
-
-        
         <link rel="stylesheet" type="text/css" href="js/jquery.dm-uploader.min.css">
-
-
         <link href="js/datepicker.css" rel="stylesheet" type="text/css">
         <script src="js/datepicker.js"></script>
         <script src="js/datepicker.pt-BR.js"></script>
-
-
-
-
         <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
         <meta charset="UTF-8">
 
@@ -128,7 +117,7 @@
         <!--MODAL COMENTÁRIO-->
         <div id="ModalComentario" class="modal">
           <span class="close cursor" onclick="closeModalComentario();">&times;</span>
-          <div class="modal-content4">
+          <div class="modal-content6">
               <h2>ADICIONAR COMENTÁRIO</h2>
               <div id="containerControles2" style="height: 290px;">
                   <p></p>
@@ -430,6 +419,7 @@
             }
             // Fecha modal Comercial
             function closeModalComercial() {
+              closeModalViewControle();
               document.getElementById('ModalComercial').style.display = "none";
             }
 
@@ -528,7 +518,6 @@
 
             const edd = easydropdown('#select-tipo-entrada');
             const edd2 = easydropdown('#select-estagio-qualidade');
-            //const edd3 = easydropdown('#select-controle');
             
 
 

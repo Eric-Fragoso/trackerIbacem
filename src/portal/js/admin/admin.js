@@ -288,9 +288,9 @@ const fnPopulaControles = async()=> {
         var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
         var view = "<a href=\"javascript:;\"><i class=\"fas fa-eye\"></i></a>"
         if (controle.visivel == false){
-          var visivelAtual = "<a href=\"javascript:;\"><i class=\"fas fa-times-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"hidden\" class=\"checkboxVisivel\"></i></a>";
+          var visivelAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id="${controle._id}forn" value="hidden" class="checkboxVisivel"></i></a>`;
         }else{
-          var visivelAtual = "<a href=\"javascript:;\"><i class=\"fas fa-check-circle\"><input type=\"checkbox\" id="+controle._id+" value=\"show\" class=\"checkboxVisivel\" checked></i></a>";
+          var visivelAtual = `<a href="javascript:;"><i class="fas fa-check-circle"><input type="checkbox" id="${controle._id}forn" value="show" class="checkboxVisivel" checked></i></a>`;
         }
         if (controle.analisado == false){
           var analisadoAtual = "<i class=\"fas fa-times-circle\"><input type=\"checkbox\" value=\"hidden\" class=\"checkboxVisivel\"></i>";
@@ -313,7 +313,7 @@ const fnPopulaControles = async()=> {
             <td>${analisadoAtual}</td>
             <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor('${controle._id}');">${visivelAtual}</div></td>
             <td><div class="tdClicavel" onclick="openModalComentario('${controle._id}','${controle.comentario}','${controle.fornecedorCod}','${controle.codigo}');">${comentarioAtual}</div></td>
-            <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
+            <td><div class="tdClicavel" onclick="viewControle('${controle.codigo}','${controle.fornecedorCod}','${controle.passoAtual}');">${view}</div></td>
             <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
           </tr>
           `);
@@ -794,7 +794,7 @@ const fnPopulaControlesFornecedorLista = async()=> {
         <td>${analisadoAtual}</td>
         <td><div class="tdClicavel" onclick="changeCheckboxStateFornecedor('${controle._id}');">${visivelAtual}</div></td>
         <td><div class="tdClicavel" onclick="openModalComentario('${controle._id}','${controle.comentario}','${controle.fornecedorCod}','${controle.codigo}');">${comentarioAtual}</div></td>
-        <td><div class="tdClicavel" onclick="carregaResumoComercial(${valueFornecedor},${cod});">${view}</div></td>
+        <td><div class="tdClicavel" onclick="viewControle('${controle.codigo}','${controle.fornecedorCod}','${controle.passoAtual}');">${view}</div></td>
         <td><div class="tdClicavel" onclick="apagaControle('${controle._id}');">${apagar}</div></td>
       </tr>
         `);
@@ -857,7 +857,7 @@ function viewControle(controleCod, fornecedorCod, faseAtual ) {
           default:
         }
         switch (faseAtual){
-          case "Recepção" :
+          case "Recepcao" :
             fase = "viewRecepcao";
             exibeResumoREC(ano,cod,cultura);
           break;
@@ -890,14 +890,18 @@ async function exibeResumoCOM(ano,cod,cultura){
   await axios.get(`http://138.204.68.18:3324/api/controles/${cod}/${ano}/${cultura}`)
   .then(function(response){
     let controles = (response.data);
-      document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
+    document.getElementById('viewComercial').innerHTML = `<ul>
+    <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+    <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${cod})" class="editarControleProdutor">Ver relatório</a></span></li>
+  </ul>`
+      /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
             return (
               `<ul>
                 <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
-                <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="geraPDF(${controle.COD_FORNECEDOR},${cod})" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Ver PDF</a></span></li>
+                <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="carregaResumoComercial(${controle.COD_FORNECEDOR},${cod})" class="editarControleProdutor">Ver relatório</a></span></li>
               </ul>`
               );
-        }).join(''); 
+        }).join(''); */
       
   })
   .catch(function(error){
