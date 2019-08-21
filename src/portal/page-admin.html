@@ -403,10 +403,10 @@
                     </select>
                     <select name="status" id="select-status">
                         <option value="" data-placeholder>STATUS</option>
-                        <option value="Recepção">Recepção</option>
-                        <option value="Seleção">Seleção</option>
+                        <option value="Recepcaoo">Recepção</option>
+                        <option value="Selecao">Seleção</option>
                         <option value="Embalagem">Embalagem</option>
-                        <option value="Expedição">Expedição</option>
+                        <option value="Expedicao">Expedição</option>
                         <option value="Comercial">Comercial</option>
                     </select>
                     <button class="importDataControles" onclick="erroImport();"><i class="fas fa-plus-circle"></i> IMPORTAR</button>
@@ -795,14 +795,19 @@
                   await axios.get(`http://138.204.68.18:3323/controles/${codigo}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
                   .then(function(response){
                     var controle = (response.data).controle;
-
-                    //console.log(checaStatus, controle[0]);
-                    if (controle.length==1 && controle[0].passoAtual == checaStatus && controle[0].visivel){
+                      /*if (controle.length==1 && controle[0].passoAtual == checaStatus && controle[0].visivel){
                       document.getElementById('erroImportData').innerHTML="Este controle já possui importação visível dessa etapa";
                       document.getElementById('erroImportData').style.display = "block";
                       setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
                     }else if (controle.length==1 && controle[0].passoAtual == checaStatus){
                       document.getElementById('erroImportData').innerHTML="Este controle já possui importação para essa etapa verifique se deve tornar ela visivel";
+                      document.getElementById('erroImportData').style.display = "block";
+                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+                    }else{
+                      importarControle();
+                    }*/
+                    if (controle.length==1){
+                      document.getElementById('erroImportData').innerHTML="Este controle já foi importado anteriormente";
                       document.getElementById('erroImportData').style.display = "block";
                       setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
                     }else{
