@@ -188,39 +188,278 @@ const importarControle = async()=> {
   var valueControle = document.getElementById("input-controle").value;
   var valueAno = document.getElementById("select-ano-safra").value;
   var valueCultura = document.getElementById("select-cultura").value;
+  let statusAtual = document.getElementById("select-status").value
 
-
-
-  await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
-  .then(function(response){
-    var controles = (response.data);
-      document.getElementById('containerControles').innerHTML = controles.map(function (controle) {
-        openModalExibeImportacao();
-        fornecedorAtual = controle.COD_FORNECEDOR;
-        return (
-          `<ul>
-            <li>COD_FORNECEDOR: <span id="controleCOD" class="destacaImport" value="${controle.COD_FORNECEDOR}">${controle.COD_FORNECEDOR}</span></li>
-            <li>ANO: <span id="controleANO" class="destacaImport">${controle.ANO}</span></li>
-            <li>MÊS: <span id="controleMES" class="destacaImport">${controle.MES}</span></li>
-            <li>SEMANA: <span id="controleSEMANA" class="destacaImport">${controle.SEMANA}</span></li>
-            <li>DATA: <span id="controleDATA" class="destacaImport">${controle.DATA}</span></li>
-            <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
-            <li>VARIEDADE: <span id="controleVAR" class="destacaImport">${controle.VARIEDADE}</span></li>
-            <li>CONTROLE: <span id="controleCON" class="destacaImport">${controle.CONTROLE}</span></li>
-            <li>SAFRA: <span id="controleSAFRA" class="destacaImport">${controle.SAFRA}</span></li>
-            <li>VOLUME EM KG: <span id="controleCOD" class="destacaImport">${controle.VOLUME_KG}</span></li>
-          </ul>`
-          );
-        
-        }).join(''); 
+  switch (statusAtual){
+    case "Recepcao" :
+        await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
+        .then(function(response){
+          let controles = (response.data);
+          
+            document.getElementById('containerControlesImport').innerHTML = controles.map(function (controle) {
+              fornecedorAtual = controle.COD_FORNECEDOR;
+                  return (
+                    `<ul>
+                      <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+                      <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${controle.COD_FORNECEDOR}</span></li>
+                      <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
+                      <li>VARIEDADE: <span id="controleVARIEDADE" class="destacaImport">${controle.VARIEDADE}</span></li>
+                      <li>VOLUME: <span id="controleVOLUME" class="destacaImport">${controle.VOLUME_KG+"Kg"}</span></li>
+                    </ul>`
+                    );
+              }).join(''); 
+            
+        })
+        .catch(function(error){
+          console.warn(error);
+          document.getElementById('erroImportData').innerHTML="Controle não encontrado";
+          document.getElementById('erroImportData').style.display = "block";
+          setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+      });
       
-  })
-  .catch(function(error){
-      console.warn(error);
-      document.getElementById('erroImportData').innerHTML="Controle não encontrado";
-      document.getElementById('erroImportData').style.display = "block";
-      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-  });
+    break;
+    case "Selecao" :
+        await axios.get(`http://138.204.68.18:3324/api/controlessel/${valueControle}/${valueAno}/${valueCultura}`)
+        .then(function(response){
+          let controles = (response.data);
+          fornecedorCod = '';
+      
+          let mercados = [];
+          for(i = 0; i< controles.length; i++){    
+              if(mercados.indexOf(controles[i].MERCADO) === -1){
+      
+                if((controles[i].MERCADO != "02-REFUGO LINHA 02") 
+                && (controles[i].MERCADO != "03-REFUGO LINHA 03")
+                && (controles[i].MERCADO != "04-REFUGO LINHA 04")
+                && (controles[i].MERCADO != "REFUGO PÓS EMBALAMENTO")){
+                  mercados.push(controles[i].MERCADO);   
+                  fornecedorCod = controles[i].COD_FORNECEDOR;   
+                }          
+              }        
+          }
+      
+          acumulaMI = 0;
+          acumulaME = 0;
+          acumulaMR = 0;
+          acumulaCL = [];
+      
+          let mi =[];
+          let me =[];
+          let mr =[];
+          let cl =[];
+          for(i = 0; i< mercados.length; i++){    
+            calibres = [];
+            for(x = 0; x< controles.length; x++){    
+              if(mercados[i] === controles[x].MERCADO){
+                acumulaMI = acumulaMI + controles[x].VOLUME_KG_MI;
+                acumulaME = acumulaME + controles[x].VOLUME_KG_ME;
+                acumulaMR = acumulaMR + controles[x].VOLUME_KG_REFUGO;
+                acumulaCL.push(controles[x].CALIBRE) ;
+              }        
+            }
+          
+            for(z = 0; z< acumulaCL.length; z++){    
+              if(calibres.indexOf(acumulaCL[z]) === -1){
+                calibres.push(acumulaCL[z]);        
+              }        
+            }
+      
+            mi.push(acumulaMI);
+            me.push(acumulaME);
+            mr.push(acumulaMR);
+            cl.push(calibres);
+      
+          acumulaMI = 0;
+          acumulaME = 0;
+          acumulaMR = 0;
+          acumulaCL = [];
+          }
+          let content = `<ul>
+                          <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+                          <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorCod}</span></li>
+                        </ul>
+                <div class="innerSc">
+                <table id="my-table" class="table tControles">
+              <thead>
+                <tr>
+                  <th width="25%">Mercado</th>
+                  <th width="25%">Calibres</th>
+                  <th width="18%">Volume MI</th>
+                  <th width="18%">Volume ME</th>
+                  <th width="14%">Volume Refugo</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-controles">`;
+      
+            for(i = 0; i< mercados.length; i++){ 
+              content+=`<tr>
+              <td>${mercados[i]}</td>
+              <td>${cl[i]}</td>
+              <td>${Math.round10(mi[i])+" KG"}</td>
+              <td>${Math.round10(me[i])+" KG"}</td>
+              <td>${Math.round10(mr[i])+" KG"}</td> 
+            </tr>`;
+            
+            };
+            content += `</tbody>
+                        </table></div>`;
+            document.getElementById('containerControlesImport').innerHTML = content;
+        })
+        .catch(function(error){
+            console.warn(error);
+        });
+    break;
+    case "Embalagem" :
+        await axios.get(`http://138.204.68.18:3324/api/controlesemb/${valueControle}/${valueAno}/${valueCultura}`)
+        .then(function(response){
+          let controles = (response.data);
+          fornecedorCod = '';
+      
+          let calibres = [];
+          for(i = 0; i< controles.length; i++){    
+              if(calibres.indexOf(controles[i].CALIBRE) === -1){
+                calibres.push(controles[i].CALIBRE);   
+                fornecedorCod = controles[i].COD_FORNECEDOR;   
+              }        
+          }
+      
+          acumulaMI = 0;
+          acumulaME = 0;
+          acumulaMR = 0;
+          pesototal = 0;
+          refugoTotal = 0
+          let mi =[];
+          let me =[];
+          let mr =[];
+          for(i = 0; i< calibres.length; i++){    
+            for(x = 0; x< controles.length; x++){    
+              if(calibres[i] === controles[x].CALIBRE){
+                acumulaMI = acumulaMI + controles[x].VOLUME_KG_MI;
+                acumulaME = acumulaME + controles[x].VOLUME_KG_ME;
+                acumulaMR = acumulaMR + controles[x].VOLUME_KG_REFUGO;
+                pesototal = pesototal + controles[x].VOLUME_KG_MI + controles[x].VOLUME_KG_ME + controles[x].VOLUME_KG_REFUGO;
+                refugoTotal = refugoTotal + controles[x].VOLUME_KG_REFUGO;
+              }        
+            }
+      
+            mi.push(acumulaMI);
+            me.push(acumulaME);
+            mr.push(acumulaMR);
+      
+          acumulaMI = 0;
+          acumulaME = 0;
+          acumulaMR = 0;
+          }
+          let content = `<ul>
+                          <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+                          <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorCod}</span></li>
+                          <li>REFUGO TOTAL: <span id="controleCOD" class="destacaImport">${Math.round10(refugoTotal)+" KG"}</span></li>
+                          <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport">${Math.round10(pesototal)+" KG"}</span></li>
+                        </ul>
+                        <div class="innerSc">
+                <table id="my-table" class="table tControles">
+              <thead>
+                <tr>
+                  <th width="25%">Calibre</th>
+                  <th width="18%">Peso Liquido</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-controles">
+              `;
+      
+            for(i = 0; i< calibres.length; i++){ 
+              content+=`<tr>
+              <td>${(calibres[i]=="N/D")?"REFUGO":calibres[i]}</td>
+              <td>${Math.round10(mi[i])+Math.round10(me[i])+Math.round10(mr[i])+" KG"}</td>
+            </tr>`;
+            
+            };
+            content += `</tbody>
+                        </table>
+                        </div>`;
+            document.getElementById('containerControlesImport').innerHTML = content;
+        })
+        .catch(function(error){
+            console.warn(error);
+        });
+    break;
+    case "Expedicao" :
+        await axios.get(`http://138.204.68.18:3324/api/controlesexp/${valueControle}/${valueAno}/${valueCultura}`)
+        .then(function(response){
+          let controles = (response.data);
+      
+          pesototal=0;
+      
+          for(i = 0; i< controles.length; i++){    
+            pesototal = pesototal + controles[i].KG;
+          }
+      
+          let content = `<ul>
+                          <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+                          <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport">${Math.round10(pesototal)+" KG"}</span></li>
+                        </ul>
+                        <div class="innerSc">
+                <table id="my-table" class="table tControles">
+              <thead>
+                <tr>
+                  <th width="20%">Mercado</th>
+                  <th width="20%">Container</th>
+                  <th width="25%">Carregamento</th>
+                  <th width="15%">Caixas</th>
+                  <th width="18%">Peso</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-controles">
+              `;
+      
+            for(i = 0; i< controles.length; i++){ 
+              content+=`<tr>
+              <td>${controles[i].MERCADO}</td>
+              <td>${controles[i].CONTAINER}</td>
+              <td>${fnConvertData(controles[i].DATA_EMBARQUE)}</td>
+              <td>${controles[i].QTD_CAIXA}</td>
+              <td>${Math.round10(controles[i].KG)+" KG"}</td>
+            </tr>`;
+            
+            };
+            content += `</tbody>
+                        </table>
+                        </div>`;
+            document.getElementById('containerControlesImport').innerHTML = content;
+        })
+        .catch(function(error){
+            console.warn(error);
+        });
+    break;
+    case "Comercial" :
+        await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
+        .then(function(response){
+          let controles = (response.data);
+          document.getElementById('containerControlesImport').innerHTML = `<ul>
+          <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+          <li>RELATÓRIO: <span id="controleREL" class="destacaImport"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${valueControle})" class="editarControleProdutor">Ver relatório</a></span></li>
+        </ul>`
+            /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
+                  return (
+                    `<ul>
+                      <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
+                      <li>RELATÓRIO: <span id="controleREL" class="destacaImport2"><a href="javascript:;" onclick="carregaResumoComercial(${controle.COD_FORNECEDOR},${cod})" class="editarControleProdutor">Ver relatório</a></span></li>
+                    </ul>`
+                    );
+              }).join(''); */
+            
+        })
+        .catch(function(error){
+            console.warn(error);
+        });
+    break;
+    default:
+  }
+
+  openModalExibeImportacao();
+  
+      
+  
 
 }      
 
@@ -1061,6 +1300,7 @@ async function exibeResumoSEL(ano,cod,cultura){
                     <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
                     <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport2">${fornecedorCod}</span></li>
                   </ul>
+          <div class="innerSc">
           <table id="my-table" class="table tControles">
         <thead>
           <tr>
@@ -1084,7 +1324,7 @@ async function exibeResumoSEL(ano,cod,cultura){
       
       };
       content += `</tbody>
-                  </table>`;
+                  </table></div>`;
       document.getElementById('viewSelecao').innerHTML = content;
   })
   .catch(function(error){
