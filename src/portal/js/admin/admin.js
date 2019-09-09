@@ -231,6 +231,9 @@ const importarControle = async()=> {
                 if((controles[i].MERCADO != "02-REFUGO LINHA 02") 
                 && (controles[i].MERCADO != "03-REFUGO LINHA 03")
                 && (controles[i].MERCADO != "04-REFUGO LINHA 04")
+                && (controles[i].MERCADO != "01-REFUGO LINHA 01")
+                && (controles[i].MERCADO != "REFUGO AMOSTRA")
+                && (controles[i].MERCADO != "REFUGO HWT")
                 && (controles[i].MERCADO != "REFUGO PÓS EMBALAMENTO")){
                   mercados.push(controles[i].MERCADO);   
                   fornecedorCod = controles[i].COD_FORNECEDOR;   
@@ -1253,6 +1256,9 @@ async function exibeResumoSEL(ano,cod,cultura){
           if((controles[i].MERCADO != "02-REFUGO LINHA 02") 
           && (controles[i].MERCADO != "03-REFUGO LINHA 03")
           && (controles[i].MERCADO != "04-REFUGO LINHA 04")
+          && (controles[i].MERCADO != "01-REFUGO LINHA 01")
+          && (controles[i].MERCADO != "REFUGO AMOSTRA")
+          && (controles[i].MERCADO != "REFUGO HWT")
           && (controles[i].MERCADO != "REFUGO PÓS EMBALAMENTO")){
             mercados.push(controles[i].MERCADO);   
             fornecedorCod = controles[i].COD_FORNECEDOR;   
