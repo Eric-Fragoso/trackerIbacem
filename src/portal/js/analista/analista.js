@@ -378,7 +378,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlessel/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorCod = '';
+          fornecedorAtual = controles[i].COD_FORNECEDOR;
       
           let mercados = [];
           for(i = 0; i< controles.length; i++){    
@@ -387,6 +387,9 @@ const importarControle = async()=> {
                 if((controles[i].MERCADO != "02-REFUGO LINHA 02") 
                 && (controles[i].MERCADO != "03-REFUGO LINHA 03")
                 && (controles[i].MERCADO != "04-REFUGO LINHA 04")
+                && (controles[i].MERCADO != "01-REFUGO LINHA 01")
+                && (controles[i].MERCADO != "REFUGO AMOSTRA")
+                && (controles[i].MERCADO != "REFUGO HWT")
                 && (controles[i].MERCADO != "REFUGO PÓS EMBALAMENTO")){
                   mercados.push(controles[i].MERCADO);   
                   fornecedorCod = controles[i].COD_FORNECEDOR;   
@@ -469,7 +472,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlesemb/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorCod = '';
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let calibres = [];
           for(i = 0; i< controles.length; i++){    
@@ -543,7 +546,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlesexp/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-      
+          fornecedorAtual = controles.COD_FORNECEDOR;
           pesototal=0;
       
           for(i = 0; i< controles.length; i++){    
@@ -591,6 +594,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
+          fornecedorAtual = controle.COD_FORNECEDOR;
           document.getElementById('containerControlesImport').innerHTML = `<ul>
           <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
           <li>RELATÓRIO: <span id="controleREL" class="destacaImport"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${valueControle})" class="editarControleProdutor">Ver relatório</a></span></li>
@@ -617,7 +621,7 @@ const importarControle = async()=> {
       
   
 
-}     
+}        
 
 
 const salvaControle = async()=> {
@@ -630,6 +634,7 @@ const salvaControle = async()=> {
   let importadoPor = localStorage.getItem("nome");
   let statusAtual = document.getElementById("select-status").value;
 
+  
   await axios.post('http://138.204.68.18:3323/controles', 
               {codigo: codigo, 
                fornecedorCod:fornecedorAtual,

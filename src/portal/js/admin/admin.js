@@ -222,7 +222,8 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlessel/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorCod = '';
+          console.log(controles);
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let mercados = [];
           for(i = 0; i< controles.length; i++){    
@@ -316,7 +317,8 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlesemb/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorCod = '';
+          console.log(controles);
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let calibres = [];
           for(i = 0; i< controles.length; i++){    
@@ -389,8 +391,10 @@ const importarControle = async()=> {
     case "Expedicao" :
         await axios.get(`http://138.204.68.18:3324/api/controlesexp/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
+          
           let controles = (response.data);
-      
+          console.log(controles);
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
           pesototal=0;
       
           for(i = 0; i< controles.length; i++){    
@@ -438,6 +442,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
+          fornecedorAtual = controle.COD_FORNECEDOR;
           document.getElementById('containerControlesImport').innerHTML = `<ul>
           <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
           <li>RELATÓRIO: <span id="controleREL" class="destacaImport"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${valueControle})" class="editarControleProdutor">Ver relatório</a></span></li>
@@ -477,6 +482,7 @@ const salvaControle = async()=> {
   let importadoPor = localStorage.getItem("nome");
   let statusAtual = document.getElementById("select-status").value;
 
+  console.log(fornecedorAtual);
   await axios.post('http://138.204.68.18:3323/controles', 
               {codigo: codigo, 
                fornecedorCod:fornecedorAtual,

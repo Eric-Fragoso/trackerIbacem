@@ -80,7 +80,7 @@ const fnPopulaControles = async()=> {
                                 <td>${calculaPerda(control.RECEPCAO, control.SELECAO)} Kg</td>
                           </tr>`
                         break;
-                        case "Embalamento" :
+                        case "Embalagem" :
                           objetoInsert = objetoInsert +
                           `<tr align="center">
                                 <td>${fnConvertData(control.DATA_CONTROLE)}</td>
@@ -136,7 +136,7 @@ const fnPopulaControles = async()=> {
                               <td>${calculaPerda(control.RECEPCAO, control.SELECAO)} Kg</td>
                         </tr>`
                       break;
-                      case "Embalamento" :
+                      case "Embalagem" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
                               <td>${fnConvertData(control.DATA_CONTROLE)}</td>
