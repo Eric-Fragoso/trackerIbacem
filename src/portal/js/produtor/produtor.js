@@ -46,13 +46,14 @@ const fnPopulaControles = async()=> {
           break;
           default:
         }
-        console.log(controle);
+        //console.log(controle);
         if(controle.visivel){
             
               await axios.get(`http://138.204.68.18:3324/api/controles/acompanhamento/${cod}/${ano}/${cultura}`)
               .then(function(resposta){
                 var controls = (resposta.data);
                 controls.map(function (control) {
+                  console.log(control);
                   if (localStorage.getItem("dataInicial")){
                     if(taNoRange(fnConvertData(control.DATA_CONTROLE), localStorage.getItem("dataInicial"), localStorage.getItem("dataFinal"))){
                       switch (controle.passoAtual){
@@ -101,7 +102,7 @@ const fnPopulaControles = async()=> {
                                 <td>${Math.round(control.SELECAO)} Kg</td>
                                 <td>${Math.round(control.EMBALAMENTO)} Kg</td>
                                 <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
+                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
                           </tr>`
                         break;
                         default:
@@ -111,6 +112,7 @@ const fnPopulaControles = async()=> {
                         
                     }
                   }else{
+                    
                     switch (controle.passoAtual){
                       case "Recepcao" :
                         objetoInsert = objetoInsert +
@@ -157,7 +159,7 @@ const fnPopulaControles = async()=> {
                               <td>${Math.round(control.SELECAO)} Kg</td>
                               <td>${Math.round(control.EMBALAMENTO)} Kg</td>
                               <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                              <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO, control.EXPEDICAO)} Kg</td>
+                              <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
                         </tr>`
                       break;
                       default:
