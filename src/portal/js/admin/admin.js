@@ -20,7 +20,7 @@ const cadastrar = async(e)=> {
     let valueAcesso = document.getElementById("select-nivelAcesso").value;
     let vAa = document.getElementById("select-nivelAnalista").value;
 
-    console.log(vAa);
+    
    
       await axios.post(`http://138.204.68.18:3323/auth/register`, 
                   {
@@ -35,7 +35,7 @@ const cadastrar = async(e)=> {
                   }
       )
       .then(function(response){
-        console.log(response);
+        
         closeModalNovoUser();
         fnPopulaUsuarios();
       })
@@ -140,7 +140,7 @@ const fnPopulaUsuarios = async()=> {
 
 const deletarUsuario = async(id)=> {
   let tokenStr = localStorage.getItem("token");
-  console.log(id);
+ 
   await axios.delete(`http://138.204.68.18:3323/usuarios/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     fnPopulaUsuarios();  
@@ -222,7 +222,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlessel/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          console.log(controles);
+          
           fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let mercados = [];
@@ -317,7 +317,7 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlesemb/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          console.log(controles);
+          
           fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let calibres = [];
@@ -393,7 +393,7 @@ const importarControle = async()=> {
         .then(function(response){
           
           let controles = (response.data);
-          console.log(controles);
+       
           fornecedorAtual = controles[0].COD_FORNECEDOR;
           pesototal=0;
       
@@ -482,7 +482,7 @@ const salvaControle = async()=> {
   let importadoPor = localStorage.getItem("nome");
   let statusAtual = document.getElementById("select-status").value;
 
-  console.log(fornecedorAtual);
+
   await axios.post('http://138.204.68.18:3323/controles', 
               {codigo: codigo, 
                fornecedorCod:fornecedorAtual,
@@ -636,9 +636,9 @@ function changeCheckboxState(id){
 
 
 function changeCheckboxStateFornecedor(id){
-  console.log(id);
+
   var checkbox = document.getElementById(id+"forn");
-  console.log(checkbox);
+
   checkbox.checked = !checkbox.checked;
   if (checkbox.checked == true){
     atualizaControle(id,checkbox.checked);
@@ -699,7 +699,7 @@ await axios.post('http://138.204.68.18:3323/financeiros',
         {headers: {"Authorization" : `Bearer ${tokenStr}`} }
 )
 .then(function(response){
-  //console.log(response);
+
   fnPopulaFinanceirosFornecedor();
   //fnPopulaControles(); 
   //closeModalExibeImportacao();   
@@ -903,7 +903,7 @@ const fnPopulaControlesFornecedor = async()=> {
   .then(function(response){
     var controles = (response.data).controles;
       document.getElementById('select-controle').innerHTML = controles.map(function (controle) {
-        console.log(controle)
+
         return (
             "<option value=\""+controle._id+"\">"+controle.codigo+"</option><br/>"
             );
@@ -926,9 +926,11 @@ function guardaDados(){
 
 
 function fnConvertData(data){
+  
   let dia = data.substring(8,10);
   let mes = data.substring(5,7);
   let ano = data.substring(0,4);
+
 
   return dia+"/"+mes+"/"+ano;
 }
@@ -1072,7 +1074,7 @@ function filtraEmpresaControle(){
 
 
 const apagaControle = async(id)=> {
-  console.log("reeccebeu o id", id);
+
   let tokenStr = localStorage.getItem("token");
   await axios.delete(`http://138.204.68.18:3323/controles/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
@@ -1424,7 +1426,7 @@ async function exibeResumoEXP(ano,cod,cultura){
   .then(function(response){
     let controles = (response.data);
 
-    console.log(controles);
+
 
     pesototal=0;
 
@@ -1450,6 +1452,7 @@ async function exibeResumoEXP(ano,cod,cultura){
         `;
 
       for(i = 0; i< controles.length; i++){ 
+        console.log(controles);
         content+=`<tr>
         <td>${controles[i].MERCADO}</td>
         <td>${controles[i].CONTAINER}</td>
@@ -1478,13 +1481,13 @@ function escondeDivs(visivel){
 }
 
 const fnPopulaControlesFornecedorQualidade = async()=> {
-  console.log("tá por aqui");
+  
   let tokenStr = localStorage.getItem("token");
   await axios.get(`http://138.204.68.18:3323/controles/fornecedor/${document.getElementById("select-empresa-controle-qualidade").value}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     var controles = (response.data).controles;
       document.getElementById('select-controle-qualidade').innerHTML = controles.map(function (controle) {
-        console.log(controle)
+        
         return (
             "<option value=\""+controle._id+"\">"+controle.codigo+"</option><br/>"
             );
@@ -1537,7 +1540,7 @@ function linkPdf(controleId, etapa) {
     
     var images = (response.data).images;
         images.map(function (image) {
-          console.log(image.path);
+          
           if(fnPegaExtensao(image.path)==="pdf"){
 
             return window.open(image.path);
@@ -1618,8 +1621,9 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
           var soma1=0;
           var soma2=0;
           var total=0;
-
+          
           controls.map(function(controle){
+            console.log(controle);
             soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
             soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
             total = total + soma2;
