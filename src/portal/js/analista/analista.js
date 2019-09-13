@@ -351,19 +351,25 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          
-            document.getElementById('containerControlesImport').innerHTML = controles.map(function (controle) {
+          let cultura;
+          let variedade;
+          let volumekg=0;
+            controles.map(function (controle) {
               fornecedorAtual = controle.COD_FORNECEDOR;
-                  return (
-                    `<ul>
-                      <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
-                      <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${controle.COD_FORNECEDOR}</span></li>
-                      <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
-                      <li>VARIEDADE: <span id="controleVARIEDADE" class="destacaImport">${controle.VARIEDADE}</span></li>
-                      <li>VOLUME: <span id="controleVOLUME" class="destacaImport">${controle.VOLUME_KG+"Kg"}</span></li>
-                    </ul>`
-                    );
+                cultura = controle.CULTURA;
+                variedade = controle.VARIEDADE;
+                volumekg += parseFloat(controle.VOLUME_KG);
+                console.log(volumekg, controle.VOLUME_KG);
               }).join(''); 
+
+              document.getElementById('containerControlesImport').innerHTML = `<ul>
+              <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+              <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorAtual}</span></li>
+              <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${cultura}</span></li>
+              <li>VARIEDADE: <span id="controleVARIEDADE" class="destacaImport">${variedade}</span></li>
+              <li>VOLUME: <span id="controleVOLUME" class="destacaImport">${volumekg+"Kg"}</span></li>
+            </ul>`;
+            openModalExibeImportacao();
             
         })
         .catch(function(error){
@@ -378,7 +384,8 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controlessel/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorAtual = controles[i].COD_FORNECEDOR;
+          
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let mercados = [];
           for(i = 0; i< controles.length; i++){    
@@ -463,15 +470,20 @@ const importarControle = async()=> {
             content += `</tbody>
                         </table></div>`;
             document.getElementById('containerControlesImport').innerHTML = content;
+            openModalExibeImportacao();
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     case "Embalagem" :
         await axios.get(`http://138.204.68.18:3324/api/controlesemb/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
+          
           fornecedorAtual = controles[0].COD_FORNECEDOR;
       
           let calibres = [];
@@ -537,16 +549,22 @@ const importarControle = async()=> {
                         </table>
                         </div>`;
             document.getElementById('containerControlesImport').innerHTML = content;
+            openModalExibeImportacao();
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     case "Expedicao" :
         await axios.get(`http://138.204.68.18:3324/api/controlesexp/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
+          
           let controles = (response.data);
-          fornecedorAtual = controles.COD_FORNECEDOR;
+       
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
           pesototal=0;
       
           for(i = 0; i< controles.length; i++){    
@@ -585,21 +603,24 @@ const importarControle = async()=> {
                         </table>
                         </div>`;
             document.getElementById('containerControlesImport').innerHTML = content;
+            openModalExibeImportacao();
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     case "Comercial" :
         await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorAtual = controle.COD_FORNECEDOR;
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
           document.getElementById('containerControlesImport').innerHTML = `<ul>
           <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
           <li>RELATÓRIO: <span id="controleREL" class="destacaImport"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${valueControle})" class="editarControleProdutor">Ver relatório</a></span></li>
-        </ul>`
-            /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
+        </ul>`;            /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
                   return (
                     `<ul>
                       <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
@@ -608,20 +629,19 @@ const importarControle = async()=> {
                     );
               }).join(''); */
             
+              openModalExibeImportacao();   
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     default:
   }
-
-  openModalExibeImportacao();
   
-      
-  
-
-}        
+}          
 
 
 const salvaControle = async()=> {
@@ -1262,6 +1282,7 @@ function escondeDivs(visivel){
 fnPopulaControles();
 fnPopulaEmpresas();
 fnPopulaFinanceiros();
+
 
 switch (localStorage.getItem("subacesso")){
   case " ":

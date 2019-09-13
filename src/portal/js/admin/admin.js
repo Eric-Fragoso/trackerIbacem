@@ -195,19 +195,25 @@ const importarControle = async()=> {
         await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          
-            document.getElementById('containerControlesImport').innerHTML = controles.map(function (controle) {
+          let cultura;
+          let variedade;
+          let volumekg=0;
+            controles.map(function (controle) {
               fornecedorAtual = controle.COD_FORNECEDOR;
-                  return (
-                    `<ul>
-                      <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
-                      <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${controle.COD_FORNECEDOR}</span></li>
-                      <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${controle.CULTURA}</span></li>
-                      <li>VARIEDADE: <span id="controleVARIEDADE" class="destacaImport">${controle.VARIEDADE}</span></li>
-                      <li>VOLUME: <span id="controleVOLUME" class="destacaImport">${controle.VOLUME_KG+"Kg"}</span></li>
-                    </ul>`
-                    );
+                cultura = controle.CULTURA;
+                variedade = controle.VARIEDADE;
+                volumekg += parseFloat(controle.VOLUME_KG);
+                console.log(volumekg, controle.VOLUME_KG);
               }).join(''); 
+
+              document.getElementById('containerControlesImport').innerHTML = `<ul>
+              <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
+              <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorAtual}</span></li>
+              <li>CULTURA: <span id="controleCULTURA" class="destacaImport">${cultura}</span></li>
+              <li>VARIEDADE: <span id="controleVARIEDADE" class="destacaImport">${variedade}</span></li>
+              <li>VOLUME: <span id="controleVOLUME" class="destacaImport">${volumekg+"Kg"}</span></li>
+            </ul>`;
+            openModalExibeImportacao();
             
         })
         .catch(function(error){
@@ -308,9 +314,13 @@ const importarControle = async()=> {
             content += `</tbody>
                         </table></div>`;
             document.getElementById('containerControlesImport').innerHTML = content;
+            openModalExibeImportacao();
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     case "Embalagem" :
@@ -383,9 +393,13 @@ const importarControle = async()=> {
                         </table>
                         </div>`;
             document.getElementById('containerControlesImport').innerHTML = content;
+            openModalExibeImportacao();
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     case "Expedicao" :
@@ -433,21 +447,24 @@ const importarControle = async()=> {
                         </table>
                         </div>`;
             document.getElementById('containerControlesImport').innerHTML = content;
+            openModalExibeImportacao();
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     case "Comercial" :
         await axios.get(`http://138.204.68.18:3324/api/controles/${valueControle}/${valueAno}/${valueCultura}`)
         .then(function(response){
           let controles = (response.data);
-          fornecedorAtual = controle.COD_FORNECEDOR;
+          fornecedorAtual = controles[0].COD_FORNECEDOR;
           document.getElementById('containerControlesImport').innerHTML = `<ul>
           <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
           <li>RELATÓRIO: <span id="controleREL" class="destacaImport"><a href="javascript:;" onclick="carregaResumoComercial(${controles[0].COD_FORNECEDOR},${valueControle})" class="editarControleProdutor">Ver relatório</a></span></li>
-        </ul>`
-            /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
+        </ul>`;            /*document.getElementById('viewComercial').innerHTML = controles.map(function (controle) {
                   return (
                     `<ul>
                       <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
@@ -456,19 +473,18 @@ const importarControle = async()=> {
                     );
               }).join(''); */
             
+              openModalExibeImportacao();   
         })
         .catch(function(error){
             console.warn(error);
+            document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+            document.getElementById('erroImportData').style.display = "block";
+            setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
         });
     break;
     default:
   }
-
-  openModalExibeImportacao();
   
-      
-  
-
 }      
 
 
@@ -1155,6 +1171,7 @@ async function exibeResumoCOM(ano,cod,cultura){
       
   })
   .catch(function(error){
+    //document.getElementById('viewRecepcao').innerHTML = '<p>Dados não encontrados para essa etapa!</p>';
       console.warn(error);
   });
 }
@@ -1247,6 +1264,7 @@ async function exibeResumoREC(ano,cod,cultura){
       
   })
   .catch(function(error){
+    document.getElementById('viewRecepcao').innerHTML = '<p>Dados não encontrados para essa etapa!</p>';
       console.warn(error);
   });
 }
@@ -1342,6 +1360,7 @@ async function exibeResumoSEL(ano,cod,cultura){
       document.getElementById('viewSelecao').innerHTML = content;
   })
   .catch(function(error){
+    document.getElementById('viewSelecao').innerHTML = '<p>Dados não encontrados para essa etapa!</p>';
       console.warn(error);
   });
 }
@@ -1416,6 +1435,7 @@ async function exibeResumoEMB(ano,cod,cultura){
       document.getElementById('viewEmbalamento').innerHTML = content;
   })
   .catch(function(error){
+    document.getElementById('viewEmbalamento').innerHTML = '<p>Dados não encontrados para essa etapa!</p>';
       console.warn(error);
   });
 }
@@ -1467,6 +1487,8 @@ async function exibeResumoEXP(ano,cod,cultura){
       document.getElementById('viewExpedicao').innerHTML = content;
   })
   .catch(function(error){
+      
+      document.getElementById('viewExpedicao').innerHTML = '<p>Dados não encontrados para essa etapa!</p>';
       console.warn(error);
   });
 }
@@ -1509,9 +1531,13 @@ const fnPopulaQualidades = async()=> {
     var images = (response.data).images;
     
       document.getElementById('containerQualiadade').innerHTML = images.map(function (qualidade) {
-        if (qualidade.aprovado == false){
-          
-          var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
+          if (qualidade.aprovado){      
+          var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-check-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
+            return (
+              `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
+              );
+            }else{
+            var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
             return (
               `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
               );
