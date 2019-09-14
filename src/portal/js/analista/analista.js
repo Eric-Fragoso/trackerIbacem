@@ -641,7 +641,69 @@ const importarControle = async()=> {
     default:
   }
   
-}          
+}   
+
+function changeCheckboxStateQual(id){
+  var checkbox3 = document.getElementById(id);
+  checkbox3.checked = !checkbox3.checked;
+  if (checkbox3.checked == true){
+    atualizaQual(id,true);
+    document.getElementById(id).parentElement.classList.remove("fa-times-circle");
+    document.getElementById(id).parentElement.classList.add("fa-check-circle");
+  }else{
+    atualizaQual(id,false);
+    document.getElementById(id).parentElement.classList.add("fa-times-circle");
+    document.getElementById(id).parentElement.classList.remove("fa-check-circle");
+  } 
+  
+}
+
+const atualizaQual = async(id, aprovado)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.put(`http://138.204.68.18:3323/images/${id}`, 
+              {id:id,
+               aprovado: aprovado
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    //fnPopulaFinanceiros(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+const fnPopulaQualidades = async()=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/images',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var images = (response.data).images;
+    
+      document.getElementById('containerQualiadade').innerHTML = images.map(function (qualidade) {
+          if (qualidade.aprovado){      
+          var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-check-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
+            return (
+              `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
+              );
+            }else{
+            var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
+            return (
+              `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
+              );
+          }
+     
+        
+        
+        }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+
+    });
+   setTimeout(rodaTabelas, 1000);    
+}
 
 
 const salvaControle = async()=> {
@@ -1282,7 +1344,7 @@ function escondeDivs(visivel){
 fnPopulaControles();
 fnPopulaEmpresas();
 fnPopulaFinanceiros();
-
+fnPopulaQualidades();
 
 switch (localStorage.getItem("subacesso")){
   case " ":

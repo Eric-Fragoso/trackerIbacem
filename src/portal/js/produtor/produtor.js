@@ -211,6 +211,7 @@ const fnPopulaControlesComercial = async()=> {
           break;
           default:
         }
+      if(controle.visivel){
         if (controle.passoAtual === "Comercial"){
           axios.get(`http://138.204.68.18:3324/api/comercial/${valueFornecedor}/${cod}`)
           .then(function(resposta){
@@ -257,7 +258,8 @@ const fnPopulaControlesComercial = async()=> {
             console.warn(error);
         });
       }
-      }).join('');   
+      }
+    }).join('');   
       fnPopulaFinanceiros();  
 
   })
