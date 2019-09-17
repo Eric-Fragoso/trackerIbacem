@@ -485,63 +485,48 @@ const importarControle = async()=> {
           let controles = (response.data);
           
           fornecedorAtual = controles[0].COD_FORNECEDOR;
+          let mercados = [];
+          let refugoTotal = 0;
+          let pesoTotal = 0;
+            for(i = 0; i< controles.length; i++){    
+              if(mercados.indexOf(controles[i].MERCADO) === -1){
       
-          let calibres = [];
-          for(i = 0; i< controles.length; i++){    
-              if(calibres.indexOf(controles[i].CALIBRE) === -1){
-                calibres.push(controles[i].CALIBRE);   
-                fornecedorCod = controles[i].COD_FORNECEDOR;   
-              }        
-          }
-      
-          acumulaMI = 0;
-          acumulaME = 0;
-          acumulaMR = 0;
-          pesototal = 0;
-          refugoTotal = 0
-          let mi =[];
-          let me =[];
-          let mr =[];
-          for(i = 0; i< calibres.length; i++){    
-            for(x = 0; x< controles.length; x++){    
-              if(calibres[i] === controles[x].CALIBRE){
-                acumulaMI = acumulaMI + controles[x].VOLUME_KG_MI;
-                acumulaME = acumulaME + controles[x].VOLUME_KG_ME;
-                acumulaMR = acumulaMR + controles[x].VOLUME_KG_REFUGO;
-                pesototal = pesototal + controles[x].VOLUME_KG_MI + controles[x].VOLUME_KG_ME + controles[x].VOLUME_KG_REFUGO;
-                refugoTotal = refugoTotal + controles[x].VOLUME_KG_REFUGO;
+                if((controles[i].MERCADO != "02-REFUGO LINHA 02") 
+                && (controles[i].MERCADO != "03-REFUGO LINHA 03")
+                && (controles[i].MERCADO != "04-REFUGO LINHA 04")
+                && (controles[i].MERCADO != "01-REFUGO LINHA 01")
+                && (controles[i].MERCADO != "REFUGO AMOSTRA")
+                && (controles[i].MERCADO != "REFUGO HWT")
+                && (controles[i].MERCADO != "REFUGO PÓS EMBALAMENTO")){
+                  pesoTotal = pesoTotal + controles[i].VOLUME
+                }else{
+                  refugoTotal = refugoTotal + controles[i].VOLUME;
+                }          
               }        
             }
       
-            mi.push(acumulaMI);
-            me.push(acumulaME);
-            mr.push(acumulaMR);
-      
-          acumulaMI = 0;
-          acumulaME = 0;
-          acumulaMR = 0;
-          }
+               
           let content = `<ul>
                           <li>CONTROLE: <span id="controleCOD" class="destacaImport">${valueControle}</span></li>
-                          <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorCod}</span></li>
+                          <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorAtual}</span></li>
                           <li>REFUGO TOTAL: <span id="controleCOD" class="destacaImport">${Math.round10(refugoTotal)+" KG"}</span></li>
-                          <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport">${Math.round10(pesototal)+" KG"}</span></li>
+                          <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport">${Math.round10(pesoTotal)+" KG"}</span></li>
                         </ul>
                         <div class="innerSc">
                 <table id="my-table" class="table tControles">
               <thead>
                 <tr>
-                  <th width="25%">Calibre</th>
+                  <th width="25%">Mercado</th>
                   <th width="18%">Peso Liquido</th>
                 </tr>
               </thead>
               <tbody id="tbody-controles">
               `;
       
-            for(i = 0; i< calibres.length; i++){ 
+            for(i = 0; i< controles.length; i++){ 
               content+=`<tr>
-              <td>${(calibres[i]=="N/D")?"REFUGO":calibres[i]}</td>
-              <td>${Math.round10(mi[i])+Math.round10(me[i])+Math.round10(mr[i])+" KG"}</td>
+              <td>${controles[i].MERCADO}</td>
+              <td>${Math.round10(controles[i].VOLUME)+" KG"}</td>
             </tr>`;
             
             };
@@ -1207,77 +1192,68 @@ async function exibeResumoSEL(ano,cod,cultura){
 
 async function exibeResumoEMB(ano,cod,cultura){
   await axios.get(`http://138.204.68.18:3324/api/controlesemb/${cod}/${ano}/${cultura}`)
-  .then(function(response){
-    let controles = (response.data);
-    fornecedorCod = '';
-
-    let calibres = [];
-    for(i = 0; i< controles.length; i++){    
-        if(calibres.indexOf(controles[i].CALIBRE) === -1){
-          calibres.push(controles[i].CALIBRE);   
-          fornecedorCod = controles[i].COD_FORNECEDOR;   
-        }        
-    }
-
-    acumulaMI = 0;
-    acumulaME = 0;
-    acumulaMR = 0;
-    pesototal = 0;
-    refugoTotal = 0
-    let mi =[];
-    let me =[];
-    let mr =[];
-    for(i = 0; i< calibres.length; i++){    
-      for(x = 0; x< controles.length; x++){    
-        if(calibres[i] === controles[x].CALIBRE){
-          acumulaMI = acumulaMI + controles[x].VOLUME_KG_MI;
-          acumulaME = acumulaME + controles[x].VOLUME_KG_ME;
-          acumulaMR = acumulaMR + controles[x].VOLUME_KG_REFUGO;
-          pesototal = pesototal + controles[x].VOLUME_KG_MI + controles[x].VOLUME_KG_ME + controles[x].VOLUME_KG_REFUGO;
-          refugoTotal = refugoTotal + controles[x].VOLUME_KG_REFUGO;
-        }        
-      }
-
-      mi.push(acumulaMI);
-      me.push(acumulaME);
-      mr.push(acumulaMR);
-
-    acumulaMI = 0;
-    acumulaME = 0;
-    acumulaMR = 0;
-    }
-    let content = `<ul>
-                    <li>CONTROLE: <span id="controleCOD" class="destacaImport2">${cod}</span></li>
-                    <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport2">${fornecedorCod}</span></li>
-                    <li>REFUGO TOTAL: <span id="controleCOD" class="destacaImport2">${Math.round10(refugoTotal)+" KG"}</span></li>
-                    <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport2">${Math.round10(pesototal)+" KG"}</span></li>
-                  </ul>
-          <table id="my-table" class="table tControles">
-        <thead>
-          <tr>
-            <th width="25%">Calibre</th>
-            <th width="18%">Peso Liquido</th>
-          </tr>
-        </thead>
-        <tbody id="tbody-controles">
-        `;
-
-      for(i = 0; i< calibres.length; i++){ 
-        content+=`<tr>
-        <td>${(calibres[i]=="N/D")?"REFUGO":calibres[i]}</td>
-        <td>${Math.round10(mi[i])+Math.round10(me[i])+Math.round10(mr[i])+" KG"}</td>
-      </tr>`;
-      
-      };
-      content += `</tbody>
-                  </table>`;
-      document.getElementById('viewEmbalamento').innerHTML = content;
-  })
-  .catch(function(error){
-      console.warn(error);
-  });
+      .then(function(response){
+        let controles = (response.data);
+        
+        fornecedorAtual = controles[0].COD_FORNECEDOR;
+        let mercados = [];
+        let refugoTotal = 0;
+        let pesoTotal = 0;
+          for(i = 0; i< controles.length; i++){    
+            if(mercados.indexOf(controles[i].MERCADO) === -1){
+    
+              if((controles[i].MERCADO != "02-REFUGO LINHA 02") 
+              && (controles[i].MERCADO != "03-REFUGO LINHA 03")
+              && (controles[i].MERCADO != "04-REFUGO LINHA 04")
+              && (controles[i].MERCADO != "01-REFUGO LINHA 01")
+              && (controles[i].MERCADO != "REFUGO AMOSTRA")
+              && (controles[i].MERCADO != "REFUGO HWT")
+              && (controles[i].MERCADO != "REFUGO PÓS EMBALAMENTO")){
+                pesoTotal = pesoTotal + controles[i].VOLUME
+              }else{
+                refugoTotal = refugoTotal + controles[i].VOLUME;
+              }          
+            }        
+          }
+    
+             
+        let content = `<ul>
+                        <li>CONTROLE: <span id="controleCOD" class="destacaImport">${cod}</span></li>
+                        <li>FORNECEDOR: <span id="controleFORNECEDOR" class="destacaImport">${fornecedorAtual}</span></li>
+                        <li>REFUGO TOTAL: <span id="controleCOD" class="destacaImport">${Math.round10(refugoTotal)+" KG"}</span></li>
+                        <li>PESO TOTAL: <span id="controleFORNECEDOR" class="destacaImport">${Math.round10(pesoTotal)+" KG"}</span></li>
+                      </ul>
+                      <div class="innerSc">
+              <table id="my-table" class="table tControles">
+            <thead>
+              <tr>
+                <th width="25%">Mercado</th>
+                <th width="18%">Peso Liquido</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-controles">
+            `;
+    
+          for(i = 0; i< controles.length; i++){ 
+            content+=`<tr>
+            <td>${controles[i].MERCADO}</td>
+            <td>${Math.round10(controles[i].VOLUME)+" KG"}</td>
+          </tr>`;
+          
+          };
+          content += `</tbody>
+                      </table>
+                      </div>`;
+          document.getElementById('viewEmbalamento').innerHTML = content;
+          
+      })
+      .catch(function(error){
+          console.warn(error);
+          document.getElementById('erroImportData').innerHTML="Dados não encontrados para essa fase";
+          document.getElementById('erroImportData').style.display = "block";
+          setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
+      });
 }
-
 
 async function exibeResumoEXP(ano,cod,cultura){
   await axios.get(`http://138.204.68.18:3324/api/controlesexp/${cod}/${ano}/${cultura}`)
