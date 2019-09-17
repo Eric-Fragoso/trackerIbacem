@@ -1480,8 +1480,8 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
             <td>${(controle.DESP_FRETE_CX).toFixed(2)}</td>
             <td>${controle.COMISSAO_REP}</td>
             <td>${controle.CUSTO_PH}</td>
-            <td>${controle.FRETE_COLHEITA}</td>
-            <td>${controle.FUNRURAL}</td>
+            <td>${(controle.FRETE_COLHEITA).toFixed(2)}</td>
+            <td>${(controle.FUNRURAL).toFixed(2)}</td>
             <td>${controle.NET_KG}</td>
             <td>${(controle.VOLUME).toFixed(2)}</td>
             <td>${(soma1).toFixed(2)}</td>
