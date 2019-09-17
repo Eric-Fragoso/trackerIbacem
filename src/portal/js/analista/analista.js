@@ -448,8 +448,8 @@ const importarControle = async()=> {
                 <table id="my-table" class="table tControles">
               <thead>
                 <tr>
-                  <th width="25%">Mercado</th>
-                  <th width="25%">Calibres</th>
+                  <!--th width="25%">Mercado</th>
+                  <th width="25%">Calibres</th-->
                   <th width="18%">Volume MI</th>
                   <th width="18%">Volume ME</th>
                   <th width="14%">Volume Refugo</th>
@@ -1176,8 +1176,8 @@ async function exibeResumoSEL(ano,cod,cultura){
           <table id="my-table" class="table tControles">
         <thead>
           <tr>
-            <th width="25%">Mercado</th>
-            <th width="25%">Calibres</th>
+            <!--th width="25%">Mercado</th>
+            <th width="25%">Calibres</th-->
             <th width="18%">Volume MI</th>
             <th width="18%">Volume ME</th>
             <th width="14%">Volume Refugo</th>

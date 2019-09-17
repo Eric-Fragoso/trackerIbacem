@@ -292,8 +292,8 @@ const importarControle = async()=> {
                 <table id="my-table" class="table tControles">
               <thead>
                 <tr>
-                  <th width="25%">Mercado</th>
-                  <th width="25%">Calibres</th>
+                  <!--th width="25%">Mercado</th>
+                  <th width="25%">Calibres</th-->
                   <th width="18%">Volume MI</th>
                   <th width="18%">Volume ME</th>
                   <th width="14%">Volume Refugo</th>
@@ -303,8 +303,8 @@ const importarControle = async()=> {
       
             for(i = 0; i< mercados.length; i++){ 
               content+=`<tr>
-              <td>${mercados[i]}</td>
-              <td>${cl[i]}</td>
+              <!--td>${mercados[i]}</td>
+              <td>${cl[i]}</td-->
               <td>${Math.round10(mi[i])+" KG"}</td>
               <td>${Math.round10(me[i])+" KG"}</td>
               <td>${Math.round10(mr[i])+" KG"}</td> 
@@ -1336,8 +1336,8 @@ async function exibeResumoSEL(ano,cod,cultura){
           <table id="my-table" class="table tControles">
         <thead>
           <tr>
-            <th width="25%">Mercado</th>
-            <th width="25%">Calibres</th>
+            <!--th width="25%">Mercado</th>
+            <th width="25%">Calibres</th-->
             <th width="18%">Volume MI</th>
             <th width="18%">Volume ME</th>
             <th width="14%">Volume Refugo</th>
