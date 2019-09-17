@@ -53,7 +53,7 @@ const fnPopulaControles = async()=> {
               .then(function(resposta){
                 var controls = (resposta.data);
                 controls.map(function (control) {
-                  console.log(control);
+                  console.log(controle.passoAtual);
                   if (localStorage.getItem("dataInicial")){
                     if(taNoRange(fnConvertData(control.DATA_CONTROLE), localStorage.getItem("dataInicial"), localStorage.getItem("dataFinal"))){
                       switch (controle.passoAtual){
@@ -94,6 +94,18 @@ const fnPopulaControles = async()=> {
                           </tr>`
                         break;
                         case "Expedicao" :
+                          objetoInsert = objetoInsert +
+                          `<tr align="center">
+                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
+                                <td>${control.CONTROLE}</td>
+                                <td>${Math.round(control.RECEPCAO)} Kg</td>
+                                <td>${Math.round(control.SELECAO)} Kg</td>
+                                <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                                <td>${Math.round(control.EXPEDICAO)} Kg</td>
+                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
+                          </tr>`
+                        break;
+                        case "Comercial" :
                           objetoInsert = objetoInsert +
                           `<tr align="center">
                                 <td>${fnConvertData(control.DATA_CONTROLE)}</td>
@@ -162,6 +174,18 @@ const fnPopulaControles = async()=> {
                               <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
                         </tr>`
                       break;
+                      case "Comercial" :
+                          objetoInsert = objetoInsert +
+                          `<tr align="center">
+                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
+                                <td>${control.CONTROLE}</td>
+                                <td>${Math.round(control.RECEPCAO)} Kg</td>
+                                <td>${Math.round(control.SELECAO)} Kg</td>
+                                <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                                <td>${Math.round(control.EXPEDICAO)} Kg</td>
+                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
+                          </tr>`
+                        break;
                       default:
                     }
                   }
@@ -297,9 +321,9 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   <td>${controle.DESC_COMERCIAL}</td>
                   <td>${(controle.OUTRAS_DESP_CX).toFixed(2)}</td>
                   <td>${(controle.RESU_FOB).toFixed(2)}</td>
+                  <td>${(controle.COMISSAO_IBACEM).toFixed(2)}</td>
                   <td>${(controle.CAMBIO).toFixed(4)}</td>
-                  <td>${(controle.RESU_FOB_BR).toFixed(2)}</td>
-                  <td>${controle.COMISSAO_IBACEM}</td>
+                  <td>${(controle.RESU_FOB_BR).toFixed(2)}</td>                  
                   <td>${(controle.DESP_FRETE_CX).toFixed(2)}</td>
                   <td>${controle.COMISSAO_REP}</td>
                   <td>${controle.CUSTO_PH}</td>
