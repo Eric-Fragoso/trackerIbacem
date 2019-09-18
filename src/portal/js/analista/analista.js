@@ -1432,8 +1432,8 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
           var total=0;
 
           controls.map(function(controle){
-            soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
-            soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
+            soma1 = controle.RESU_FOB_BR - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
+            soma2 = controle.RESU_FOB_BR - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
             total = total + soma2;
             objetoInsert = objetoInsert +
             `<tr align="center">
