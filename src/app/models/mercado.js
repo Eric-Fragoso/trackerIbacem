@@ -6,14 +6,9 @@ require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 
 const MercadoSchema = Schema({
-    mercadoCod:{
-        type: String,
-        require:true,
-        default:"",
-    },
     data:{
-        type: Date,
-        require:true,
+        type:Date,
+        default: Date.now,
     },
     resenha:{
         type: String,
