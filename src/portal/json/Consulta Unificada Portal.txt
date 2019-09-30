@@ -1,0 +1,70 @@
+select *
+from (
+      select  
+            'RECEPÇÃO' as ETAPA,
+            vp.CONTROLE as CONTROLE, 
+            vp.SAFRA, 
+            sum(vp.PESO) as PESO                                                                                                                  
+            
+            from mgcli.cli_dw_visaoprodutivaph_dq vp
+            where vp.PROCESSO = 1 
+            group by
+            vp.CONTROLE,
+            vp.SAFRA
+            
+      UNION ALL
+
+      select 'SELEÇÃO' as ETAPA, 
+             vp.CONTROLE, 
+             vp.SAFRA,
+             sum(vp.peso) as PESO
+                                                                                                                            
+
+          from mgcli.cli_dw_visaoprodutivaph_dq vp
+        where vp.PROCESSO in (2,4) 
+        AND (
+          ( vp.PROCESSO = 2 and
+                       upper(vp.MERCADO) not like '%REFUGO%'
+                )
+                      OR
+          ( vp.PROCESSO = 4 and
+            upper(vp.MERCADO) like '%REFUGO%' and
+            upper(vp.MERCADO) like '%SELE%'     
+          )
+           )   
+          group by
+              vp.CONTROLE,
+              vp.SAFRA
+
+
+
+      UNION ALL
+
+      select 
+            'EMBALAGEM' as ETAPA, 
+                    vp.CONTROLE,               
+                    vp.SAFRA,
+                    sum(vp.PESO) as PESO
+                                                                                                                                      
+                from mgcli.cli_dw_visaoprodutivaph_dq vp
+                where (
+                          (vp.PROCESSO = 4 and upper(vp.MERCADO) like '%LINHA%') or
+                          (vp.PROCESSO = 3)
+                         )
+                group by
+                    vp.CONTROLE,
+                    vp.SAFRA
+
+
+      UNION ALL
+
+      select 
+               'EXEPDIÇÃO' as ETAPA,
+                    vc.CONTROLE,
+                    vc.SAFRA,
+                    sum(vc.PESO_CX) as PESO
+                from mgagr.agr_bi_visaocomercial_dq vc 
+                group by
+                    vc.CONTROLE,
+                    vc.SAFRA
+)

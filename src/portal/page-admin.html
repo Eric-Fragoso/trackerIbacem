@@ -8,12 +8,14 @@
         <link rel="stylesheet" type="text/css" href="js/jquery.dynatable.css">
         <link rel="stylesheet" type="text/css" href="js/beanstalk.css">
         <link rel="stylesheet" type="text/css" href="js/jquery.dm-uploader.min.css">
+        
         <link href="js/datepicker.css" rel="stylesheet" type="text/css">
         <script src="js/datepicker.js"></script>
         <script src="js/datepicker.pt-BR.js"></script>
         <script src="js/jquery.dynatable.js"></script>
         <script src="js/jquery.mask.min.js"></script>
         <script src="js/all.js"></script>
+        <script src="js/ckeditor/ckeditor.js"></script>
         
         
 
@@ -104,6 +106,7 @@
                             <option value="controle">ANALISTA DE CONTROLE</option>
                             <option value="financeiro">ANALISTA DE FINANCEIRO</option>
                             <option value="qualidade">ANALISTA DE QUALIDADE</option>
+                            <option value="mercado">ANALISTA DE MERCADO</option>
                             <option value="senior">ANALISTA SENIOR</option>
                         </select>
                         </div>
@@ -342,6 +345,7 @@
                 <button class="tablinks" onclick="openCity(event, 'pageUsuarios')">USUÁRIOS</button>
                 <button class="tablinks" onclick="openCity(event, 'pageFinanceiroAdmin')">FINANCEIRO</button>
                 <button class="tablinks" onclick="openCity(event, 'pageQualidadeAdmin')">QUALIDADE</button>
+                <button class="tablinks" onclick="openCity(event, 'pageMercadoAdmin')">MERCADO</button>
             </div>
         </div>
 
@@ -573,6 +577,36 @@
               </div>
             </div>
 
+
+            <div id="pageMercadoAdmin" class="conteudoAba">
+              
+                <div id="entradaMercado" >
+                  <h2 id="titleMercado">INSERIR RELATÓRIO</h2>
+                  <form id="formEntMercado">
+                    <input id="inputResenhaMercado" type="textarea" placeholder="Escreva o relatório" value="">
+                    <a href="javascript:;" id="inserirEntradaMercado" class="confirmarEntrada" onclick="cadastrarMercado(event);" ><i class="fas fa-plus-circle"></i></i> Salvar</a>
+                  </form>
+                </div>
+                <div id="resultadoPesquisaMercado">
+                  <h2>RESENHAS REGISTRADAS</h2>
+                  <table id="my-table-Mercado" class="table tMercado">
+                    <thead>
+                      <tr>
+                        <th width="10%">Data</th>
+                        <th >Resenha</th>
+                        <th width="10%">Aprovado</th>
+                        <th width="10%"style="border-top-right-radius: 6px; background-color: #d63031">Excluir</th>
+                      </tr>
+                    </thead>
+                    <tbody id="containerMercado">
+                      
+                    </tbody>
+                  </table>
+                </div>
+
+                
+            </div>
+
       </div>
 
 
@@ -625,6 +659,13 @@
             const edd2 = easydropdown('#select-cultura');
             const edd3 = easydropdown('#select-status');
             const edd4 = easydropdown('#select-tipo-entrada');
+
+            var editor = CKEDITOR.replace('inputResenhaMercado');
+            editor.on( 'change', function( evt ) {
+            // getData() returns CKEditor's HTML content.
+            //console.log( 'Total bytes: ' + evt.editor.getData().length );
+            //console.log( evt.editor.getData());
+            });
 
             
             function openModalDeleteUser(id) {

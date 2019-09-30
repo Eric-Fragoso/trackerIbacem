@@ -52,148 +52,66 @@ const fnPopulaControles = async()=> {
               await axios.get(`http://138.204.68.18:3324/api/controles/acompanhamento/${cod}/${ano}/${cultura}`)
               .then(function(resposta){
                 var controls = (resposta.data);
-                controls.map(function (control) {
-                  console.log(controle.passoAtual);
-                  if (localStorage.getItem("dataInicial")){
-                    if(taNoRange(fnConvertData(control.DATA_CONTROLE), localStorage.getItem("dataInicial"), localStorage.getItem("dataFinal"))){
-                      switch (controle.passoAtual){
-                        case "Recepcao" :
-                          objetoInsert = objetoInsert +
-                          `<tr align="center">
-                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                                <td>${control.CONTROLE}</td>
-                                <td>${Math.round(control.RECEPCAO)} Kg</td>
-                                <td>---</td>
-                                <td>---</td>
-                                <td>---</td>
-                                <td>${calculaPerda(control.RECEPCAO)} Kg</td>
-                          </tr>`
-                        break;
-                        case "Selecao" :
-                          objetoInsert = objetoInsert +
-                          `<tr align="center">
-                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                                <td>${control.CONTROLE}</td>
-                                <td>${Math.round(control.RECEPCAO)} Kg</td>
-                                <td>${Math.round(control.SELECAO)} Kg</td>
-                                <td>---</td>
-                                <td>---</td>
-                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO)} Kg</td>
-                          </tr>`
-                        break;
-                        case "Embalagem" :
-                          objetoInsert = objetoInsert +
-                          `<tr align="center">
-                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                                <td>${control.CONTROLE}</td>
-                                <td>${Math.round(control.RECEPCAO)} Kg</td>
-                                <td>${Math.round(control.SELECAO)} Kg</td>
-                                <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                                <td>---</td>
-                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
-                          </tr>`
-                        break;
-                        case "Expedicao" :
-                          objetoInsert = objetoInsert +
-                          `<tr align="center">
-                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                                <td>${control.CONTROLE}</td>
-                                <td>${Math.round(control.RECEPCAO)} Kg</td>
-                                <td>${Math.round(control.SELECAO)} Kg</td>
-                                <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                                <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
-                          </tr>`
-                        break;
-                        case "Comercial" :
-                          objetoInsert = objetoInsert +
-                          `<tr align="center">
-                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                                <td>${control.CONTROLE}</td>
-                                <td>${Math.round(control.RECEPCAO)} Kg</td>
-                                <td>${Math.round(control.SELECAO)} Kg</td>
-                                <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                                <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
-                          </tr>`
-                        break;
-                        default:
-                      }
-                      
-                        
-                        
-                    }
-                  }else{
-                    
-                    switch (controle.passoAtual){
+                switch (controle.passoAtual){
                       case "Recepcao" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                              <td>${control.CONTROLE}</td>
-                              <td>${Math.round(control.RECEPCAO)} Kg</td>
+                              <td>${controls[0].CONTROLE}</td>
+                              <td>${Math.round(controls[0].PESO)} Kg</td>
                               <td>---</td>
                               <td>---</td>
                               <td>---</td>
-                              <td>${calculaPerda(control.RECEPCAO)} Kg</td>
+                              <td>${calculaPerda(controls[0].PESO)} Kg</td>
                         </tr>`
                       break;
                       case "Selecao" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                              <td>${control.CONTROLE}</td>
-                              <td>${Math.round(control.RECEPCAO)} Kg</td>
-                              <td>${Math.round(control.SELECAO)} Kg</td>
+                              <td>${controls[0].CONTROLE}</td>
+                              <td>${Math.round(controls[0].PESO)} Kg</td>
+                              <td>${Math.round(controls[1].PESO)} Kg</td>
                               <td>---</td>
                               <td>---</td>
-                              <td>${calculaPerda(control.RECEPCAO, control.SELECAO)} Kg</td>
+                              <td>${calculaPerda(controls[0].PESO, controls[1].PESO)} Kg</td>
                         </tr>`
                       break;
                       case "Embalagem" :
+                          console.log(controls);
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                              <td>${control.CONTROLE}</td>
-                              <td>${Math.round(control.RECEPCAO)} Kg</td>
-                              <td>${Math.round(control.SELECAO)} Kg</td>
-                              <td>${Math.round(control.EMBALAMENTO)} Kg</td>
+                              <td>${controls[0].CONTROLE}</td>
+                              <td>${Math.round(controls[0].PESO)} Kg</td>
+                              <td>${Math.round(controls[1].PESO)} Kg</td>
+                              <td>${Math.round(controls[2].PESO)} Kg</td>
                               <td>---</td>
-                              <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
+                              <td>${calculaPerda(controls[0].PESO, controls[1].PESO, controls[2].PESO)} Kg</td>
                         </tr>`
                       break;
                       case "Expedicao" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                              <td>${control.CONTROLE}</td>
-                              <td>${Math.round(control.RECEPCAO)} Kg</td>
-                              <td>${Math.round(control.SELECAO)} Kg</td>
-                              <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                              <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                              <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
+                              <td>${controls[0].CONTROLE}</td>
+                              <td>${Math.round(controls[0].PESO)} Kg</td>
+                              <td>${Math.round(controls[1].PESO)} Kg</td>
+                              <td>${Math.round(controls[2].PESO)} Kg</td>
+                              <td>${Math.round(controls[3].PESO)} Kg</td>
+                              <td>${calculaPerda(controls[0].PESO, controls[1].PESO, controls[2].PESO)} Kg</td>
                         </tr>`
                       break;
                       case "Comercial" :
                           objetoInsert = objetoInsert +
                           `<tr align="center">
-                                <td>${fnConvertData(control.DATA_CONTROLE)}</td>
-                                <td>${control.CONTROLE}</td>
-                                <td>${Math.round(control.RECEPCAO)} Kg</td>
-                                <td>${Math.round(control.SELECAO)} Kg</td>
-                                <td>${Math.round(control.EMBALAMENTO)} Kg</td>
-                                <td>${Math.round(control.EXPEDICAO)} Kg</td>
-                                <td>${calculaPerda(control.RECEPCAO, control.SELECAO, control.EMBALAMENTO)} Kg</td>
+                                <td>${controls[0].CONTROLE}</td>
+                                <td>${Math.round(controls[0].PESO)} Kg</td>
+                                <td>${Math.round(controls[1].PESO)} Kg</td>
+                                <td>${Math.round(controls[2].PESO)} Kg</td>
+                                <td>${Math.round(controls[3].PESO)} Kg</td>
+                                <td>${calculaPerda(controls[0].PESO, controls[1].PESO, controls[2].PESO)} Kg</td>
                           </tr>`
                         break;
                       default:
                     }
-                  }
-                      
-                  }).join('');  
-                
                   return (document.getElementById('containerControles').innerHTML = objetoInsert);
-                  
               })
               .catch(function(error){
                 console.warn(error);
@@ -293,6 +211,10 @@ const fnPopulaControlesComercial = async()=> {
   
 
 } 
+
+
+
+
 async function carregaResumoComercial(fornecedorCod, controleCod){
   let objetoInsert= '';
   await axios.get(`http://138.204.68.18:3324/api/relatorio/${fornecedorCod}/${controleCod}`)
@@ -303,8 +225,8 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
           var total=0;
 
           controls.map(function(controle){
-            soma1 = controle.RESU_FOB_BR - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
-            soma2 = controle.RESU_FOB_BR - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
+            soma1 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL;
+            soma2 = controle.RESU_FOB_BR - controle.COMISSAO_IBACEM - controle.DESP_FRETE_CX - controle.COMISSAO_REP - controle.CUSTO_PH - controle.FRETE_COLHEITA - controle.FUNRURAL - controle.ADT_CX_ETOTAL - controle.ADT_CX_STOTAL;
             total = total + soma2;
             objetoInsert = objetoInsert +
             `<tr align="center">
@@ -652,11 +574,49 @@ const fnPopulaControlesQualidade = async()=> {
       console.warn(error);
 
     });
-    
+    fnPopulaMercados();
     setTimeout(rodaTabelas, 500);  
   
     
 }  
+
+function verMercado(resenha, id, data){
+   document.getElementById('mercadoData').innerHTML = data;
+   //console.log(resenha);
+   document.getElementById('textoMercado').innerHTML= resenha;
+   openModalMercado();
+ }
+
+const fnPopulaMercados = async()=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/mercados',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var mercados = (response.data).mercados;
+    
+    
+      document.getElementById('containerMercado').innerHTML = mercados.map(function (mercado) {
+        
+                
+          var ver = `<a href="javascript:;" class="editarControleProdutor"><i class="far fa-eye"></i> Ver</a>`;
+          
+
+          if(mercado.aprovado){
+            return (
+              `<tr align="center"><td>${fnConvertData(mercado.data)}</td><td>${(mercado.resenha).substring(0, 90) + "..."}</td><td><div class="tdClicavel" onclick="verMercado('${mercado.resenha}','${mercado._id}','${fnConvertData(mercado.data)}');">${ver}</div></td></tr>`
+              );
+          }
+          
+       }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+
+    });
+    setTimeout(rodaTabelas, 1000);    
+}
+
+
+
 
 function rodaTabelas(){
   $('#my-table').dynatable({

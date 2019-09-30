@@ -1316,11 +1316,76 @@ function escondeDivs(visivel){
   document.getElementById(visivel).style.display = "block";
 }
 
+const apagaMercado = async(id)=> {
+
+  let tokenStr = localStorage.getItem("token");
+  await axios.delete(`http://138.204.68.18:3323/mercados/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    fnPopulaMercados(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
+
+const cadastrarMercado = async(e)=> {
+  let tokenStr = localStorage.getItem("token");
+  
+  e.preventDefault();
+  //var dados = CKEDITOR.inputResenhaMercado.getData();
+  //console.log(document.getElementById("inputResenhaMercado").text);
+  console.log(editor.getData().replace(/(\r\n|\n|\r)/gm, ""));
+ 
+  await axios.post('http://138.204.68.18:3323/mercados', 
+              { resenha: editor.getData().replace(/(\r\n|\n|\r)/gm, ""),
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+  
+    fnPopulaMercados();
+    //fnPopulaControles(); 
+    //closeModalExibeImportacao();   
+    
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+  
+  }
+
+const fnPopulaMercados = async()=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/mercados',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var mercados = (response.data).mercados;
+    
+    
+      document.getElementById('containerMercado').innerHTML = mercados.map(function (mercado) {
+        
+          var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
+          return (
+              `<tr align="center"><td>${fnConvertData(mercado.data)}</td><td>${mercado.resenha}</td><td><div class="tdClicavel" onclick="apagaMercado('${mercado._id}');">${apagar}</div></td></tr>`
+              );
+          
+       }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+
+    });
+    setTimeout(rodaTabelas, 1000);    
+}
+
 
 fnPopulaControles();
 fnPopulaEmpresas();
 fnPopulaFinanceiros();
 fnPopulaQualidades();
+fnPopulaMercados();
+
+
 
 switch (localStorage.getItem("subacesso")){
   case " ":
@@ -1331,39 +1396,54 @@ switch (localStorage.getItem("subacesso")){
       document.getElementById('default').style.display = "block";
       document.getElementById('abaFinan').style.display = "none";
       document.getElementById('abaQuali').style.display = "none";
-
+      document.getElementById('abaMercado').style.display = "none";
       document.getElementById('pageControlesAnalista').style.display = "block";
       document.getElementById('pageFinanceiroAnalista').style.display = "none";
       document.getElementById('pageQualidadeAnalista').style.display = "none";
+      document.getElementById('pageMercadoAdmin').style.display = "none";
       break;
   case "financeiro":
       document.getElementById('default').style.display = "none";
       document.getElementById('abaFinan').style.display = "block";
       document.getElementById('abaQuali').style.display = "none";
-
+      document.getElementById('abaMercado').style.display = "none";
       document.getElementById('pageControlesAnalista').style.display = "none";
       document.getElementById('pageFinanceiroAnalista').style.display = "block";
       document.getElementById('pageQualidadeAnalista').style.display = "none";
+      document.getElementById('pageMercadoAdmin').style.display = "none";
       
       break;
   case "qualidade":
       document.getElementById('default').style.display = "none";
       document.getElementById('abaFinan').style.display = "none";
       document.getElementById('abaQuali').style.display = "block";
-      
+      document.getElementById('abaMercado').style.display = "none";
       document.getElementById('pageControlesAnalista').style.display = "none";
       document.getElementById('pageFinanceiroAnalista').style.display = "none";
       document.getElementById('pageQualidadeAnalista').style.display = "block";
-      
+      document.getElementById('pageMercadoAdmin').style.display = "none";
 
       break;
+  case "mercado":
+    document.getElementById('default').style.display = "none";
+    document.getElementById('abaFinan').style.display = "none";
+    document.getElementById('abaQuali').style.display = "none";
+    document.getElementById('abaMercado').style.display = "block";
+    document.getElementById('pageControlesAnalista').style.display = "none";
+    document.getElementById('pageFinanceiroAnalista').style.display = "none";
+    document.getElementById('pageQualidadeAnalista').style.display = "none";
+    document.getElementById('pageMercadoAdmin').style.display = "block";
+
+    break;
   case "senior":
       document.getElementById('default').style.display = "block";
       document.getElementById('abaFinan').style.display = "block";
       document.getElementById('abaQuali').style.display = "block";
+      document.getElementById('abaMercado').style.display = "block";
       document.getElementById('pageControlesAnalista').style.display = "block";
       document.getElementById('pageFinanceiroAnalista').style.display = "none";
       document.getElementById('pageQualidadeAnalista').style.display = "none";
+      document.getElementById('pageMercadoAdmin').style.display = "none";
 
       break;
   default:

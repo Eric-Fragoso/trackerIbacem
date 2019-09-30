@@ -112,13 +112,15 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 
 #ModalDeleteUser p, #ModalDeleteRegistro p{margin:40px 0;}
 .cancelarDelete{background:#d63031;border-radius: 6px; width: 130px; height: 40px; color: white; cursor: pointer; float: left;}
-#confirmarDelete, #confirmarImport, #confirmarEntrada, #confirmarComment{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
+#confirmarDelete, #confirmarImport, #confirmarEntrada, #confirmarEntradaMercado, #confirmarComment{border-radius: 6px;background-color: #029184; width: 80px; height: 40px; color: white; cursor: pointer; float: left;margin-right: 30px;}
 
-#inserirEntrada{background-color: #029184!important; width: 140px!important; float: right!important;border-radius: 6px; height: 30px; color: white; cursor: pointer;padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
+#inserirEntrada, #inserirEntradaMercado{background-color: #029184!important; width: 140px!important; float: right!important;border-radius: 6px; height: 30px; color: white; cursor: pointer;padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
 #editarEntradaFinanceiro{background-color: #0984e3!important; width: 140px!important; float: right!important;border-radius: 6px; height: 30px; color: white; cursor: pointer;padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
 
 #escondeCampo{position: absolute;  background-color: rgb(242, 243, 227);  width: 262px;  height: 58px;  z-index: 50;  right: 99px;  bottom: 97px;  display: block;}
 #confirmarUserEditar{height:30px!important; padding-top: 13px; text-decoration: none; font-size: 13px; text-align: center}
+
+#inserirEntradaMercado{margin-top: 10px; margin-bottom: 10px; display: block;}
 
 .hidden{display: none;}
 .innerSc{height: 280px;overflow: auto;}
@@ -192,11 +194,12 @@ header{border-bottom: 1px solid #029184; padding: 30px 0; width: 100%; height: 7
 #input-descricao{width:280px!important}
 #input-nf{width:80px!important}
 #entradaFinanceira {display: none}
-#entradaFinanceira .edd-root{width: 180px!important;}
-.confirmarEntrada{width:140px!important; float:right!important}
+#entradaFinanceira .edd-root, #entradaMercado .edd-root{width: 180px!important;}
+.confirmarEntrada {width:140px!important; float:right!important}
 
-#resultadoPesquisaFinanceiro{ padding-top: 20px}
-#pesquisaFinanceira .edd-root, #pesquisaControle .edd-root{float: left; width: 350px}
+#resultadoPesquisaFinanceiro, #resultadoPesquisaMercado{ padding-top: 20px}
+#resultadoPesquisaMercado{margin-top: 40px}
+#pesquisaFinanceira .edd-root, #pesquisaControle .edd-root, #pesquisaMercado .edd-root{float: left; width: 350px}
 
 .someUpload{animation: someUpload 2s}
 

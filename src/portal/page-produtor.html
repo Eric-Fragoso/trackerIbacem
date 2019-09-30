@@ -95,6 +95,22 @@
             </div>
         </div>
 
+        <!--MODAL MERCADO-->
+        <!--MODAL MERCADO-->
+        <!--MODAL MERCADO-->
+        <div id="ModalMercado" class="modal">
+          <span class="close cursor" onclick="closeModalMercado();">&times;</span>
+          <div class="modal-content6">
+              <h2>RELATÓRIO DE MERCADO</h2>
+              <div id="containerMercado2" style="height: 290px;">
+                <ul id="dadosMercado">
+                    <li>DATA: <span id="mercadoData" class="destacaImport"></span></li>
+                  </ul>
+                  <div id="textoMercado" data-content="html"></div>
+              </div>
+          </div>
+      </div>
+
 
         <div id="menuHolder" >
             <div id="abas">
@@ -102,6 +118,7 @@
                 <button class="tablinks" onclick="openCity(event, 'pageComercialProdutor')" >COMERCIAL</button>
                 <button class="tablinks" onclick="openCity(event, 'pageFinanceiroProdutor')" >FINANCEIRO</button>
                 <button class="tablinks" onclick="openCity(event, 'pageQualidadeProdutor')" >QUALIDADE</button>
+                <button class="tablinks" onclick="openCity(event, 'pageMercadoAdmin')" >MERCADO</button>
             </div>
         </div>
 
@@ -118,7 +135,7 @@
                     <table id="my-table" class="table tControles">
                       <thead>
                         <tr>
-                          <th width="11%">Entrada</th>
+                          <!--th width="11%">Entrada</th-->
                           <th width="9%">Controle</th>
                           <th>Recepção</th>
                           <th>Seleção</th>
@@ -159,12 +176,6 @@
                   </table>
                 </div>
               </div>
-
-
-
-
-
-
 
 
                 <div id="pageFinanceiroProdutor" class="conteudoAba">
@@ -232,7 +243,26 @@
                 </div>
                 </div>
 
-            </div>
+                <div id="pageMercadoAdmin" class="conteudoAba">
+              
+                 <div id="entradaMercado">
+                    <h2>RESENHAS REGISTRADAS</h2>
+                    <table id="my-table-Mercado" class="table tMercado">
+                      <thead>
+                        <tr>
+                          <th width="10%">Data</th>
+                          <th >Resenha</th>
+                          <th width="10%"style="border-top-right-radius: 6px; ">Ver</th>
+                        </tr>
+                      </thead>
+                      <tbody id="containerMercado">
+                        
+                      </tbody>
+                    </table>
+                  </div>
+  
+                  
+              </div>
         </div>
 
 
@@ -247,6 +277,14 @@
             // Fecha modal Comercial
             function closeModalComercial() {
               document.getElementById('ModalComercial').style.display = "none";
+            }
+
+            function openModalMercado() {
+              document.getElementById('ModalMercado').style.display = "block";              
+            }
+            // Fecha modal Mercado
+            function closeModalMercado() {
+              document.getElementById('ModalMercado').style.display = "none";
             }
 
 

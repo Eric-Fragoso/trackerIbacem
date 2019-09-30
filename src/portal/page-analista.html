@@ -14,6 +14,7 @@
         <link href="js/datepicker.css" rel="stylesheet" type="text/css">
         <script src="js/datepicker.js"></script>
         <script src="js/datepicker.pt-BR.js"></script>
+        <script src="js/ckeditor/ckeditor.js"></script>
         <title>IBACEM - Sistema de Gerenciamento de Controles e Usuários</title>
         <meta charset="UTF-8">
 
@@ -215,6 +216,7 @@
                 <button class="tablinks" onclick="openCity(event, 'pageControlesAnalista')" id="default">CONTROLES</button>
                 <button class="tablinks" onclick="openCity(event, 'pageFinanceiroAnalista')" id="abaFinan">FINANCEIRO</button>
                 <button class="tablinks" onclick="openCity(event, 'pageQualidadeAnalista')"id="abaQuali">QUALIDADE</button>
+                <button class="tablinks" onclick="openCity(event, 'pageMercadoAdmin')" id="abaMercado">MERCADO</button>
             </div>
         </div>
 
@@ -402,9 +404,38 @@
                   </table>
                 </div>
               </div>
+              
+            <div id="pageMercadoAdmin" class="conteudoAba">
+              
+              <div id="entradaMercado" >
+                <h2 id="titleMercado">INSERIR RELATÓRIO</h2>
+                <form id="formEntMercado">
+                  <input id="inputResenhaMercado" type="textarea" placeholder="Escreva o relatório" value="">
+                  <a href="javascript:;" id="inserirEntradaMercado" class="confirmarEntrada" onclick="cadastrarMercado(event);" ><i class="fas fa-plus-circle"></i></i> Salvar</a>
+                </form>
               </div>
-            </div>
+              <div id="resultadoPesquisaMercado">
+                <h2>RESENHAS REGISTRADAS</h2>
+                <table id="my-table-Mercado" class="table tMercado">
+                  <thead>
+                    <tr>
+                      <th width="10%">Data</th>
+                      <th >Resenha</th>
+                      <th width="10%"style="border-top-right-radius: 6px; background-color: #d63031">Excluir</th>
+                    </tr>
+                  </thead>
+                  <tbody id="containerMercado">
+                    
+                  </tbody>
+                </table>
+              </div>
+    
+              
+          </div>
+           
         </div>
+
+        
       
 
 
@@ -608,7 +639,13 @@
                 }
                 
           
-               
+            var editor = CKEDITOR.replace('inputResenhaMercado');
+            editor.on( 'change', function( evt ) {
+            // getData() returns CKEditor's HTML content.
+            //console.log( 'Total bytes: ' + evt.editor.getData().length );
+            //console.log( evt.editor.getData());
+            });
+     
           
           $('#input-valor').mask('#.##0,00', {reverse: true});  
              

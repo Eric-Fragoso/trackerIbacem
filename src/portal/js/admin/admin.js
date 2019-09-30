@@ -472,6 +472,7 @@ const importarControle = async()=> {
           
           let controles = (response.data);
        
+          console.log(controles);
           fornecedorAtual = controles[0].COD_FORNECEDOR;
           pesototal=0;
       
@@ -792,6 +793,62 @@ await axios.post('http://138.204.68.18:3323/financeiros',
 }
 
 
+const cadastrarMercado = async(e)=> {
+  let tokenStr = localStorage.getItem("token");
+  
+  e.preventDefault();
+  //var dados = CKEDITOR.inputResenhaMercado.getData();
+  //console.log(document.getElementById("inputResenhaMercado").text);
+  console.log(editor.getData().replace(/(\r\n|\n|\r)/gm, ""));
+ 
+  await axios.post('http://138.204.68.18:3323/mercados', 
+              { resenha: editor.getData().replace(/(\r\n|\n|\r)/gm, ""),
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+  
+    fnPopulaMercados();
+    //fnPopulaControles(); 
+    //closeModalExibeImportacao();   
+    
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+  
+  }
+
+
+const fnPopulaMercados = async()=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/mercados',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var mercados = (response.data).mercados;
+    
+    
+      document.getElementById('containerMercado').innerHTML = mercados.map(function (mercado) {
+        
+          if(mercado.aprovado){        
+            var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-check-circle"><input type="checkbox" id=${mercado._id} value="hidden" class="checkboxVisivel" checked></i></a>`;
+          }else{
+            var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${mercado._id} value="hidden" class="checkboxVisivel"></i></a>`;
+          }
+
+          var apagar = "<a href=\"javascript:;\"><i class=\"fas fa-trash-alt\"></i></a>"
+          return (
+              `<tr align="center"><td>${fnConvertData(mercado.data)}</td><td>${mercado.resenha}</td><td><div class="tdClicavel" onclick="changeCheckboxStateMercado('${mercado._id}');">${aprovadoAtual}</div></td><td><div class="tdClicavel" onclick="apagaMercado('${mercado._id}');">${apagar}</div></td></tr>`
+              );
+          
+       }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+
+    });
+    setTimeout(rodaTabelas, 1000);    
+}
+
 
 
 const fnPopulaFinanceiros = async()=> {
@@ -854,6 +911,22 @@ const updateFinanceiro = async(id)=> {
 
 }
 
+const atualizaMercado = async(id, aprovado)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.put(`http://138.204.68.18:3323/mercados/${id}`, 
+              {id:id,
+               aprovado: aprovado
+              },
+          {headers: {"Authorization" : `Bearer ${tokenStr}`} }
+  )
+  .then(function(response){
+    fnPopulaMercados(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+}
+
 const atualizaFinan = async(id, aprovado)=> {
   let tokenStr = localStorage.getItem("token");
   await axios.put(`http://138.204.68.18:3323/financeiros/${id}`, 
@@ -863,7 +936,7 @@ const atualizaFinan = async(id, aprovado)=> {
           {headers: {"Authorization" : `Bearer ${tokenStr}`} }
   )
   .then(function(response){
-    //fnPopulaFinanceiros(); 
+    fnPopulaFinanceiros(); 
   })
   .catch(function(error){
       console.warn(error);
@@ -885,6 +958,24 @@ const atualizaQual = async(id, aprovado)=> {
       console.warn(error);
   });
 
+}
+
+
+function changeCheckboxStateMercado(id){
+  var checkbox3 = document.getElementById(id);
+  console.log(checkbox3.checked);
+  checkbox3.checked = !checkbox3.checked;
+  console.log(checkbox3.checked);
+  if (checkbox3.checked == true){
+    atualizaMercado(id,true);
+    document.getElementById(id).parentElement.classList.remove("fa-times-circle");
+    document.getElementById(id).parentElement.classList.add("fa-check-circle");
+  }else{
+    atualizaMercado(id,false);
+    document.getElementById(id).parentElement.classList.add("fa-times-circle");
+    document.getElementById(id).parentElement.classList.remove("fa-check-circle");
+  } 
+  
 }
 
 
@@ -1151,7 +1242,18 @@ function filtraEmpresaControle(){
   fnPopulaControlesFornecedorLista();
 }
 
+const apagaMercado = async(id)=> {
 
+  let tokenStr = localStorage.getItem("token");
+  await axios.delete(`http://138.204.68.18:3323/mercados/${id}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    fnPopulaMercados(); 
+  })
+  .catch(function(error){
+      console.warn(error);
+  });
+
+}
 
 const apagaControle = async(id)=> {
 
@@ -1560,9 +1662,11 @@ function escondeDivs(visivel){
 const fnPopulaControlesFornecedorQualidade = async()=> {
   
   let tokenStr = localStorage.getItem("token");
+  console.log(document.getElementById("select-empresa-controle-qualidade").value);
   await axios.get(`http://138.204.68.18:3323/controles/fornecedor/${document.getElementById("select-empresa-controle-qualidade").value}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
   .then(function(response){
     var controles = (response.data).controles;
+    console.log(response.data);
       document.getElementById('select-controle-qualidade').innerHTML = controles.map(function (controle) {
         
         return (
@@ -1639,6 +1743,7 @@ fnPopulaUsuarios();
 fnPopulaEmpresas();
 fnPopulaFinanceiros();
 fnPopulaQualidades();
+fnPopulaMercados();
 
 
 (function(){
