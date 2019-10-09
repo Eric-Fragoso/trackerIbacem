@@ -580,12 +580,37 @@ const fnPopulaControlesQualidade = async()=> {
     
 }  
 
-function verMercado(resenha, id, data){
+function verMercado(id, data){
    document.getElementById('mercadoData').innerHTML = data;
+   fnPopulaMercadosVisu(id)
    //console.log(resenha);
-   document.getElementById('textoMercado').innerHTML= resenha;
    openModalMercado();
- }
+}
+
+const fnPopulaMercadosVisu = async(id)=> {
+  let tokenStr = localStorage.getItem("token");
+  await axios.get('http://138.204.68.18:3323/mercados',{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+  .then(function(response){
+    var mercados = (response.data).mercados;
+    
+    
+      mercados.map(function (mercado) {        
+          if(mercado.aprovado){
+            return (
+              document.getElementById('textoMercado').innerHTML = mercado.resenha
+              );
+          }
+          
+       }).join('');      
+  })
+  .catch(function(error){
+      console.warn(error);
+
+    });
+}
+
+
+
 
 const fnPopulaMercados = async()=> {
   let tokenStr = localStorage.getItem("token");
@@ -594,15 +619,12 @@ const fnPopulaMercados = async()=> {
     var mercados = (response.data).mercados;
     
     
-      document.getElementById('containerMercado').innerHTML = mercados.map(function (mercado) {
-        
+      document.getElementById('containerMercado').innerHTML = mercados.map(function (mercado) {        
                 
-          var ver = `<a href="javascript:;" class="editarControleProdutor"><i class="far fa-eye"></i> Ver</a>`;
-          
-
+          var ver = `<a href="javascript:;" class="editarControleProdutor"><i class="far fa-eye"></i> Ver</a>`;          
           if(mercado.aprovado){
             return (
-              `<tr align="center"><td>${fnConvertData(mercado.data)}</td><td>${(mercado.resenha).substring(0, 90) + "..."}</td><td><div class="tdClicavel" onclick="verMercado('${mercado.resenha}','${mercado._id}','${fnConvertData(mercado.data)}');">${ver}</div></td></tr>`
+              `<tr align="center"><td>${fnConvertData(mercado.data)}</td><td>${(mercado.resenha).substring(0, 100) + "..."}</td><td><div class="tdClicavel" onclick="verMercado('${mercado._id}','${fnConvertData(mercado.data)}');">${ver}</div></td></tr>`
               );
           }
           
