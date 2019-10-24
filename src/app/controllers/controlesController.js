@@ -38,8 +38,8 @@ router.get('/controle/:controleId', async(req, res)=>{
     let id = `${ req.params.controleId}`;
     console.log( req.params.controleId, id);
     try{
-        const controle = await Controle.find({id}).sort({ importadoEm: -1 });
-
+        const controle = await Controle.find({_id:id}).sort({ importadoEm: -1 });
+        console.log(controle);
         return res.send({controle});
     }catch(err){
         return res.status(400).send({error: ' Erro carregando controle'});
