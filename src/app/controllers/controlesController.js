@@ -33,6 +33,19 @@ router.get('/:controleId', async(req, res)=>{
     }
 });
 
+router.get('/controle/:controleId', async(req, res)=>{
+    
+    let id = `${ req.params.controleId}`;
+    console.log( req.params.controleId, id);
+    try{
+        const controle = await Controle.find({id}).sort({ importadoEm: -1 });
+
+        return res.send({controle});
+    }catch(err){
+        return res.status(400).send({error: ' Erro carregando controle'});
+    }
+});
+
 router.get('/fornecedor/:fornecedorID', async(req, res)=>{
     const fornecedorID = req.params.fornecedorID;
 
