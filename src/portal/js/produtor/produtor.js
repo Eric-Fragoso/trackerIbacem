@@ -259,6 +259,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
                   <td>${controle.ADT_CX_SAIDA}</td>
                   <td>${controle.ADT_CX_STOTAL}</td>
                   <td>${(soma2).toFixed(2)}</td>
+                  <td>${controle.CAMBIO_STATUS}</td>
                   <td><a href="javascript:;" onclick="imprimeResumoComercial('${controle.MERCADO}',
                                                                              '${controle.NAVIO}',
                                                                              '${controle.CONTAINER}',
