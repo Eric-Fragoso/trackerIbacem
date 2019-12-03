@@ -1844,7 +1844,7 @@ async function carregaResumoComercial(fornecedorCod, controleCod){
             <td>${controle.ADT_CX_SAIDA}</td>
             <td>${controle.ADT_CX_STOTAL}</td>
             <td>${(soma2).toFixed(2)}</td>
-                  
+            <td>${controle.CAMBIO_STATUS}</td>      
             </tr>`            
           }).join('');
           document.getElementById('saldoComercialValor').innerHTML = `R$  ${(total).toFixed(2)}`;
