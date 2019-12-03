@@ -1690,15 +1690,28 @@ const fnPopulaQualidades = async()=> {
     var images = (response.data).images;
     
       document.getElementById('containerQualiadade').innerHTML = images.map(function (qualidade) {
+
+
+          //console.log(qualidade.controleRelacionado);
+          axios.get(`http://138.204.68.18:3323/controles/controle/${qualidade.controleRelacionado}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
+          .then(function(response){
+            document.getElementById(`tdConrole${qualidade._id}`).innerHTML = response.data.controle[0].codigo;          
+            document.getElementById(`tdFornecedor${qualidade._id}`).innerHTML = response.data.controle[0].fornecedorCod;   
+          })
+          .catch(function(error){
+              console.warn(error);
+          });
+
+
           if (qualidade.aprovado){      
           var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-check-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
             return (
-              `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
+              `<tr align="center"><td id="tdFornecedor${qualidade._id}"></td><td id="tdConrole${qualidade._id}"></td><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
               );
             }else{
             var aprovadoAtual = `<a href="javascript:;"><i class="fas fa-times-circle"><input type="checkbox" id=${qualidade._id} value="hidden" class="checkboxVisivel"></i></a>`;
             return (
-              `<tr align="center"><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
+              `<tr align="center"><td id="tdFornecedor${qualidade._id}"></td><td id="tdConrole${qualidade._id}"></td><td>${qualidade.etapaRelacionada}</td><td><a href="javascript:;" onclick="linkPdf('${qualidade.controleRelacionado}','${qualidade.etapaRelacionada}');" class="editarControleProdutor"><i class="fas fa-file-pdf"></i> Relatório</a></td><td></td><td><div><a href="javascript:;" title="Deletar registro" class="deletarUsuario" onclick="deletarQualidade('${qualidade._id}');"><i class="fas fa-trash-alt"></i></a></div></td><td><div class="tdClicavel" onclick="changeCheckboxStateQual('${qualidade._id}');">${aprovadoAtual}</div></td></tr>`
               );
           }
      
