@@ -796,36 +796,9 @@
                   document.getElementById('erroImportData').style.display = "block";
                   setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
               }else{
-                  let codigo = checaControle+"-"+checaCultura+"-"+checaAno;
                   
-                  let tokenStr = localStorage.getItem("token");
-                  await axios.get(`http://138.204.68.18:3323/controles/${codigo}`,{ headers: {"Authorization" : `Bearer ${tokenStr}`} })
-                  .then(function(response){
-                    var controle = (response.data).controle;
-                      /*if (controle.length==1 && controle[0].passoAtual == checaStatus && controle[0].visivel){
-                      document.getElementById('erroImportData').innerHTML="Este controle já possui importação visível dessa etapa";
-                      document.getElementById('erroImportData').style.display = "block";
-                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-                    }else if (controle.length==1 && controle[0].passoAtual == checaStatus){
-                      document.getElementById('erroImportData').innerHTML="Este controle já possui importação para essa etapa verifique se deve tornar ela visivel";
-                      document.getElementById('erroImportData').style.display = "block";
-                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-                    }else{
-                      importarControle();
-                    }*/
-                    if (controle.length==1){
-                      document.getElementById('erroImportData').innerHTML="Este controle já foi importado anteriormente";
-                      document.getElementById('erroImportData').style.display = "block";
-                      setTimeout(function(){ document.getElementById('erroImportData').style.display = "none"; }, 4000);
-                    }else{
-                      importarControle();
-                    }
-                  })
-                  .catch(function(error){
-                      console.warn(error);
-                  });
-                  
-                  
+                  importarControle();
+
                 };
             }
             function erroQualidade(){
