@@ -576,7 +576,7 @@ const fnPopulaControlesQualidade = async()=> {
 
     });
     fnPopulaMercados();
-    setTimeout(rodaTabelas, 1500);  
+    setTimeout(rodaTabelas, 2500);  
   
     
 }  
@@ -635,7 +635,7 @@ const fnPopulaMercados = async()=> {
       console.warn(error);
 
     });
-    setTimeout(rodaTabelas, 2000);    
+    setTimeout(rodaTabelas, 3000);    
 }
 
 
