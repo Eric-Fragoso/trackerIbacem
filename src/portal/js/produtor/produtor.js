@@ -56,7 +56,7 @@ const fnPopulaControles = async()=> {
                       case "Recepcao" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${controls[0].CONTROLE}</td>
+                              <td>${controls[0].CONTROLE}-${controls[0].SAFRA}</td>
                               <td>${Math.round(controls[0].PESO)} Kg</td>
                               <td>---</td>
                               <td>---</td>
@@ -67,7 +67,7 @@ const fnPopulaControles = async()=> {
                       case "Selecao" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${controls[0].CONTROLE}</td>
+                              <td>${controls[0].CONTROLE}-${controls[0].SAFRA}</td>
                               <td>${Math.round(controls[0].PESO)} Kg</td>
                               <td>${Math.round(controls[1].PESO)} Kg</td>
                               <td>---</td>
@@ -79,7 +79,7 @@ const fnPopulaControles = async()=> {
                           console.log(controls);
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${controls[0].CONTROLE}</td>
+                              <td>${controls[0].CONTROLE}-${controls[0].SAFRA}</td>
                               <td>${Math.round(controls[0].PESO)} Kg</td>
                               <td>${Math.round(controls[1].PESO)} Kg</td>
                               <td>${Math.round(controls[2].PESO)} Kg</td>
@@ -90,7 +90,7 @@ const fnPopulaControles = async()=> {
                       case "Expedicao" :
                         objetoInsert = objetoInsert +
                         `<tr align="center">
-                              <td>${controls[0].CONTROLE}</td>
+                              <td>${controls[0].CONTROLE}-${controls[0].SAFRA}</td>
                               <td>${Math.round(controls[0].PESO)} Kg</td>
                               <td>${Math.round(controls[1].PESO)} Kg</td>
                               <td>${Math.round(controls[2].PESO)} Kg</td>
@@ -101,7 +101,7 @@ const fnPopulaControles = async()=> {
                       case "Comercial" :
                           objetoInsert = objetoInsert +
                           `<tr align="center">
-                                <td>${controls[0].CONTROLE}</td>
+                                <td>${controls[0].CONTROLE}-${controls[0].SAFRA}</td>
                                 <td>${Math.round(controls[0].PESO)} Kg</td>
                                 <td>${Math.round(controls[1].PESO)} Kg</td>
                                 <td>${Math.round(controls[2].PESO)} Kg</td>
@@ -576,7 +576,7 @@ const fnPopulaControlesQualidade = async()=> {
 
     });
     fnPopulaMercados();
-    setTimeout(rodaTabelas, 500);  
+    setTimeout(rodaTabelas, 1500);  
   
     
 }  
@@ -635,7 +635,7 @@ const fnPopulaMercados = async()=> {
       console.warn(error);
 
     });
-    setTimeout(rodaTabelas, 1000);    
+    setTimeout(rodaTabelas, 2000);    
 }
 
 
